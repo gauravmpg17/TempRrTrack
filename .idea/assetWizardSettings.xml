@@ -79,8 +79,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Mobile Programming\Downloads\Group 151335\Group 151335@2x.png" />
-                                                <entry key="scalingPercent" value="60" />
+                                                <entry key="imagePath" value="C:\Users\Mobile Programming\Downloads\tracking.png" />
+                                                <entry key="scalingPercent" value="46" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -113,7 +113,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundColor" value="3d92dc" />
                                     </map>
                                   </option>
                                 </PersistentState>
