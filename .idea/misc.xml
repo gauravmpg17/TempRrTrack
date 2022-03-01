@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/RrTrack/app/src/main/res/drawable/button_bg.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/RrTrack/app/src/main/res/layout-v21/fragment_home.xml" value="0.3715277777777778" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/RrTrack/app/src/main/res/layout-v21/splash_assettrak.xml" value="0.4" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/RrTrack/app/src/main/res/layout/content_main.xml" value="0.21169354838709678" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/bordered_rect_background.xml" value="0.1445" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/button_background.xml" value="0.176" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_bg.xml" value="0.124" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_error_placeholder.xml" value="0.1035" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_homebg.xml" value="0.124" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_not_found.xml" value="0.1035" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_not_found_error.xml" value="0.1405" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/ic_recog.xml" value="0.109" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/rectangle_background.xml" value="0.1415" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/search_box.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/drawable/square_bg.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_asset_regi.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_my_library_search.xml" value="0.264" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_not_found.xml" value="0.2547043010752688" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_reconcile_assets.xml" value="0.264" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_record_inventory_asset.xml" value="0.1908315565031983" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_scan.xml" value="0.5222222222222223" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/fragment_view_inventory.xml" value="0.264" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/itme_not_found.xml" value="0.49740932642487046" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/itme_result.xml" value="0.536" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/layout_list.xml" value="0.2265625" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/splash_assettrak.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout-v21/update_location_item.xml" value="0.14112903225806453" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/content_main.xml" value="0.11281859070464767" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/drawer_list_item.xml" value="0.2546875" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_advancedoptionitem.xml" value="0.2547043010752688" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_advancedoptionitem_list.xml" value="0.23790322580645162" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_antenna_settings.xml" value="0.23790322580645162" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_inventory.xml" value="0.17028985507246377" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_locate_tag.xml" value="0.1585144927536232" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_not_registered.xml" value="0.17028985507246377" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_rr.xml" value="0.1" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_save_configurations.xml" value="0.23790322580645162" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/fragment_single_tag_locate.xml" value="0.128" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/home_layout_new.xml" value="0.17991004497751126" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/item_not_registered.xml" value="0.23790322580645162" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/layout_list.xml" value="0.2265625" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/layout/setting_list.xml" value="0.2" />
+        <entry key="..\:/Users/Mobile Programming/AndroidStudioProjects/assettrak/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2035" />
+        <entry key="..\:/Users/Mobile Programming/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.1290983606557377" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
