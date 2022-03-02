@@ -54,15 +54,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        disableUserInteraction(requireActivity())
+       // disableUserInteraction(requireActivity())
 
-      //  progressBar.visibility=View.VISIBLE
+        progressBar.visibility=View.VISIBLE
         /*Save Books Data to Database*/
 //        saveDataToDataBase()
         listeners()
 
         if (Constants.isInternetAvailable(requireContext())) {
-          //  getLastSync()
+            getLastSync()
         }
           Log.e("dhdgdhdh","djd")
     }
