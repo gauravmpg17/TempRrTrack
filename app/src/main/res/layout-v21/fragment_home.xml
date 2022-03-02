@@ -219,7 +219,7 @@
                 android:id="@+id/linearScan"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/light_blue"
+                android:background="?colorSecondary"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -262,7 +262,7 @@
                 android:id="@+id/inventoryLin"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/light_blue"
+                android:background="?colorSecondary"
                 android:gravity="center"
                 android:orientation="vertical">
 
