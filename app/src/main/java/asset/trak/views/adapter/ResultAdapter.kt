@@ -77,7 +77,7 @@ class ResultAdapter(
         }
 //        if(homeGoalsItem.assetCatalogue.imagePathFile?.isNotEmpty()==true)
 //        {
-            holder.ivBook.visibility=View.VISIBLE
+          //  holder.ivBook.visibility=View.VISIBLE
             holder.tv.visibility=View.GONE
             Glide.with(context)
                 .load(File(homeGoalsItem.assetCatalogue.imagePathFile.toString()))

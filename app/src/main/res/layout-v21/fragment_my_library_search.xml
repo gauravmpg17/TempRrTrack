@@ -100,9 +100,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/twenty_dp"
         android:text="@string/lblResults"
-        android:textColor="@color/black"
+        android:textColor="?colorSecondary"
         android:fontFamily="@font/jio_type_bold"
-        android:textSize="@dimen/text_size_16"
+        android:textSize="@dimen/text_size_18"
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 

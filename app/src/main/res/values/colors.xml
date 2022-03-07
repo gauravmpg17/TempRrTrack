@@ -64,10 +64,12 @@
 
     <color name="reconciledBgColor">#D6FFEB</color>
     <color name="reconciledTxtCountColor">#00B95C</color>
+    <color name="dark_green">#009688</color>
     <color name="notReconciledBgColor">#FFE3E3</color>
     <color name="notReconciledTxtCountColor">#EA4242</color>
 
     <color name="reconcile_tab_bg_color">#DDF8FF</color>
     <color name="tab_un_selected_color">#717171</color>
+    <color name="yellow">#FFEB3B</color>
 
 </resources>

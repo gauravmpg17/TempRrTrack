@@ -381,17 +381,17 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
 
                 if (viewPager.currentItem == 0) {
-                    buttonScan.visibility=View.VISIBLE
-                    buttonScan.text = "Scan"
-                    tvUpdate.text = "Update Location"
+                    //buttonScan.visibility=View.VISIBLE
+                    //buttonScan.text = "Scan"
+                    tvUpdate.text = "Ignore"
 
                 } else if (viewPager.currentItem == 1) {
-                    buttonScan.visibility=View.VISIBLE
-                    buttonScan.text = "Update to Current Location"
-                    tvUpdate.text = "Moved to Registered Location"
+                   // buttonScan.visibility=View.VISIBLE
+                   // buttonScan.text = "Update to Current Location"
+                    tvUpdate.text = "Update to Current Location"
 
                 } else if (viewPager.currentItem == 2) {
-                    buttonScan.visibility=View.GONE
+                   // buttonScan.visibility=View.GONE
                     tvUpdate.text = "Ignore"
 
                 }

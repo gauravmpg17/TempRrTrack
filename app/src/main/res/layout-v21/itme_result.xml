@@ -51,6 +51,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivBook"
+        android:visibility="gone"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:adjustViewBounds="true"
@@ -125,7 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_10"
         android:fontFamily="@font/jio_type_bold"
-        android:textColor="@color/btn_color"
+        android:textColor="@color/dark_green"
         android:textSize="@dimen/text_size_10"
         android:maxLines="2"
         app:layout_constraintStart_toEndOf="@+id/barrierLinear"
@@ -143,7 +144,7 @@
         android:fontFamily="@font/jio_type_light"
         android:gravity="right"
         android:text="Search"
-        android:textColor="@color/sky_blue"
+        android:textColor="?colorSecondary"
         android:textSize="@dimen/text_size_10"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvTag"

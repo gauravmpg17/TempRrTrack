@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.Guideline
@@ -79,7 +80,6 @@
         android:paddingBottom="@dimen/ten_dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_10"
-        android:background="@drawable/rectangle_border_inventory_gry"
         app:cardCornerRadius="@dimen/fourteen_dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -91,14 +91,13 @@
             android:id="@+id/tvFloorTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/twenty_dp"
+            android:gravity="center"
             android:layout_marginTop="@dimen/ten_dp"
-
             android:text="FIRST FLOOR – LIVING ROOM"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14"
-            android:paddingBottom="5dp"
+            android:textColor="?colorSecondary"
+            android:fontFamily="@font/jio_type_medium"
+            android:textSize="@dimen/text_size_18"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,30 +105,28 @@
             android:id="@+id/tvTotalRegisteredAssets"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/twenty_dp"
-
-
+            android:layout_marginTop="@dimen/five_dp"
+            android:gravity="center"
             android:fontFamily="@font/jio_type_light"
-            android:text="@string/lblTotalRegisteredAssets"
+            tools:text="@string/lblTotalRegisteredAssets"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_12"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvFloorTitle" />
 
         <TextView
             android:id="@+id/tvILastRecord"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/twenty_dp"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/five_dp"
             android:fontFamily="@font/jio_type_medium"
-            android:paddingBottom="@dimen/sixteen_dp"
-            android:visibility="gone"
             android:text="@string/last_recorded_02_02_2022_10_43_am"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_12"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalRegisteredAssets" />
 
 
@@ -139,7 +136,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:background="@color/reconcile_tab_bg_color"
+        android:background="@color/light_grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/margin_10"
@@ -148,7 +145,7 @@
         app:tabGravity="fill"
         app:tabTextColor="@color/tab_un_selected_color"
         app:tabSelectedTextColor="@color/black"
-        app:tabIndicatorColor="@color/btn_color"
+        app:tabIndicatorColor="?colorSecondary"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
         android:layout_height="wrap_content"/>
@@ -173,20 +170,20 @@
         android:visibility="visible"
         android:id="@+id/llBottomParent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/white"
-        android:paddingBottom="@dimen/ten_dp"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonScan"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_10"
             android:layout_weight="1"
             android:textSize="@dimen/text_size_13"
             android:background="@drawable/skyblue_border"
@@ -198,15 +195,11 @@
             android:id="@+id/tvUpdate"
             android:textSize="@dimen/text_size_13"
             android:textAllCaps="true"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="1"
-            android:background="@drawable/button_background"
+            android:background="?colorSecondary"
             android:text="Update Location"
             android:textColor="@color/white" />
 

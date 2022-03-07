@@ -141,60 +141,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/cardView"></androidx.appcompat.widget.AppCompatTextView>
 
-    <LinearLayout
-        android:id="@+id/btnLayout1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/thirty_dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/tvManageasset">
 
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
-            android:visibility="gone"
-            android:layout_marginLeft="@dimen/twenty_dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="@dimen/margin_20">
-
-            <LinearLayout
-                android:id="@+id/searchLin"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@color/search_btn"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/six_dp"
-                    android:src="@drawable/ic_search" />
-
-                <TextView
-                    android:id="@+id/searchTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/jio_type_bold"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/ten_dp"
-                    android:paddingBottom="@dimen/ten_dp"
-                    android:text="@string/search"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/diet_cta"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btnLayout2"
@@ -204,9 +151,8 @@
         android:orientation="horizontal"
         android:weightSum="2"
         app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/btnLayout1">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
             android:layout_width="100dp"
@@ -292,6 +238,99 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/btnLayout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/thirty_dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/btnLayout2">
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/margin_20">
+
+            <LinearLayout
+                android:id="@+id/searchLin"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="?colorSecondary"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/six_dp"
+                    app:tint="@color/white"
+                    android:src="@drawable/ic_search" />
+
+                <TextView
+                    android:id="@+id/searchTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jio_type_bold"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:text="@string/search"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/diet_cta"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginLeft="@dimen/twenty_dp"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="@dimen/margin_20">
+
+            <LinearLayout
+                android:id="@+id/configLin"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="?colorSecondary"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/white"
+                    android:layout_marginTop="@dimen/six_dp"
+                    android:src="@drawable/ic_configurations" />
+
+                <TextView
+                    android:id="@+id/configTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jio_type_bold"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:text="@string/configuration"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/diet_cta"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/btnLayout3"
         android:layout_width="0dp"
@@ -301,62 +340,20 @@
         app:layout_constraintEnd_toEndOf="@+id/guideline_right"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/btnLayout2">
+        app:layout_constraintTop_toBottomOf="@id/btnLayout1">
 
-          <androidx.cardview.widget.CardView
-         android:layout_marginLeft="@dimen/twenty_dp"
-         android:layout_width="100dp"
-         android:layout_height="150dp"
-         android:layout_weight="1"
-         android:visibility="gone"
-         app:cardCornerRadius="@dimen/margin_20">
-
-         <LinearLayout
-             android:id="@+id/configLin"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:background="@color/config_btn"
-             android:gravity="center"
-             android:orientation="vertical">
-
-             <ImageView
-                 android:layout_width="30dp"
-                 android:layout_height="30dp"
-                 android:layout_gravity="center"
-                 android:layout_marginTop="@dimen/six_dp"
-                 android:src="@drawable/ic_configurations" />
-
-             <TextView
-                 android:id="@+id/configTV"
-
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:fontFamily="@font/jio_type_bold"
-                 android:gravity="center"
-                 android:maxLines="1"
-                 android:paddingTop="@dimen/ten_dp"
-                 android:paddingBottom="@dimen/ten_dp"
-                 android:text="@string/configuration"
-                 android:textColor="@color/black"
-                 android:textSize="@dimen/diet_cta"
-                 android:textStyle="bold" />
-         </LinearLayout>
-
-
-     </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:layout_width="100dp"
             android:layout_height="150dp"
             android:layout_weight="1"
-           android:background="@color/search_btn"
+            android:background="?colorSecondary"
             app:cardCornerRadius="@dimen/margin_20">
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/linearSync"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/light_green"
+                android:background="?colorSecondary"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -365,6 +362,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/six_dp"
+                    app:tint="@color/white"
                     android:src="@drawable/ic_recog" />
 
                 <TextView
@@ -377,11 +375,50 @@
                     android:paddingTop="@dimen/ten_dp"
                     android:paddingBottom="@dimen/ten_dp"
                     android:text="@string/data_sync"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/diet_cta"
                     android:textStyle="bold" />
             </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/margin_20">
 
+                <LinearLayout
+                    android:id="@+id/configLinDummy"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="?colorSecondary"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/six_dp"
+                        android:src="@drawable/ic_configurations" />
+
+                    <TextView
+                        android:id="@+id/configTVDummy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/jio_type_bold"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/ten_dp"
+                        android:paddingBottom="@dimen/ten_dp"
+                        android:text="@string/configuration"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/diet_cta"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.cardview.widget.CardView>
 

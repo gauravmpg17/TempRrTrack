@@ -93,7 +93,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/twenty_dp"
-                android:background="@drawable/rectangle_border"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -101,37 +100,28 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvLocation"
+                    tools:text="@string/locationing_distance_title"
+                    android:gravity="center"
+                    android:fontFamily="@font/jio_type_medium"
+                    android:textColor="?colorSecondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/ten_dp" />
+                    android:padding="@dimen/five_dp" />
             </LinearLayout>
-
-
-            <TextView
-                android:id="@+id/tvInventoryReport"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/ten_dp"
-                android:fontFamily="@font/jio_type_bold"
-                android:text="Inventory Report"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/llSpinnerParent" />
 
             <TextView
                 android:id="@+id/tvILastRecord12"
                 android:layout_width="0dp"
+                android:textAlignment="center"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/ten_dp"
+                android:layout_marginTop="@dimen/five_dp"
                 android:fontFamily="@font/jio_type_medium"
                 android:text="@string/last_recorded_02_02_2022_10_43_am"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_15"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/tvInventoryReport" />
+                app:layout_constraintTop_toBottomOf="@id/llSpinnerParent" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -361,7 +351,7 @@
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     tools:text="02"
-                    android:textColor="?colorSecondary"
+                    android:textColor="@color/yellow"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/tvDiffLocation"
@@ -404,8 +394,8 @@
                     android:layout_marginBottom="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
-                    android:text="03"
-                    android:textColor="?colorSecondary"
+                    tools:text="03"
+                    android:textColor="@color/yellow"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintEnd_toEndOf="@+id/tvDifferentLocationCount"
@@ -418,6 +408,15 @@
 
     </ScrollView>
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_float"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/twenty_dp" />
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnScan123"
         android:layout_width="wrap_content"
@@ -428,15 +427,16 @@
         android:letterSpacing="0.1"
         android:paddingStart="@dimen/thirty_dp"
         android:paddingEnd="@dimen/thirty_dp"
+        android:backgroundTint="@color/white"
+        app:tint="?colorSecondary"
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
         android:text="@string/stop"
-        android:textColor="@color/white"
+        android:textColor="?colorSecondary"
         android:textSize="@dimen/text_size_13"
-        app:layout_constraintBottom_toTopOf="@+id/llBottomParent1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_goneMarginBottom="@dimen/twenty_dp" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline_float" />
 
 
     <LinearLayout
@@ -445,8 +445,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ten_dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -454,29 +452,21 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_weight="1"
-            android:background="@drawable/skyblue_border"
-            android:fontFamily="@font/jio_type_bold"
+            android:layout_marginEnd="@dimen/margin_5"
+           android:layout_weight="1"
+            android:background="?colorSecondary"
+           android:fontFamily="@font/jio_type_bold"
             android:text="@string/lblReconcileAssets"
-            android:textColor="?colorSecondary"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_size_13" />
 
         <androidx.appcompat.widget.AppCompatButton
-
             android:id="@+id/btnInventoryRecord"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_5"
             android:layout_weight="1"
-            android:background="@drawable/button_background"
+            android:background="?colorSecondary"
             android:text="@string/lblInventoryRecorded"
             android:textAllCaps="true"
             android:textColor="@color/white"
@@ -694,6 +684,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
 
         <RelativeLayout
 

@@ -98,6 +98,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvResult"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ten_dp"
@@ -110,13 +111,10 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginBottom="@dimen/margin_20"
         android:id="@+id/rvNotFound"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
         android:clipToPadding="false"
-
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"

@@ -654,9 +654,9 @@
     <string name="last_scanned">Last scanned:</string>
     <string name="lblRecordInventory">Record Inventory</string>
     <string name="lblScanned">Scanned</string>
-    <string name="lblReconcileAssets">RECONCILE ASSETS</string>
+    <string name="lblReconcileAssets">RECONCILE\n ASSETS</string>
     <string name="lblReconcileAssetsSmall">Reconcile Assets</string>
-    <string name="lblInventoryRecorded">INVENTORY RECORDED</string>
+    <string name="lblInventoryRecorded">INVENTORY\n RECORDED</string>
     <string name="lblTotalRegisteredAssets">Total Registered Assets : 106 </string>
     <string name="lblsSarchforBooks">Search for books</string>
     <string name="permissions_must_be_required">Permissions must be required!</string>

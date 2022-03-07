@@ -97,7 +97,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 
 //        if(item.assetCatalogue.imagePathFile?.isNotEmpty()==true)
 //        {
-            holder.ivBook.visibility=View.VISIBLE
+        //    holder.ivBook.visibility=View.VISIBLE
             holder.tv.visibility=View.GONE
             Glide.with(context)
                 .load(File(item.assetCatalogue.imagePathFile.toString()))

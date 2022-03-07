@@ -326,13 +326,13 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         });
 
         btnReconcile.setOnClickListener(v -> {
-//            Bundle bundle = new Bundle();
-//            bundle.putInt("locationId", locationData.getId());
-//            bundle.putParcelable("LocationData", locationData);
-//            ReconcileAssetsFragment fragInfo = new ReconcileAssetsFragment();
-//            fragInfo.setArguments(bundle);
-//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
-//                    fragInfo, TAG_CONTENT_FRAGMENT).addToBackStack(null).commit();
+            Bundle bundle = new Bundle();
+            bundle.putInt("locationId", locationData.getId());
+            bundle.putParcelable("LocationData", locationData);
+            ReconcileAssetsFragment fragInfo = new ReconcileAssetsFragment();
+            fragInfo.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    fragInfo, TAG_CONTENT_FRAGMENT).addToBackStack(null).commit();
         });
         if (scannedList.isEmpty() == false) {
             btnScan.setTag("1");
