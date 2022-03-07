@@ -211,7 +211,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             tvCategory.setText(categoryMaster.getCategoryName());
             if(list.get(0).getAssetCatalogue().getImagePathFile()!=null && !list.get(0).getAssetCatalogue().getImagePathFile().isEmpty())
             {
-                ivBook.setVisibility(View.VISIBLE);
+             //   ivBook.setVisibility(View.VISIBLE);
                 tv.setVisibility(View.GONE);
                 Glide.with(requireActivity())
                         .load(list.get(0).getAssetCatalogue().getImagePathFile())
@@ -219,7 +219,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             }
             else {
 
-                ivBook.setVisibility(View.VISIBLE);
+               // ivBook.setVisibility(View.VISIBLE);
                 tv.setVisibility(View.GONE);
                 Glide.with(requireActivity())
                         .load(list.get(0).getAssetCatalogue().getImagePathFile())

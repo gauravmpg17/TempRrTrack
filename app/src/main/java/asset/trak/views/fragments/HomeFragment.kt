@@ -83,7 +83,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         inventoryLin.setOnClickListener {
-
             replaceFragment(
                 requireActivity().supportFragmentManager, InventoryRFragment(),
                 R.id.content_frame

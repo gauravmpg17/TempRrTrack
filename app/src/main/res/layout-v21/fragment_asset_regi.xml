@@ -35,37 +35,59 @@
         app:layout_constraintGuide_percent="0.02" />
 
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivBack"
-
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginTop="@dimen/twenty_dp"
-        android:src="@drawable/ic_home"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <LinearLayout
         android:id="@+id/section_title"
-        android:layout_width="0dp"
-        android:layout_marginLeft="@dimen/ten_dp"
-        android:layout_height="wrap_content"
-       android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/ivBack"
-        app:layout_constraintLeft_toRightOf="@id/ivBack"
-        app:layout_constraintTop_toTopOf="@+id/ivBack">
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center"
-            android:gravity="start|center"
-            android:fontFamily="@font/jio_type_bold"
-            android:text="@string/regi_assets"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_22" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?colorSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/margin_20"
+                android:src="@drawable/ic_home"
+                android:tint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivBack">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jio_type_bold"
+                    android:gravity="center_horizontal"
+                    android:text="@string/regi_assets"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_22" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_home"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 

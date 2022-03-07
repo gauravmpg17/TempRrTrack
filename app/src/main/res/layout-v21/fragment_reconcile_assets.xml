@@ -44,34 +44,90 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rlTopParent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        app:layout_constraintBottom_toBottomOf="@id/ivBackButton"
-        app:layout_constraintTop_toTopOf="@id/ivBackButton"
-        app:layout_constraintLeft_toRightOf="@+id/ivBackButton">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?colorSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/jio_type_bold"
-            android:text="@string/lblReconcileAssetsSmall"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_22" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBackButtonrr"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/margin_20"
+                android:src="@drawable/ic_home"
+                android:tint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_home"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_home"
-            app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/ivBackButtonrr"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivBackButtonrr">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTitle"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/jio_type_bold"
+                    android:text="@string/lblReconcileAssetsSmall"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_22" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_home"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rlTopParent"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="@dimen/margin_10"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/ivBackButton"-->
+<!--        app:layout_constraintTop_toTopOf="@id/ivBackButton"-->
+<!--        app:layout_constraintLeft_toRightOf="@+id/ivBackButton">-->
+
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/tvTitle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/jio_type_bold"-->
+<!--            android:text="@string/lblReconcileAssetsSmall"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/text_size_22" />-->
+
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+<!--            android:id="@+id/iv_home"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:src="@drawable/ic_home"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+<!--    </RelativeLayout>-->
+
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -155,7 +211,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_10"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent"

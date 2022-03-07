@@ -71,5 +71,5 @@
     <color name="reconcile_tab_bg_color">#DDF8FF</color>
     <color name="tab_un_selected_color">#717171</color>
     <color name="yellow">#FFEB3B</color>
-
+    <color name="cardBorderColor">#70000000</color>
 </resources>
