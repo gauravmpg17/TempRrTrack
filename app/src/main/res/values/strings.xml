@@ -637,7 +637,7 @@
     <string name="lblMyLibrary">MY LIBRARY</string>
     <string name="edition">Location:</string>
     <string name="lblMyLibrarySmall">My Library</string>
-    <string name="lblSearch"> > Search</string>
+    <string name="lblSearch">Search</string>
     <string name="lblResults">Results</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>

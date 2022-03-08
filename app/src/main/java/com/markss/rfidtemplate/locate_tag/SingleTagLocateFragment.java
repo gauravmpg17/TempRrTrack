@@ -1,5 +1,6 @@
 package com.markss.rfidtemplate.locate_tag;
 
+
 import static com.markss.rfidtemplate.application.Application.roomDatabaseBuilder;
 import static com.markss.rfidtemplate.home.MainActivity.filter;
 
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -166,7 +168,6 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
         String RFIDTag = Application.locateTag;
         List<BookAndAssetData> list = new ArrayList<>();
         List<LocationMaster> itemslocation = new ArrayList<>();
-
         TextView tvTitle = getActivity().findViewById(R.id.tvTitle);
         TextView tvAuthor = getActivity().findViewById(R.id.tvAuthor);
         ImageView ivBook = getActivity().findViewById(R.id.ivBook);
@@ -177,59 +178,73 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
 
             list.addAll(roomDatabaseBuilder.getBookDao().getBookForRFID(RFIDTag));
-            tvTitle.setText(list.get(0).getAssetCatalogue().getAssetName());
-            if(list.get(0).getBookAttributes().getAuthor()==null) {
-                tvAuthor.setText("");
-            }
-            else{
-                tvAuthor.setText(list.get(0).getBookAttributes().getAuthor());
-            }
-            if(list.get(0).getAssetCatalogue().getLocationId()==null)
+            if(list.isEmpty())
             {
-                tvTag.setText("");
+                constLay.setVisibility(View.GONE);
             }
             else
             {
-                LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
-                tvTag.setText(locationMaster.getLocationName());
+                constLay.setVisibility(View.VISIBLE);
+                if(list.get(0).getAssetCatalogue().getAssetName()==null || TextUtils.isEmpty(list.get(0).getAssetCatalogue().getAssetName()))
+                {
+                    tvTitle.setText("-");
+                }
+                else
+                {
+                    tvTitle.setText(list.get(0).getAssetCatalogue().getAssetName());
+                }
+
+                if(list.get(0).getBookAttributes()==null || list.get(0).getBookAttributes().getAuthor()==null) {
+                    tvAuthor.setText("-");
+                }
+                else{
+                    tvAuthor.setText(list.get(0).getBookAttributes().getAuthor());
+                }
+                if(list.get(0).getAssetCatalogue().getLocationId()==null)
+                {
+                    tvTag.setText("-");
+                }
+                else
+                {
+                    LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
+                    tvTag.setText(locationMaster.getLocationName());
+                }
+                if(list.get(0).getAssetCatalogue().getCategoryId()==null)
+                {
+                    tvCategory.setText("-");
+                }
+                else
+                {
+                    CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
+                    tvCategory.setText(categoryMaster.getCategoryName());
+                }
+
+
+                //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
+                // CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
+
+//            tvTag.setText(locationMaster.getLocationName());
+                //     tvCategory.setText(categoryMaster.getCategoryName());
+                if(list.get(0).getAssetCatalogue().getImagePathFile()!=null && !list.get(0).getAssetCatalogue().getImagePathFile().isEmpty())
+                {
+                  //  ivBook.setVisibility(View.VISIBLE);
+                    tv.setVisibility(View.GONE);
+                    Glide.with(requireActivity())
+                            .load(list.get(0).getAssetCatalogue().getImagePathFile())
+                            .into(ivBook);
+                }
+                else {
+
+                 //   ivBook.setVisibility(View.VISIBLE);
+                    tv.setVisibility(View.GONE);
+                    Glide.with(requireActivity())
+                            .load(list.get(0).getAssetCatalogue().getImagePathFile())
+                            .centerCrop()
+                            .error(R.drawable.ic_not_found_error)
+                            .into(ivBook);
+                    //    tv.setText(list.get(0).getAssetCatalogue().getAssetName().substring(0,2).toUpperCase());
+                }
             }
-            if(list.get(0).getAssetCatalogue().getCategoryId()==null)
-            {
-                tvCategory.setText("");
-            }
-            else
-            {
-                CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
-                tvCategory.setText(categoryMaster.getCategoryName());
-            }
-
-
-            LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
-            CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
-
-            tvTag.setText(locationMaster.getLocationName());
-            tvCategory.setText(categoryMaster.getCategoryName());
-            if(list.get(0).getAssetCatalogue().getImagePathFile()!=null && !list.get(0).getAssetCatalogue().getImagePathFile().isEmpty())
-            {
-             //   ivBook.setVisibility(View.VISIBLE);
-                tv.setVisibility(View.GONE);
-                Glide.with(requireActivity())
-                        .load(list.get(0).getAssetCatalogue().getImagePathFile())
-                        .into(ivBook);
-            }
-            else {
-
-               // ivBook.setVisibility(View.VISIBLE);
-                tv.setVisibility(View.GONE);
-                Glide.with(requireActivity())
-                        .load(list.get(0).getAssetCatalogue().getImagePathFile())
-                        .centerCrop()
-                        .error(R.drawable.ic_not_found_error)
-                        .into(ivBook);
-            //    tv.setText(list.get(0).getAssetCatalogue().getAssetName().substring(0,2).toUpperCase());
-            }
-
-
         }
 
 

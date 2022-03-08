@@ -983,10 +983,28 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Application.isFirstTime=true;
                                finish();
                             }
                         });
-            } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            }
+            else if (fragment==null) {
+                //stop Timer
+                Inventorytimer.getInstance().stopTimer();
+                getInstance().stopTimer();
+                //
+                if (DisconnectTask != null)
+                    DisconnectTask.cancel(true);
+                //Alert Dialog
+                showMessageOKCancel("Do you want to close this application?",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+            }
+            else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStackImmediate();
             } else {
                 super.onBackPressed();

@@ -117,19 +117,19 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 
 
 
-        if (item.assetCatalogue.isSelected) {
-            holder.ivCheck.visibility = View.VISIBLE
-
-        }
-        else {
-            holder.ivCheck.visibility = View.GONE
-
-        }
+//        if (item.assetCatalogue.isSelected) {
+//            holder.ivCheck.visibility = View.VISIBLE
+//
+//        }
+//        else {
+//            holder.ivCheck.visibility = View.GONE
+//
+//        }
 
 
         holder.clMain.setOnClickListener {
-            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
-            notifyDataSetChanged()
+//            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
+//            notifyDataSetChanged()
 
         }
     }

@@ -11,6 +11,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import asset.trak.views.fragments.HomeFragment
+import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,6 +68,9 @@ open class BaseFragment(@LayoutRes private val layout: Int) : Fragment(layout) {
     }
 
     fun getBackToPreviousFragment() {
-        requireActivity().supportFragmentManager.popBackStackImmediate()
+     //   requireActivity().supportFragmentManager.popBackStackImmediate()
+        requireActivity().supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment())?.commit()
+
     }
 }

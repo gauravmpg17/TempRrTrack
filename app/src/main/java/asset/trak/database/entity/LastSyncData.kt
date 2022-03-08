@@ -12,5 +12,5 @@ class LastSyncData {
       var assetCatalogue:List<AssetCatalogue>?=null
      var statusCode:Int?=null
      var success:Boolean?=null
-
+    var deviceId:String?=null
 }

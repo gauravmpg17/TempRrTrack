@@ -67,13 +67,13 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
             holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
         }
 
-        if (item.assetCatalogue.isSelected) holder.ivCheck.visibility=View.VISIBLE
-        else holder.ivCheck.visibility=View.GONE
+//        if (item.assetCatalogue.isSelected) holder.ivCheck.visibility=View.VISIBLE
+//        else holder.ivCheck.visibility=View.GONE
 
 
         holder.clMain.setOnClickListener {
-            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
-            notifyDataSetChanged()
+//            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
+//            notifyDataSetChanged()
         }
 
         holder.tvCategory.text = item.assetCatalogue.categoryName

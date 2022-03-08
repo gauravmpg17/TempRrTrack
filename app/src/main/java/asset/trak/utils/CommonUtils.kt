@@ -21,6 +21,7 @@ import java.io.IOException
 
 object Constants {
     val LastSyncTs="LastSyncTs"
+    val DeviceId="DeviceId"
     var AssetClassId = 0
     var CategoryId="CategoryId"
     var SubCategoryId="SubCategoryId"
@@ -30,6 +31,7 @@ object Constants {
     var SubCategoryTitle="subCategoryTitle"
     var LocationId=0
     var ScanId=0
+    var PrefenceFileName = "myprefs"
 
 
 

@@ -81,10 +81,10 @@
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvTitle"
-                            android:gravity="center_horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/jio_type_bold"
+                            android:gravity="center_horizontal"
                             android:text="@string/lblRecordInventory"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_22" />
@@ -461,6 +461,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton

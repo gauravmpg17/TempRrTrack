@@ -1,6 +1,7 @@
 package asset.trak.views.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -17,11 +18,13 @@ import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.inventory.InventoryRFragment
+import asset.trak.views.inventory.ViewInventoryFragment
 import asset.trak.views.module.InventoryViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.markss.rfidtemplate.R
+import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +50,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private var badgeImage: File? = null
     private var listBookAttributes:ArrayList<BookAttributes> = ArrayList()
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
-
+    var sharedPreference: SharedPreferences?= null
     override fun onStart() {
         super.onStart()
 
@@ -55,14 +58,24 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
        // disableUserInteraction(requireActivity())
-
-        progressBar.visibility=View.VISIBLE
+        sharedPreference =  requireActivity().getSharedPreferences(Constants.PrefenceFileName,Context.MODE_PRIVATE)
+      //  progressBar.visibility=View.VISIBLE
         /*Save Books Data to Database*/
 //        saveDataToDataBase()
         listeners()
 
         if (Constants.isInternetAvailable(requireContext())) {
-            getLastSync()
+            if(Application.isFirstTime || isSyncClicked)
+            {
+                Log.e("dhdgdhdh","getLastSync First")
+                disableUserInteraction(requireActivity())
+                getLastSync()
+            }
+            else
+            {
+                Log.e("dhdgdhdh","getLastSync Not Called")
+            }
+
         }
           Log.e("dhdgdhdh","djd")
     }
@@ -72,7 +85,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         searchLin.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, AssetRegisterFragment(),
+                requireActivity().supportFragmentManager, MyLibrarySearchFragment(),
                 R.id.content_frame
             )
         }
@@ -84,7 +97,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
         inventoryLin.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, InventoryRFragment(),
+                requireActivity().supportFragmentManager, ViewInventoryFragment(),
                 R.id.content_frame
             )
 
@@ -101,7 +114,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         linearSync.setOnClickListener {
             if (Constants.isInternetAvailable(requireContext())) {
                 isSyncClicked=true
-                progressBar.visibility=View.VISIBLE
+            //    progressBar.visibility=View.VISIBLE
                 getLastSync()
             }
         }
@@ -113,13 +126,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun  getLastSync() {
         progressBar.visibility=View.VISIBLE
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val sharedPreference =  requireActivity().getSharedPreferences("myprefs",Context.MODE_PRIVATE)
-        var syncTime =  sharedPreference.getString(Constants.LastSyncTs,"2022-02-08")
+
+        var syncTime =  sharedPreference?.getString(Constants.LastSyncTs,"2022-02-08")
         var currSyncTime =sdf.format(Date())
+        var deviceId="A"
+        Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
+            .show()
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
 //            if (it != null && it.statusCode == 200) {
+
 
             if (!it.assetClassification.isNullOrEmpty()) {
                 bookDao?.addAssetClassfication(it.assetClassification!!)
@@ -160,85 +177,87 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                                 val savedUri = saveToInternalStorage(requireContext(),it.imageId!!)
                                 savePath=savedUri.toString()
                                 it.imagePathFile= savePath
-                             //   it.imagePathFile= downloadImage("https://images.pexels.com/photos/212286/pexels-photo-212286.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",it.imageId!!)
+                                //   it.imagePathFile= downloadImage("https://images.pexels.com/photos/212286/pexels-photo-212286.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",it.imageId!!)
                                 it.imagePathFile= downloadImage(it.imageUrl!!,it.imageId!!)
 
-                                        bookDao?.addAssetCatalogueList(
-                                            AssetCatalogue(
-                                                it.id,
-                                                it.assetName,
-                                                it.imagePath,
-                                                it.imagePathFile,
-                                                it.description,
-                                                it.assetClassId,
-                                                it.categoryId,
-                                                it.subCategoryId,
-                                                it.locationId,
-                                                it.rfidTag,
-                                                it.searchTags,
-                                                it.inventorySyncFlag,
-                                                it.createdOn,
-                                                it.modifiedOn,
-                                                it.inventorySyncOn,
-                                                it.inventoryScanId,
-                                                it.Image,
-                                                it.locationName,
-                                                it.categoryName,
-                                                it.subCategoryName,
-                                                it.isSelected,
-                                                it.imageUrl,
-                                                it.imageId
-                                            ))
+                                bookDao?.addAssetCatalogueList(
+                                    AssetCatalogue(
+                                        it.id,
+                                        it.assetName,
+                                        it.imagePath,
+                                        it.imagePathFile,
+                                        it.description,
+                                        it.assetClassId,
+                                        it.categoryId,
+                                        it.subCategoryId,
+                                        it.locationId,
+                                        it.rfidTag,
+                                        it.searchTags,
+                                        it.inventorySyncFlag,
+                                        it.createdOn,
+                                        it.modifiedOn,
+                                        it.inventorySyncOn,
+                                        it.inventoryScanId,
+                                        it.Image,
+                                        it.locationName,
+                                        it.categoryName,
+                                        it.subCategoryName,
+                                        it.isSelected,
+                                        it.imageUrl,
+                                        it.imageId
+                                    ))
 
 
-                           }
+                            }
                             override fun onLoadCleared(placeholder: Drawable?) {
 
                             }
 
                             override fun onLoadFailed(errorDrawable: Drawable?) {
                                 super.onLoadFailed(errorDrawable)
-                            //    Log.d(TAG, ": ${it.imagePathFile}")
-                           //     bookDao?.addAssetCatalogueList(it.assetCatalogue!!)
+                                //    Log.d(TAG, ": ${it.imagePathFile}")
+                                //     bookDao?.addAssetCatalogueList(it.assetCatalogue!!)
 
 
-                                        bookDao?.addAssetCatalogueList(
-                                            AssetCatalogue(
-                                                it.id,
-                                                it.assetName,
-                                                it.imagePath,
-                                                it.imagePathFile,
-                                                it.description,
-                                                it.assetClassId,
-                                                it.categoryId,
-                                                it.subCategoryId,
-                                                it.locationId,
-                                                it.rfidTag,
-                                                it.searchTags,
-                                                it.inventorySyncFlag,
-                                                it.createdOn,
-                                                it.modifiedOn,
-                                                it.inventorySyncOn,
-                                                it.inventoryScanId,
-                                                it.Image,
-                                                it.locationName,
-                                                it.categoryName,
-                                                it.subCategoryName,
-                                                it.isSelected,
-                                                it.imageUrl,
-                                                it.imageId
-                                            ))
+                                bookDao?.addAssetCatalogueList(
+                                    AssetCatalogue(
+                                        it.id,
+                                        it.assetName,
+                                        it.imagePath,
+                                        it.imagePathFile,
+                                        it.description,
+                                        it.assetClassId,
+                                        it.categoryId,
+                                        it.subCategoryId,
+                                        it.locationId,
+                                        it.rfidTag,
+                                        it.searchTags,
+                                        it.inventorySyncFlag,
+                                        it.createdOn,
+                                        it.modifiedOn,
+                                        it.inventorySyncOn,
+                                        it.inventoryScanId,
+                                        it.Image,
+                                        it.locationName,
+                                        it.categoryName,
+                                        it.subCategoryName,
+                                        it.isSelected,
+                                        it.imageUrl,
+                                        it.imageId
+                                    ))
                             }
                         })
                 }
             }
 
-
+            if (!it.deviceId.isNullOrEmpty()){
+                deviceId= it.deviceId!!;
+            }
             if (!it.bookAttributes.isNullOrEmpty()) {
 //                bookDao?.addBookAttributeList(it.bookAttributes!!)
                 inventoryViewModel.listBookAttributes.clear()
                 inventoryViewModel.listBookAttributes.addAll(it.bookAttributes!!)
-                Log.d(TAG, "getLastSync:${ inventoryViewModel.listBookAttributes.size} ")
+                //   Log.d(TAG, "getLastSync:${ inventoryViewModel.listBookAttributes.size} ")
                 progressBar.visibility=View.INVISIBLE
                 enableUserInteraction(requireActivity())
                 if(isSyncClicked)
@@ -247,14 +266,19 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                         .show()
                     isSyncClicked=false
                 }
-
-           }
-
-            //save last sync time in sp
-            var editor = sharedPreference.edit()
-            editor.putString(Constants.LastSyncTs,currSyncTime)
-            editor.commit()
+            }
+            Application.isFirstTime=false
         }
+        //save last sync time in sp
+        var editor = sharedPreference?.edit()
+        editor?.putString(Constants.LastSyncTs,currSyncTime)
+        editor?.putString(Constants.DeviceId,deviceId)
+        editor?.commit()
+        progressBar.visibility=View.INVISIBLE
+        enableUserInteraction(requireActivity())
+
+        Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
+            .show()
     }
 
 

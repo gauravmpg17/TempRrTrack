@@ -71,7 +71,6 @@ class ViewInventoryFragment : BaseFragment(R.layout.fragment_view_inventory) {
             ) {
                 if(position > 0)
                 {
-
                     /*.....*/
                     Log.d("tagnew", "onItemSelected: ${listOfLocations[position].id}")
                     /*...*/

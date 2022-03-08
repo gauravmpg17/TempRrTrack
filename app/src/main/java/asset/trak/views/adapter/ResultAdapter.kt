@@ -56,8 +56,17 @@ class ResultAdapter(
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
         val homeGoalsItem = items[position]
         holder.tvTitle.text = homeGoalsItem.assetCatalogue?.assetName
-        holder.tvAuthor.text = homeGoalsItem.bookAttributes?.author
-        if( homeGoalsItem.assetCatalogue.subCategoryName.equals("") || homeGoalsItem.assetCatalogue.subCategoryName.isNotBlank())
+
+        if( homeGoalsItem.bookAttributes?.author.isNullOrEmpty())
+        {
+            holder.tvAuthor.text = "-"
+        }
+        else
+        {
+            holder.tvAuthor.text = homeGoalsItem.bookAttributes?.author
+        }
+
+        if( homeGoalsItem.assetCatalogue.subCategoryName.equals("") || homeGoalsItem.assetCatalogue.subCategoryName.isNullOrBlank())
         {
             holder.tvCategory.text = homeGoalsItem.assetCatalogue.categoryName
         }
@@ -66,7 +75,16 @@ class ResultAdapter(
             holder.tvCategory.text ="${homeGoalsItem.assetCatalogue.categoryName} - ${homeGoalsItem.assetCatalogue.subCategoryName}"
         }
 
-        holder.tvTag.text = homeGoalsItem.assetCatalogue?.locationName
+        if(homeGoalsItem.assetCatalogue?.locationName.equals("") || homeGoalsItem.assetCatalogue?.locationName.isNullOrBlank())
+        {
+            holder.tvTag.text = "-"
+        }
+        else
+        {
+            holder.tvTag.text = homeGoalsItem.assetCatalogue?.locationName
+        }
+
+
         if(isFromLib==true)
         {
             holder.tvSearch.visibility=View.VISIBLE

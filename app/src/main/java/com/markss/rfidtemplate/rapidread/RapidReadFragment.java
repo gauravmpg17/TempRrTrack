@@ -32,6 +32,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,13 +63,15 @@ import asset.trak.database.entity.ScanTag;
 import asset.trak.model.AssetScanApi;
 import asset.trak.model.AssetSyncRequestDataModel;
 import asset.trak.model.InventoryMasterApi;
+import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ReconcileAssetsFragment;
+import asset.trak.views.listener.RapidReadCallback;
 import asset.trak.views.module.InventoryViewModel;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 
-public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler {
+public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler,RapidReadCallback {
     MatchModeProgressView progressView;
     private TextView tagReadRate;
     private TextView uniqueTags;
@@ -105,6 +108,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private int countNotFoundCurrentLocation = 0;
     private int countFoundDifferentLoc = 0;
     private int countNotRegistered = 0;
+    private boolean isFromReconsile=false;
 
     public static com.markss.rfidtemplate.rapidread.RapidReadFragment newInstance() {
         return new com.markss.rfidtemplate.rapidread.RapidReadFragment();
@@ -300,7 +304,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         });
 
         ivBack.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
         });
 
 
@@ -310,6 +315,10 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 llBottomParent.setVisibility(View.GONE);
                 btnScan.setImageResource(android.R.drawable.ic_media_pause);
                 listInventoryList = new HashSet<>();
+
+                //new requirement
+                foundLocParent.setVisibility(View.GONE);
+                foundForDifferentParent.setVisibility(View.GONE);
             } else {
                 btnScan.setTag("1");
                 llBottomParent.setVisibility(View.VISIBLE);
@@ -334,14 +343,16 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
                     fragInfo, TAG_CONTENT_FRAGMENT).addToBackStack(null).commit();
         });
-        if (scannedList.isEmpty() == false) {
+
+        if(isFromReconsile)
+        {
             btnScan.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
             btnScan.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
         }
-
+        ReconcileAssetsFragment.Companion.setFragmentCallback(this);
     }
 
     public void updateTexts() {
@@ -791,5 +802,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
+    @Override
+    public void onDataSent(boolean isBack) {
+        Log.d("tag12", "onDataSent: "+isBack);
+        isFromReconsile=isBack;
+        btnScan.setTag("1");
+        llBottomParent.setVisibility(View.VISIBLE);
+        btnScan.setImageResource(android.R.drawable.ic_media_play);
+        addDataToScanTag();
+        showCountFound();
+    }
 
 }

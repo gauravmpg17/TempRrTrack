@@ -23,6 +23,7 @@ import asset.trak.utils.inter.UpdateItemInterface
 import asset.trak.views.adapter.ReconcileAssetsPagerAdapter
 import asset.trak.views.adapter.UpdateLocationAdapter
 import asset.trak.views.baseclasses.BaseFragment
+import asset.trak.views.listener.RapidReadCallback
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.markss.rfidtemplate.R
@@ -53,6 +54,10 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     private var listOfLocations = ArrayList<LocationMaster>()
     companion object{
         var selectedPosition12:Int=0
+        lateinit var fragmentCallback1: RapidReadCallback
+        fun setFragmentCallback(callback1: RapidReadCallback) {
+            fragmentCallback1 = callback1
+        }
     }
     val listInventoryList = HashSet<String>()
     override fun handleTagResponse(inventoryListItem: InventoryListItem?, isAddedToList: Boolean) {
@@ -500,6 +505,20 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
            adapter = ReconcileAssetsPagerAdapter(this)
             viewPager.adapter = adapter
         }
+
+        requireView().isFocusableInTouchMode = true
+        requireView().requestFocus()
+        requireView().setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
+                return if (event.action === KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+
+                    Log.d("backpress", "onKey:Back ")
+                    fragmentCallback1.onDataSent(true)
+                    requireActivity().supportFragmentManager.popBackStackImmediate()
+                    true
+                } else false
+            }
+        })
 
      //   viewPager.adapter?.notifyDataSetChanged()
     }
