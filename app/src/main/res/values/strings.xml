@@ -627,7 +627,7 @@
     <string name="asset_registration">Asset Registration</string>
     <string name="add_successfully">Add Successfully</string>
     <string name="scan">Scan</string>
-
+    <string name="global_inventory">Global Inventory</string>
     <string name="lbl_asset_reconciliation">Asset Reconciliation</string>
     <string name="lblMyDevices">MY DEVICES</string>
     <string name="lblRegistered">Registered</string>
@@ -646,6 +646,7 @@
     <string name="lblCategory">Category</string>
     <string name="lblSubCategory">SubCategory</string>
     <string name="lblInventory">Inventory</string>
+    <string name="lblLocationInventory">Location Inventory</string>
     <string name="lblReconciled">RECONCILED</string>
     <string name="lblNotReconciled">NOT RECONCILED</string>
     <string name="lblDetailAssetInventories">Details of asset inventories</string>
@@ -657,7 +658,7 @@
     <string name="lblReconcileAssets">RECONCILE\n ASSETS</string>
     <string name="lblReconcileAssetsSmall">Reconcile Assets</string>
     <string name="lblInventoryRecorded">INVENTORY\n RECORDED</string>
-    <string name="lblTotalRegisteredAssets">Total Registered Assets : 106 </string>
+    <string name="lblTotalRegisteredAssets">Total Registered Assets : 0 </string>
     <string name="lblsSarchforBooks">Search for books</string>
     <string name="permissions_must_be_required">Permissions must be required!</string>
     <string name="lblScan">SCAN</string>
@@ -692,5 +693,6 @@
     <string name="data_sync">Data Sync</string>
     <string name="data_not_found">Data Not Found</string>
     <string name="select_all">Select All</string>
+    <string name="scan_location_barcode">Scan Location Barcode</string>
 
 </resources>

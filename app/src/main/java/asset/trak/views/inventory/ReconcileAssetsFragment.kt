@@ -37,13 +37,13 @@ import com.markss.rfidtemplate.rfid.RFIDController
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.zebra.rfid.api3.RFIDResults
 import kotlinx.android.synthetic.main.fragment_reconcile_assets.*
-import kotlinx.android.synthetic.main.fragment_reconcile_assets.ivBackButton
 import kotlinx.coroutines.launch
 
 
 class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets),  UpdateItemInterface,
     ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler,
     ResponseHandlerInterfaces.ResponseStatusHandler {
+    private var whichInventory: String=""
     private var inventoryMasterList: List<Inventorymaster> = ArrayList()
     private var loginErrorDialog: Dialog?=null
     private var inventorymaster: Inventorymaster?=null
@@ -72,6 +72,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
             }
         }
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
     }
 
@@ -110,6 +115,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             getBackToPreviousFragment()
         }
         locationId = arguments?.getInt("locationId") ?: 0
+        whichInventory=arguments?.getString("INVENTORY_NAME") ?: ""
         val locationData = arguments?.getParcelable<LocationMaster>("LocationData")
 
         tvFloorTitle.text = locationData?.locationName
@@ -125,8 +131,14 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             val differentLocation = "Different Location ($differntLocationCount)"
             var countofNotRegistered = 0
             val notRegistered = "Not Registered ($countofNotRegistered)"
+
             tablayout.addTab(tablayout.newTab().setText(notFound));
-            tablayout.addTab(tablayout.newTab().setText(differentLocation))
+
+
+            // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
+            if (!whichInventory.equals("global")) {
+                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+            }
             tablayout.addTab(tablayout.newTab().setText(notRegistered))
         }
         else
@@ -140,7 +152,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
             val notRegistered = "Not Registered ($countofNotRegistered)"
             tablayout.addTab(tablayout.newTab().setText(notFound));
-            tablayout.addTab(tablayout.newTab().setText(differentLocation))
+            if (!whichInventory.equals("global")) {
+                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+            }
             tablayout.addTab(tablayout.newTab().setText(notRegistered))
         }
         tablayout.tabGravity = TabLayout.GRAVITY_FILL

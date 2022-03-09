@@ -32,7 +32,8 @@ object Constants {
     var LocationId=0
     var ScanId=0
     var PrefenceFileName = "myprefs"
-
+    var globalInventory="global"
+    var locationInventory="location"
 
 
     fun isInternetAvailable(context: Context): Boolean {

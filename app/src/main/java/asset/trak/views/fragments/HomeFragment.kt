@@ -17,8 +17,6 @@ import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
-import asset.trak.views.inventory.InventoryRFragment
-import asset.trak.views.inventory.ViewInventoryFragment
 import asset.trak.views.module.InventoryViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -26,6 +24,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
+import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -89,19 +88,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 R.id.content_frame
             )
         }
-        linearScan.setOnClickListener {
+        globalInventory.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, ScanFragment(),
+                requireActivity().supportFragmentManager, RapidReadFragment.newInstance("global"),
                 R.id.content_frame
             )
         }
-        inventoryLin.setOnClickListener {
+        locationInventory.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, ViewInventoryFragment(),
+                requireActivity().supportFragmentManager, RapidReadFragment.newInstance("location"),
                 R.id.content_frame
             )
-
-
         }
         configLin.setOnClickListener {
 

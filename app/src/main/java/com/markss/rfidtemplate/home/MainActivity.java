@@ -824,7 +824,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 fragment = new HomeFragment();
                 break;
             case 1:
-                fragment = RapidReadFragment.newInstance();
+                fragment = RapidReadFragment.newInstance("global");
                 break;
             case 2:
                 fragment = InventoryFragment.newInstance();
