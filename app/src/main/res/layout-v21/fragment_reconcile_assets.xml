@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.Guideline
@@ -44,90 +43,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/rlTopParent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="?colorSecondary"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        app:layout_constraintBottom_toBottomOf="@id/ivBackButton"
+        app:layout_constraintTop_toTopOf="@id/ivBackButton"
+        app:layout_constraintLeft_toRightOf="@+id/ivBackButton">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivBackButtonrr"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="@dimen/margin_20"
-                android:src="@drawable/ic_home"
-                android:tint="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/jio_type_bold"
+            android:text="@string/lblReconcileAssetsSmall"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_22" />
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/ivBackButtonrr"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivBackButtonrr">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvTitle"
-                    android:gravity="center_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/jio_type_bold"
-                    android:text="@string/lblReconcileAssetsSmall"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_22" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_home"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </RelativeLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/rlTopParent"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginLeft="@dimen/margin_10"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/ivBackButton"-->
-<!--        app:layout_constraintTop_toTopOf="@id/ivBackButton"-->
-<!--        app:layout_constraintLeft_toRightOf="@+id/ivBackButton">-->
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/tvTitle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fontFamily="@font/jio_type_bold"-->
-<!--            android:text="@string/lblReconcileAssetsSmall"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="@dimen/text_size_22" />-->
-
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:id="@+id/iv_home"-->
-<!--            android:visibility="gone"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/ic_home"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-<!--    </RelativeLayout>-->
-
-
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_home"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_home"
+            app:layout_constraintTop_toTopOf="parent" />
+    </RelativeLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,6 +79,7 @@
         android:paddingBottom="@dimen/ten_dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_10"
+        android:background="@drawable/rectangle_border_inventory_gry"
         app:cardCornerRadius="@dimen/fourteen_dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -147,13 +91,14 @@
             android:id="@+id/tvFloorTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/ten_dp"
+
             android:text="FIRST FLOOR – LIVING ROOM"
-            android:textColor="?colorSecondary"
-            android:fontFamily="@font/jio_type_medium"
-            android:textSize="@dimen/text_size_18"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14"
+            android:paddingBottom="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -161,28 +106,28 @@
             android:id="@+id/tvTotalRegisteredAssets"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/five_dp"
-            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/twenty_dp"
             android:fontFamily="@font/jio_type_light"
-            tools:text="@string/lblTotalRegisteredAssets"
+            android:text="@string/lblTotalRegisteredAssets"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_12"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvFloorTitle" />
 
         <TextView
             android:id="@+id/tvILastRecord"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/five_dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/twenty_dp"
             android:fontFamily="@font/jio_type_medium"
+            android:paddingBottom="@dimen/sixteen_dp"
+            android:visibility="gone"
             android:text="@string/last_recorded_02_02_2022_10_43_am"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_12"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalRegisteredAssets" />
 
 
@@ -192,7 +137,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:background="@color/light_grey"
+        android:background="@color/reconcile_tab_bg_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/margin_10"
@@ -201,7 +146,7 @@
         app:tabGravity="fill"
         app:tabTextColor="@color/tab_un_selected_color"
         app:tabSelectedTextColor="@color/black"
-        app:tabIndicatorColor="?colorSecondary"
+        app:tabIndicatorColor="@color/btn_color"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
         android:layout_height="wrap_content"/>
@@ -211,6 +156,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/margin_10"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent"
@@ -225,36 +171,41 @@
         android:visibility="visible"
         android:id="@+id/llBottomParent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/white"
+        android:paddingBottom="@dimen/ten_dp"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonScan"
             android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
             android:layout_weight="1"
             android:textSize="@dimen/text_size_13"
             android:background="@drawable/skyblue_border"
             android:layout_marginBottom="@dimen/margin_10"
             android:text="@string/scan"
-            android:textColor="?colorSecondary" />
+            android:textColor="@color/sky_blue" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tvUpdate"
             android:textSize="@dimen/text_size_13"
             android:textAllCaps="true"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="1"
-            android:background="?colorSecondary"
+            android:background="@drawable/button_background"
             android:text="Update Location"
             android:textColor="@color/white" />
 

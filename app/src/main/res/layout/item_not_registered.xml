@@ -36,7 +36,7 @@
         android:fontFamily="@font/jio_type_light"
         android:text="Search"
         android:textStyle="bold"
-        android:textColor="?colorSecondary"
+        android:textColor="@color/sky_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvTitle"

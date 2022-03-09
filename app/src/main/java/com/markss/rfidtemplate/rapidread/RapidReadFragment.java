@@ -171,7 +171,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         tvILastRecordDate = getActivity().findViewById(R.id.tvILastRecord12);
         btnReconcile = getActivity().findViewById(R.id.btnReconcile);
         btnInventoryRecord = getActivity().findViewById(R.id.btnInventoryRecord);
-        llBottomParent = getActivity().findViewById(R.id.llBottomParent1);
+        llBottomParent = getActivity().findViewById(R.id.llBottomParent2);
         progressBar = getActivity().findViewById(R.id.progressBar);
         TextView tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
         TextView tvLocation = getActivity().findViewById(R.id.tvLocation);

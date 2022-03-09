@@ -20,78 +20,59 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/twenty_five_dp" />
 
-<!--    <androidx.appcompat.widget.AppCompatImageView-->
-<!--        android:id="@+id/ivBack"-->
-<!--        android:layout_width="25dp"-->
-<!--        android:layout_height="25dp"-->
-<!--        android:background="?android:attr/selectableItemBackground"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true"-->
-<!--        android:layout_marginStart="@dimen/margin_20"-->
-<!--        android:layout_marginTop="@dimen/twenty_dp"-->
-<!--        android:src="@drawable/ic_home"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/tvMyLibrary"-->
-<!--        android:layout_marginLeft="@dimen/ten_dp"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/jio_type_bold"-->
-<!--        android:text="@string/lblMyLibrarySmall"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="@dimen/text_size_22"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/ivBack"-->
-<!--        app:layout_constraintLeft_toRightOf="@+id/ivBack"-->
-<!--        app:layout_constraintTop_toTopOf="@id/ivBack" />-->
-
-
-    <LinearLayout
-        android:id="@+id/rlTopParent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBack"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/twenty_dp"
+        android:src="@drawable/ic_home"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="?colorSecondary"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivBack"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="@dimen/margin_20"
-                android:src="@drawable/ic_home"
-                android:tint="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/ivBack"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivBack">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMyLibrary"
+        android:layout_marginLeft="@dimen/ten_dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/search"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_22"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintLeft_toRightOf="@+id/ivBack"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/jio_type_bold"
-                    android:gravity="center_horizontal"
-                    android:text="@string/lblSearch"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_22" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/nine_dp"
+        android:layout_marginTop="85dp"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/lblSearch"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMyLibrary"
+        app:layout_constraintStart_toEndOf="@+id/tvMyLibrary"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            </RelativeLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="85dp"
+        android:src="@drawable/ic_home"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMyLibrary"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -101,7 +82,7 @@
         android:background="@drawable/rectangle_background"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
+        app:layout_constraintTop_toBottomOf="@+id/tvMyLibrary">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
@@ -119,11 +100,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/twenty_dp"
         android:text="@string/lblResults"
-        android:textColor="?colorSecondary"
+        android:textColor="@color/black"
         android:fontFamily="@font/jio_type_bold"
-        android:textSize="@dimen/text_size_18"
-        android:gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        android:textSize="@dimen/text_size_16"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
@@ -140,6 +119,34 @@
         app:layout_constraintTop_toBottomOf="@+id/tvResult"
         tools:itemCount="4"
         tools:listitem="@layout/itme_result" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvDateNotFound"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/twenty_dp"
+        android:text="@string/data_not_found"
+        android:textColor="@color/black"
+        android:fontFamily="@font/jio_type_bold"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

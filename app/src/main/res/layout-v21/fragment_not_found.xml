@@ -98,7 +98,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvResult"
-        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ten_dp"
@@ -107,6 +106,20 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_16"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSelectAll"
+        android:textColor="@color/btn_color"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:tag="0"
+        android:layout_marginTop="@dimen/ten_dp"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/select_all"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 
@@ -119,9 +132,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/tvResult"
         tools:itemCount="4"
         tools:listitem="@layout/itme_result" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvDateNotFound"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/twenty_dp"
+        android:text="@string/data_not_found"
+        android:textColor="@color/black"
+        android:fontFamily="@font/jio_type_bold"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
