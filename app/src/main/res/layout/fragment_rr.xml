@@ -99,20 +99,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/etRfid"
-                    android:layout_centerVertical="true"
+                    android:imeOptions="actionDone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvRfid"
-                    android:background="@null"
-                    android:inputType="number"
-                    android:digits="0123456789"
+                    android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivScanBar"
+                    android:background="@null"
                     android:fontFamily="@font/jio_type_light"
                     android:hint="@string/scan_location_barcode"
+                    android:inputType="text"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sixteen_sp" />
+                    android:textSize="@dimen/sixteen_sp"
+                    app:iconifiedByDefault="false" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivScanBar"

@@ -57,7 +57,8 @@ class BookRepository @Inject constructor(
          //   val android_id = Settings.Secure.getString(Application.context.contentResolver, Settings.Secure.ANDROID_ID);
 
             val hashMap = HashMap<String, String>()
-            hashMap["LastSyncDateTime"] = syncTime.toString()
+           // hashMap["LastSyncDateTime"] = syncTime.toString()
+            hashMap["LastSyncDateTime"]="2022-03-08"
             //hashMap["CurrentDateTime"] = "2022-02-08"
           //  hashMap["MacId"] = android_id
 

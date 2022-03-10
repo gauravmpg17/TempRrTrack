@@ -7,8 +7,12 @@ import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -107,7 +115,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private int countNotRegistered = 0;
     private boolean isFromReconsile=false;
     private String whichInventory="";
-
+    private EditText etRfid;
+    private String locationName;
+    private AppCompatImageView ivScanBar;
     public static RapidReadFragment newInstance(final String whichInventory) {
         RapidReadFragment rapidReadFragment=new RapidReadFragment();
         final Bundle args = new Bundle();
@@ -174,6 +184,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         batchModeRR = getActivity().findViewById(R.id.batchModeRR);
         invtoryData = getActivity().findViewById(R.id.inventoryDataLayout);
         btnScan = getActivity().findViewById(R.id.btnScan123);
+        etRfid=getActivity().findViewById(R.id.etRfid);
+        ivScanBar=getActivity().findViewById(R.id.ivScanBar);
 
         foundLocParent = getActivity().findViewById(R.id.foundLocParent);
         foundForDifferentParent = getActivity().findViewById(R.id.foundForDifferentParent);
@@ -192,9 +204,11 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
      //   locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
 
-//        tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationData.getId())));
 
       //  tvLocation.setText(locationData.getLocationName());
+
+
+
         listInventoryList = new HashSet<>();
         scannedList = new HashSet<>();
 
@@ -234,6 +248,40 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //
 //
 //        }
+
+        ivScanBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!etRfid.getText().toString().isEmpty())
+                {
+                    locationName=etRfid.getText().toString().trim();
+                 //   tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationName));
+
+                }
+
+            }
+        });
+//        etRfid.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                if(!editable.toString().isEmpty())
+//                {
+//                    locationName=editable.toString();
+//                }
+//           }
+//        });
         if(scannedList.size() < 10 && scannedList.size()>0)
         {
             uniqueTags.setText("0"+scannedList.size());
