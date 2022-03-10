@@ -101,7 +101,6 @@
 
                 <EditText
                     android:id="@+id/etRfid"
-                    android:imeOptions="actionDone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvRfid"
@@ -110,6 +109,7 @@
                     android:background="@null"
                     android:fontFamily="@font/jio_type_light"
                     android:hint="@string/scan_location_barcode"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sixteen_sp"

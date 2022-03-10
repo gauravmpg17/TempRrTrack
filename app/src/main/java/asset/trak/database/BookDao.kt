@@ -65,6 +65,9 @@ interface BookDao {
     @Query("SELECT COUNT(LocationId) FROM assetMain WHERE Location IN (:locationId)")
     fun getCountLocationIdRR(locationId: String): Int
 
+    @Query("SELECT LocationId FROM assetMain WHERE Location IN (:locationName)")
+    fun getLocationIdRR(locationName:String):Int
+
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE inventoryScanId IS NULL")
     fun getCountNotReconciled(): Int
 
@@ -238,7 +241,12 @@ interface BookDao {
     fun addInventoryItem(inventoryMaster: Inventorymaster)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addInventoryScanRR(InventoryScan: InventoryScan)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addScanTag(scanTag: ScanTag)
+
+
 
     /*Update*/
     @Update(onConflict = OnConflictStrategy.REPLACE)
