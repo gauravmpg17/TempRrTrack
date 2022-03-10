@@ -255,7 +255,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 if(!etRfid.getText().toString().isEmpty())
                 {
                     locationName=etRfid.getText().toString().trim();
-                 //   tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationName));
+                   tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationName)));
 
                 }
 

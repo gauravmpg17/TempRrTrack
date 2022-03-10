@@ -41,6 +41,11 @@ interface BookDao {
     @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE categoryId IN (:catId)")
     fun getCategoryAssetCount(catId: Int): Int
 
+    @Query("SELECT COUNT(LocationId) FROM assetMain WHERE OfficeLocation IN (:locationId)")
+    fun getCountLocationIdRR(locationId: String): Int
+
+
+
     @Query("SELECT * FROM tblLocationMaster WHERE id IN (:locationId)")
     fun getLocationName(locationId: Int): LocationMaster
 
@@ -56,8 +61,8 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue")
     fun getCount(): Int
 
-    @Query("SELECT COUNT(OfficeLocation) FROM assetMain WHERE OfficeLocation IN (:locationId)")
-    fun getCountLocationId(locationId: Int): Int
+    @Query("SELECT COUNT(LocationId) FROM assetMain WHERE Location IN (:locationId)")
+    fun getCountLocationId(locationId: String): Int
 
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE inventoryScanId IS NULL")
     fun getCountNotReconciled(): Int
