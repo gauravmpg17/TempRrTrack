@@ -28,7 +28,7 @@ data class AssetMain(
     val ScanID: Int?,
     val ScanDate: String?,
     val Class:String?,
-    val OfficeLocation:String?,
+    val Location:String?,
     val EntryDate: String?,
     val ExitDate: String?,
     val VendorBarcode:String?,

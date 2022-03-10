@@ -54,16 +54,16 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
     }
 
-    override fun onGoalClick(bookAttributes: BookAndAssetData) {
+    override fun onGoalClick(bookAttributes: AssetMain) {
 
-//        Application.locateTag = bookAttributes.assetCatalogue.rfidTag
-//        RFIDController.accessControlTag = bookAttributes.assetCatalogue.rfidTag
-//        Application.PreFilterTag = bookAttributes.assetCatalogue.rfidTag
-//        Application.comefrom ="show"
-//
-//
-//
-//        replaceFragment(requireActivity().supportFragmentManager, LocateOperationsFragment(), R.id.content_frame)
+        Application.locateTag = bookAttributes.AssetRFID
+        RFIDController.accessControlTag =bookAttributes.AssetRFID
+        Application.PreFilterTag =bookAttributes.AssetRFID
+        Application.comefrom ="show"
+
+
+
+        replaceFragment(requireActivity().supportFragmentManager, LocateOperationsFragment(), R.id.content_frame)
     }
 
     private fun setAdaptor() {

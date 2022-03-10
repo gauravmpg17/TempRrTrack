@@ -36,9 +36,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search), OnGoalClickListen
     }
 
     override fun onGoalClick(navToScreen: String) {
-        replaceFragment(
-            requireActivity().supportFragmentManager, CategoriesFragment(),
-            R.id.content_frame
-        )
+
     }
 }

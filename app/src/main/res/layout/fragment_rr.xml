@@ -111,6 +111,7 @@
                     android:fontFamily="@font/jio_type_light"
                     android:hint="@string/scan_location_barcode"
                     android:inputType="text"
+
                     android:textColor="@color/black"
                     android:textSize="@dimen/sixteen_sp"
                     app:iconifiedByDefault="false" />
@@ -120,7 +121,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/five_dp"
                     android:src="@drawable/ic_barcode" />
 

@@ -3,8 +3,6 @@ package asset.trak.database
 import androidx.room.*
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.*
-import asset.trak.model.MasterClass
-import asset.trak.model.SamplingArticles
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.modelsrrtrack.InventoryScan
 import asset.trak.modelsrrtrack.MasterLocation
@@ -20,16 +18,11 @@ interface BookDao {
     fun addInventoryScan(inventoryScan: List<InventoryScan>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMasterClass(masterClass: List<MasterClass>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMasterLocation(masterLocation: List<MasterLocation>)
 
+    //MasterVendor
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMasterVendor(masterVendor: List<MasterVendor>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addSamplingArticles(masterLocation: List<SamplingArticles>)
     /**/
 
     @Query("SELECT * FROM assetMain")
@@ -56,7 +49,7 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue")
     fun getCount(): Int
 
-    @Query("SELECT COUNT(OfficeLocation) FROM assetMain WHERE OfficeLocation IN (:locationId)")
+    @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
 
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE inventoryScanId IS NULL")
@@ -83,8 +76,8 @@ interface BookDao {
     @Query("SELECT * FROM tblAssetCatalogue WHERE categoryId IN (:categoryId) AND subCategoryId IN (:subCategoryId)")
     fun getBooksCategoryAndSubCategory(categoryId: Int, subCategoryId: Int): List<BookAndAssetData>
 
-    @Query("SELECT * FROM assetMain WHERE categoryId IN (:categoryId)")
-    fun getBooksCategory(categoryId: Int): List<AssetMain>
+    @Query("SELECT * FROM tblAssetCatalogue WHERE categoryId IN (:categoryId)")
+    fun getBooksCategory(categoryId: Int): List<BookAndAssetData>
 
     @Query("SELECT * FROM tblCatSubCatMap WHERE categoryId IN (:CatId)")
     fun getCatSubCatMapByCatId(CatId: Int): List<CatSubCatMap>
@@ -122,8 +115,8 @@ interface BookDao {
     @Query("SELECT * FROM tblAssetClassification")
     fun getAssetClassficationMasterList(): List<AssetClassification>
 
-    @Query("SELECT * FROM tblAssetCatalogue WHERE rfidTag IN (:rfidTag)")
-    fun getBookForRFID(rfidTag: String): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain WHERE AssetRFID IN (:rfidTag)")
+    fun getBookForRFID(rfidTag: String): List<AssetMain>
 
     @Query("SELECT * FROM tblInventorymaster WHERE _id IN (:id)")
     fun getInventoryMaster(id: Int): List<Inventorymaster>

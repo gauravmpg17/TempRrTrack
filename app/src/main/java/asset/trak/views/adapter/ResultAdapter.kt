@@ -24,7 +24,7 @@ import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import java.io.File
 
 interface OnResultClickListener {
-    fun onGoalClick(navToScreen: BookAndAssetData)
+    fun onGoalClick(navToScreen:AssetMain)
 }
 //
 class ResultAdapter(
@@ -56,57 +56,23 @@ class ResultAdapter(
 
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
         val  homeGoalsItem = items[position]
-//        holder.tvTitle.text = homeGoalsItem.assetCatalogue?.assetName
-//
-//        if( homeGoalsItem.bookAttributes?.author.isNullOrEmpty())
-//        {
-//            holder.tvAuthor.text = "-"
-//        }
-//        else
-//        {
-//            holder.tvAuthor.text = homeGoalsItem.bookAttributes?.author
-//        }
-//
-//        if( homeGoalsItem.assetCatalogue.subCategoryName.equals("") || homeGoalsItem.assetCatalogue.subCategoryName.isNullOrBlank())
-//        {
-//            holder.tvCategory.text = homeGoalsItem.assetCatalogue.categoryName
-//        }
-//        else
-//        {
-//            holder.tvCategory.text ="${homeGoalsItem.assetCatalogue.categoryName} - ${homeGoalsItem.assetCatalogue.subCategoryName}"
-//        }
-//
-//        if(homeGoalsItem.assetCatalogue?.locationName.equals("") || homeGoalsItem.assetCatalogue?.locationName.isNullOrBlank())
-//        {
-//            holder.tvTag.text = "-"
-//        }
-//        else
-//        {
-//            holder.tvTag.text = homeGoalsItem.assetCatalogue?.locationName
-//        }
-//
-//
-//        if(isFromLib==true)
-//        {
-//            holder.tvSearch.visibility=View.VISIBLE
-//        }
-//        else
-//        {
-//            holder.tvSearch.visibility=View.GONE
-//        }
-//
-//            holder.tv.visibility=View.GONE
-//            Glide.with(context)
-//                .load(File(homeGoalsItem.assetCatalogue.imagePathFile.toString()))
-//                .placeholder(R.color.light_gray)
-//                .fitCenter()
-//                .error(R.drawable.ic_not_found_error)
-//                .into(holder.ivBook)
-//
-//
-//        holder.itemView.setOnClickListener {
-//            onGoalClickListener.onGoalClick(homeGoalsItem)
-//        }
+        holder.tvTitle.text = homeGoalsItem.Supplier
+
+        if( homeGoalsItem.SampleType.isNullOrEmpty())
+        {
+            holder.tvAuthor.text = "-"
+        }
+        else
+        {
+            holder.tvAuthor.text = homeGoalsItem.SampleType
+        }
+        holder.tvCategory.text = homeGoalsItem.SampleNature+" | "+homeGoalsItem.Season
+        holder.tvTag.text = homeGoalsItem.Location+" - "+homeGoalsItem.Class
+
+
+        holder.itemView.setOnClickListener {
+            onGoalClickListener.onGoalClick(homeGoalsItem)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -129,14 +95,10 @@ class ResultAdapter(
                 if (constraint != null) {
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
-//                            if (mFilterData.assetCatalogue.assetName?.lowercase()?.contains(constraint.toString().lowercase())==true
-//                                || mFilterData.bookAttributes?.author?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-//                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true
+                                || mFilterData.SampleType?.lowercase()?.contains(constraint.toString().lowercase())==true ||
+                                mFilterData.SampleNature?.lowercase()?.contains(constraint.toString().lowercase())==true||
+                                mFilterData.Season?.lowercase()?.contains(constraint.toString().lowercase())==true)
 
                                 results.add(mFilterData)
                         }
