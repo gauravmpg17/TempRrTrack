@@ -143,6 +143,15 @@ interface BookDao {
     @Query("SELECT COUNT(_id) FROM tblInventorymaster")
     fun getInventoryMasterAllCount(): Int
 
+    @Query("SELECT * FROM tblAssetCatalogue WHERE inventorySyncFlag=1")
+    fun getAssetsPendingToSync(): List<BookAndAssetData>
+
+    @Query("SELECT * FROM masterLocation WHERE LocRFID=:rfId")
+    fun getLocationMasterDataRR(rfId:String): MasterLocation
+
+//    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
+//    fun clearSyncFlagOfAssets(ids:List<String>)
+
     @Query("SELECT * FROM tblInventorymaster where locationId in (:locationId) AND Status='Pending' ORDER BY _id desc LIMIT 1")
     fun getPendingInventoryScan(locationId: Int): List<Inventorymaster>
 
@@ -161,24 +170,24 @@ interface BookDao {
     /*  @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE rfidTag IN (:scanTagIds) AND locationId IN (:locationId)")
       fun getCountOfTagsFound(scanTagIds: List<String>,locationId: Int): Int*/
 
-    @Query("SELECT COUNT(*) FROM tblAssetCatalogue AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.rfidTag WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
+    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
     fun getCountOfTagsFound(scanId: String, locationId: Int): Int
 
     //   @Query("SELECT COUNT(*) FROM tblAssetCatalogue AC LEFT JOIN tblScanTag ST ON ST.rfidTag = AC.rfidTag WHERE ST.scanId IS NULL AND AC.locationId IN (:locationId)")
-    @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND rfidTag is null)")
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
     fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int
 
-    @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId NOT IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId))")
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId))")
     fun getCountFoundDifferentLoc(scanId: String, locationId: Int): Int
 
-    @Query("SELECT COUNT(*) FROM tblScanTag ST LEFT JOIN tblAssetCatalogue AC ON ST.rfidTag = AC.rfidTag WHERE AC.rfidTag IS NULL AND ST.scanId IN (:scanId)")
+    @Query("SELECT COUNT(*) FROM tblScanTag ST LEFT JOIN assetMain AC ON ST.rfidTag = AC.AssetRFID WHERE AC.AssetRFID IS NULL AND ST.scanId IN (:scanId)")
     fun getCountNotRegistered(scanId: String): Int
 
     @Query("SELECT COUNT(*) FROM tblScanTag  WHERE rfidTag IN (:rfid) AND scanId IN (:scanId)")
     fun getCountOfTagAlready(rfid: String, scanId: String): Int
 
-    @Query("SELECT * FROM tblAssetCatalogue  WHERE locationId IN (:locationId) AND rfidTag NOT IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId)) OR (locationId IN (:locationId) AND rfidTag is null)")
-    fun getAssetNotFound(locationId: Int, scanId: String): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain  WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
+    fun getAssetNotFound(locationId: Int, scanId: String): List<AssetMain>
 
     @Query("SELECT * FROM tblAssetCatalogue  WHERE locationId NOT IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getAssetDifferentLoc(scanId: String, locationId: Int): List<BookAndAssetData>
@@ -186,7 +195,7 @@ interface BookDao {
     @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from tblAssetCatalogue WHERE rfidTag IS NOT NULL)")
     fun getAssetNotRegistered(scanId: String): List<ScanTag>
 
-    @Query("SELECT * FROM tblAssetCatalogue  WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
+    @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getFoundAtLocation(scanId: String, locationId: Int): List<BookAndAssetData>
 
     @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=(:scanId) WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")

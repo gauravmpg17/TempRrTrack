@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import asset.trak.database.daoModel.BookAndAssetData
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.NotFoundAdapter
 import asset.trak.views.baseclasses.BaseFragment
 import com.markss.rfidtemplate.R
@@ -22,7 +23,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
 
     private lateinit var notFoundAdapter: NotFoundAdapter
 
-     var listBook = ArrayList<BookAndAssetData>()
+     var listBook = ArrayList<AssetMain>()
      override fun onResume() {
          super.onResume()
          setAdaptor()
@@ -69,9 +70,9 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
 
 
         for (i in 0 until listBook.size)  {
-            var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
+            var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
             listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
+            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).categoryId?:0)
             listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
             var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
             listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""

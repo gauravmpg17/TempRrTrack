@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.AssetCatalogue
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.DifferntLocationAdapter
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application.bookDao
@@ -20,7 +21,7 @@ class DifferentLoactionFragment(val locationId: Int) :
     Fragment(R.layout.fragment_different_loaction) {
     private lateinit var notFoundAdapter: DifferntLocationAdapter
 
-    var listBook = ArrayList<BookAndAssetData>()
+    var listBook = ArrayList<AssetMain>()
     override fun onResume() {
         super.onResume()
 

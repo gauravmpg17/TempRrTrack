@@ -99,7 +99,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
 
-                <EditText
+                <TextView
                     android:id="@+id/etRfid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -480,8 +480,8 @@
         android:letterSpacing="0.1"
         android:paddingStart="@dimen/thirty_dp"
         android:paddingEnd="@dimen/thirty_dp"
-        android:src="@android:drawable/ic_media_pause"
-        android:tag="0"
+        android:src="@android:drawable/ic_media_play"
+        android:tag="1"
         android:text="@string/stop"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
