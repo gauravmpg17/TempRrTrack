@@ -69,6 +69,7 @@ import asset.trak.database.entity.ScanTag;
 import asset.trak.model.AssetScanApi;
 import asset.trak.model.AssetSyncRequestDataModel;
 import asset.trak.model.InventoryMasterApi;
+import asset.trak.modelsrrtrack.AssetMain;
 import asset.trak.modelsrrtrack.MasterLocation;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ReconcileAssetsFragment;
@@ -219,9 +220,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         listInventoryList = new HashSet<>();
         scannedList = new HashSet<>();
 
-        pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
-        ReconcileAssetsFragment.Companion.setFragmentCallback(this);
 
+        ReconcileAssetsFragment.Companion.setFragmentCallback(this);
+        pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
         if (!pendingInventoryScan.isEmpty()) {
             List<String> tags = bookDao.getScanRfid(locationData.getLocID(), pendingInventoryScan.get(0).getScanID());
             for (String tag : tags) {
@@ -717,9 +718,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             countNotFoundCurrentLocation = bookDao.getCountOfTagsNotFound(locationData.getLocID(), inventoryMaster.getScanID());
             countFoundDifferentLoc = bookDao.getCountFoundDifferentLoc(inventoryMaster.getScanID(), locationData.getLocID());
             countNotRegistered = bookDao.getCountNotRegistered(inventoryMaster.getScanID());
-            List<BookAndAssetData> bookAndAssetData = bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID());
+            List<AssetMain> assetMain = bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID());
 
-            Log.e("data", "" + new Gson().toJson(bookAndAssetData));
+          //  Log.e("data", "" + new Gson().toJson(bookAndAssetData));
 
 
             tvFoundLocCount.setText(String.valueOf(countFoundCurrentLocation));
@@ -771,8 +772,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
     private void postAssetSync() {
         disableUserInteraction(getActivity());
-        List<BookAndAssetData> bookAndAssetData = new ArrayList<BookAndAssetData>();
-        List<BookAndAssetData> pendingSyncAssetdata = new ArrayList<BookAndAssetData>();
+        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
+        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
         AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
         List<String> syncedIds = new ArrayList<>() ;
 
@@ -794,31 +795,33 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
         bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
-        pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
+
+        //temporary
+      //  pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
 
         Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
         Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
-        for (BookAndAssetData n : bookAndAssetData) {
+        for (AssetMain n : bookAndAssetData) {
             AssetScanApi scanTag = new AssetScanApi();
             // sending ID in rfidTag field, need to update attribute name accordingly in API
-            scanTag.setRfidTag(n.getAssetCatalogue().getId());
-            if (n.getAssetCatalogue().getInventoryScanId() == null) {
-                n.getAssetCatalogue().setInventoryScanId("");
+            scanTag.setRfidTag(n.getAssetRFID());
+            if (n.getScanID() == null) {
+                n.setScanID(0);
             }
             scanTag.setScanId(inventoryMaster.getScanID());
-            scanTag.setNewLocationId(n.getAssetCatalogue().getLocationId());
+            scanTag.setNewLocationId(n.getLocationId());
             assetSyncRequestDataModel.assetScan.add(scanTag);
         }
 
         // assets which location was changed
-        for (BookAndAssetData n : pendingSyncAssetdata) {
+        for (AssetMain n : pendingSyncAssetdata) {
             AssetScanApi scanTag = new AssetScanApi();
-            scanTag.setRfidTag(n.getAssetCatalogue().getId());
+            scanTag.setRfidTag(n.getAssetRFID());
 
 
-            scanTag.setNewLocationId(n.getAssetCatalogue().getLocationId());
+            scanTag.setNewLocationId(n.getLocationId());
             assetSyncRequestDataModel.assetScan.add(scanTag);
-            syncedIds.add(n.getAssetCatalogue().getId());
+            syncedIds.add(n.getScanID().toString());
         }
 
         RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel),MediaType.parse("application/json"));

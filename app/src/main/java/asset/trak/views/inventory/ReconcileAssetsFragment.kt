@@ -178,33 +178,33 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 addScan()
 
             } else if (viewPager.currentItem == 1) { // Different Loc
-                if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
-                    val listBook = ArrayList<AssetMain>()
-                    (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
-                        if (it.assetCatalogue.isSelected) {
-                            val assetCatalog = it.assetCatalogue
-                            assetCatalog.locationId = locationId
-                            listBook.add(assetCatalog)
-                        }
-                    }
-                    if (listBook.isNotEmpty()) {
-                        bookDao.updateBookAndAssetData(listBook)
-                        refreshRegisteredAssetCount()
-                        (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
-                    } else
-//                        Toast.makeText(
-//                            requireContext(), "No Item Selected",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-
-                    FancyToast.makeText(
-                        requireActivity(),
-                        "No Item Selected.",
-                        FancyToast.LENGTH_LONG,
-                        FancyToast.WARNING,
-                        false
-                    ).show()
-                }
+//                if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
+//                    val listBook = ArrayList<AssetMain>()
+//                    (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
+//                        if (it.isSelected) {
+//                            val assetCatalog = it
+//                            assetCatalog.LocationId = locationId
+//                            listBook.add(assetCatalog)
+//                        }
+//                    }
+//                    if (listBook.isNotEmpty()) {
+//                        bookDao.updateBookAndAssetData(listBook)
+//                        refreshRegisteredAssetCount()
+//                        (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
+//                    } else
+////                        Toast.makeText(
+////                            requireContext(), "No Item Selected",
+////                            Toast.LENGTH_LONG
+////                        ).show()
+//
+//                    FancyToast.makeText(
+//                        requireActivity(),
+//                        "No Item Selected.",
+//                        FancyToast.LENGTH_LONG,
+//                        FancyToast.WARNING,
+//                        false
+//                    ).show()
+//                }
 
                 if(inventorymaster==null)
                 {
@@ -257,9 +257,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         var totalItemCount=0
                         val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
-                            if (it.assetCatalogue.isSelected) {
-                                val assetCatalog = it.assetCatalogue
-                                assetCatalog.locationId = locationId
+                            if (it.isSelected) {
+                                val assetCatalog = it
+                                assetCatalog.LocationId = locationId
                                // listBook.add(assetCatalog)
                                 totalItemCount+=1
                             }
@@ -280,38 +280,40 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         }
                         else
                         {
-                            showUpdateLocationDialog()
+
+                            listBook.forEach {
+                                bookDao.deleteFromAssetMain(it.LocationId,it.AssetRFID!!)
+                            }
+                            refreshRegisteredAssetCount()
+                            (adapter.getCurrentFragment() as NotFoundFragment).updateList()
+                            inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
+                            var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
+                            val notFound = "Not Found ($notFoundCount)"
+                            tablayout.getTabAt(0)?.text = notFound
+
                         }
                     }
                 }
                 1 -> {
                     if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
-                        val listRfids = ArrayList<ScanTag>()
-
-                        val scanList = bookDao.getScanTagAll()
-                        val listBook =
-                            (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook
-
-                        Log.e(
-                            "sdd",
-                            "" + Gson().toJson((adapter.getCurrentFragment() as DifferentLoactionFragment).listBook)
-                        )
-
-                        listBook.forEach {
-                            if (it.assetCatalogue.isSelected) {
-                                val assetCatalogue = it.assetCatalogue
-                                scanList.forEachIndexed { index, scanTag ->
-                                    if (scanTag.rfidTag == assetCatalogue.rfidTag) {
-                                        listRfids.add(scanTag)
-                                    }
-                                }
+                        val listBook = ArrayList<AssetMain>()
+                        (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
+                            if (it.isSelected) {
+                                val assetCatalog = it
+                                assetCatalog.LocationId = locationId
+                                listBook.add(assetCatalog)
                             }
                         }
-
-                        if (listRfids.isNotEmpty()) {
-                            bookDao.deleteScanTag(listRfids)
+                        if (listBook.isNotEmpty()) {
+                            bookDao.updateBookAndAssetData(listBook)
+                            refreshRegisteredAssetCount()
                             (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
                         } else
+//                        Toast.makeText(
+//                            requireContext(), "No Item Selected",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+
                             FancyToast.makeText(
                                 requireActivity(),
                                 "No Item Selected.",
@@ -319,6 +321,43 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 FancyToast.WARNING,
                                 false
                             ).show()
+                    }
+
+
+//                    if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
+//                        val listRfids = ArrayList<ScanTag>()
+//
+//                        val scanList = bookDao.getScanTagAll()
+//                        val listBook =
+//                            (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook
+//
+//                        Log.e(
+//                            "sdd",
+//                            "" + Gson().toJson((adapter.getCurrentFragment() as DifferentLoactionFragment).listBook)
+//                        )
+//
+//                        listBook.forEach {
+//                            if (it.assetCatalogue.isSelected) {
+//                                val assetCatalogue = it.assetCatalogue
+//                                scanList.forEachIndexed { index, scanTag ->
+//                                    if (scanTag.rfidTag == assetCatalogue.rfidTag) {
+//                                        listRfids.add(scanTag)
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        if (listRfids.isNotEmpty()) {
+//                            bookDao.deleteScanTag(listRfids)
+//                            (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
+//                        } else
+//                            FancyToast.makeText(
+//                                requireActivity(),
+//                                "No Item Selected.",
+//                                FancyToast.LENGTH_LONG,
+//                                FancyToast.WARNING,
+//                                false
+//                            ).show()
 //                            Toast.makeText(
 //                                requireContext(), "No Item Selected",
 //                                Toast.LENGTH_LONG
@@ -340,7 +379,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
 
                     }
-                }
+
                 2 -> {
                     if (adapter.getCurrentFragment() is NotRegisteredFragment) {
                         val listRfids = ArrayList<ScanTag>()
@@ -426,7 +465,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         if( !(adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.isNullOrEmpty())
                         {
                             (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
-                                it.assetCatalogue.isSelected=false
+                                it.isSelected=false
                             }
                             adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
                             viewPager.adapter = adapter
@@ -436,7 +475,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                     if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
 
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
-                            it.assetCatalogue.isSelected = false
+                            it.isSelected = false
                         }
                         adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
                         viewPager.adapter = adapter
@@ -449,7 +488,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
 
                     (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
-                        it.assetCatalogue.isSelected = false
+                        it.isSelected = false
                     }
                     adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
                     viewPager.adapter = adapter
@@ -497,8 +536,6 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, scanTag.scanId!!)
                         val notFound = "Not Found ($notFoundCount)"
                         tablayout.getTabAt(0)?.text = notFound
-
-
                     }
                 }
             }
@@ -614,55 +651,52 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
     override fun onUpdateItemCallback(locationData: LocationUpdate) {
 Log.d("locationData",locationData.title.toString());
-        val listBook = ArrayList<AssetCatalogue>()
-        (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
-            if (it.assetCatalogue.isSelected) {
-                val assetCatalog = it.assetCatalogue
-                assetCatalog.locationId = locationId
-                listBook.add(assetCatalog)
-            }
-        }
-        if (listBook.isNotEmpty()) {
-            listBook.forEach {
-                bookDao.updateLocationIdOfAssets(locationData.id!!,it.id)
-            }
-            refreshRegisteredAssetCount()
-            (adapter.getCurrentFragment() as NotFoundFragment).updateList()
-            progressBar2.visibility=View.INVISIBLE
-            FancyToast.makeText(
-                requireActivity(),
-                "Asset(s) Location Updated Successfully.",
-                FancyToast.LENGTH_LONG,
-                FancyToast.SUCCESS,
-                false
-            ).show()
-//            Toast.makeText(
-//                requireContext(), "Asset(s) Location Updated Successfully",
-//                Toast.LENGTH_LONG
+//        val listBook = ArrayList<AssetMain>()
+//        (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
+//            if (it.isSelected) {
+//                val assetCatalog = it
+//                assetCatalog.LocationId = locationId
+//                listBook.add(assetCatalog)
+//            }
+//        }
+//        if (listBook.isNotEmpty()) {
+//            listBook.forEach {
+//                bookDao.updateLocationIdOfAssets(locationData.id!!,it.id)
+//            }
+//            refreshRegisteredAssetCount()
+//            (adapter.getCurrentFragment() as NotFoundFragment).updateList()
+//            progressBar2.visibility=View.INVISIBLE
+//            FancyToast.makeText(
+//                requireActivity(),
+//                "Asset(s) Location Updated Successfully.",
+//                FancyToast.LENGTH_LONG,
+//                FancyToast.SUCCESS,
+//                false
 //            ).show()
-
-
-        } else
-        {
-//            Toast.makeText(
-//                requireContext(), "No Item Selected",
-//                Toast.LENGTH_LONG
+//
+//
+//
+//        } else
+//        {
+////            Toast.makeText(
+////                requireContext(), "No Item Selected",
+////                Toast.LENGTH_LONG
+////            ).show()
+//
+//            FancyToast.makeText(
+//                requireActivity(),
+//                "No Item Selected.",
+//                FancyToast.LENGTH_LONG,
+//                FancyToast.WARNING,
+//                false
 //            ).show()
-
-            FancyToast.makeText(
-                requireActivity(),
-                "No Item Selected.",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-            ).show()
-            progressBar2.visibility=View.INVISIBLE
-        }
-        inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
-        var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
-        val notFound = "Not Found ($notFoundCount)"
-        tablayout.getTabAt(0)?.text = notFound
-        loginErrorDialog?.cancel()
+//            progressBar2.visibility=View.INVISIBLE
+//        }
+//        inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
+//        var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
+//        val notFound = "Not Found ($notFoundCount)"
+//        tablayout.getTabAt(0)?.text = notFound
+//        loginErrorDialog?.cancel()
 
     }
 

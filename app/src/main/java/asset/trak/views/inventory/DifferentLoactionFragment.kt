@@ -68,13 +68,13 @@ class DifferentLoactionFragment(val locationId: Int) :
         }
 
         for (i in 0 until listBook.size)  {
-            var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
-            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category=roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
-            var subcategory=roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
-            listBook[i].assetCatalogue?.isSelected=false
+            var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+            listBook[i].Location= locationName?.locationName?:""
+      //      var category=roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//            var subcategory=roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
+            listBook[i].isSelected=false
 
 
 

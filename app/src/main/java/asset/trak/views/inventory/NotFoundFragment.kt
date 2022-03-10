@@ -71,11 +71,11 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
 
         for (i in 0 until listBook.size)  {
             var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).categoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
-            var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
+            listBook[i]?.Location= locationName?.locationName?:""
+//            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).Supplier?:0)
+//            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//            var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
 
         }
 
@@ -87,12 +87,6 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
     }
      fun updateList() {
          setAdaptor()
-
-
      }
-
-
-
-
 
 }
