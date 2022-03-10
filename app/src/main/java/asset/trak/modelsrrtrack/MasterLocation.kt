@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "masterLocation")
 data class MasterLocation(
+    @PrimaryKey(autoGenerate = false)
+    val LocID: Int,
     val CreatedBy: String?,
     val CreatedOn: String?,
     val Description: String?,
@@ -12,7 +14,6 @@ data class MasterLocation(
     val ImageURL: String?,
     val InactiveOn: String?,
     val LocBarcode: String?,
-    val LocID: Int?,
     val LocQRCode: String?,
     val LocRFID: String?,
     val ModifiedBy: String?,
@@ -20,6 +21,5 @@ data class MasterLocation(
     val Name: String?,
     val ParentLocID: Int?
 ){
-    @PrimaryKey(autoGenerate = false)
     var id:Int=0
 }
