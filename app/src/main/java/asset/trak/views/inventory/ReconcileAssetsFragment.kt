@@ -460,9 +460,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     }
 
     fun refreshRegisteredAssetCount(){
-        var count = bookDao.getCountLocationId(locationId)
-        val totalcount = "Total Registered Assets : $count"
-        tvTotalRegisteredAssets.text = totalcount
+//        var count = bookDao.getCountLocationId(locationId)
+//        val totalcount = "Total Registered Assets : $count"
+//        tvTotalRegisteredAssets.text = totalcount
     }
     fun addScan() {
         val inventoryMasterList:List<Inventorymaster>? = bookDao.getPendingInventoryScan(locationId)

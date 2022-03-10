@@ -76,7 +76,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 
-public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler,RapidReadCallback {
+public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler, RapidReadCallback {
     MatchModeProgressView progressView;
     private TextView tagReadRate;
     private TextView uniqueTags;
@@ -106,22 +106,23 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private HashSet<String> listInventoryList = new HashSet<>();
     private HashSet<String> scannedList = new HashSet<>();
 
-   // private List<Inventorymaster> pendingInventoryScan;
+    // private List<Inventorymaster> pendingInventoryScan;
     private InventoryViewModel inventoryViewModel;
     private int totalRegisteredCount = 0;
     private int countFoundCurrentLocation = 0;
     private int countNotFoundCurrentLocation = 0;
     private int countFoundDifferentLoc = 0;
     private int countNotRegistered = 0;
-    private boolean isFromReconsile=false;
-    private String whichInventory="";
+    private boolean isFromReconsile = false;
+    private String whichInventory = "";
     private EditText etRfid;
     private String locationName;
     private AppCompatImageView ivScanBar;
+
     public static RapidReadFragment newInstance(final String whichInventory) {
-        RapidReadFragment rapidReadFragment=new RapidReadFragment();
+        RapidReadFragment rapidReadFragment = new RapidReadFragment();
         final Bundle args = new Bundle();
-        args.putString("INVENTORY_NAME",whichInventory);
+        args.putString("INVENTORY_NAME", whichInventory);
         rapidReadFragment.setArguments(args);
         return rapidReadFragment;
     }
@@ -129,15 +130,12 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Bundle arguments=getArguments();
-        if(arguments==null || ! arguments.containsKey("INVENTORY_NAME"))
-        {
+        final Bundle arguments = getArguments();
+        if (arguments == null || !arguments.containsKey("INVENTORY_NAME")) {
 
-        }
-        else
-        {
-            whichInventory=arguments.getString("INVENTORY_NAME");
-            Log.d("RapidReadFragment", "onCreate: "+whichInventory);
+        } else {
+            whichInventory = arguments.getString("INVENTORY_NAME");
+            Log.d("RapidReadFragment", "onCreate: " + whichInventory);
         }
         setHasOptionsMenu(true);
     }
@@ -184,8 +182,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         batchModeRR = getActivity().findViewById(R.id.batchModeRR);
         invtoryData = getActivity().findViewById(R.id.inventoryDataLayout);
         btnScan = getActivity().findViewById(R.id.btnScan123);
-        etRfid=getActivity().findViewById(R.id.etRfid);
-        ivScanBar=getActivity().findViewById(R.id.ivScanBar);
+        etRfid = getActivity().findViewById(R.id.etRfid);
+        ivScanBar = getActivity().findViewById(R.id.ivScanBar);
 
         foundLocParent = getActivity().findViewById(R.id.foundLocParent);
         foundForDifferentParent = getActivity().findViewById(R.id.foundForDifferentParent);
@@ -201,26 +199,22 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         TextView tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
         TextView tvLocation = getActivity().findViewById(R.id.tvLocation);
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
-     //   locationData = getArguments().getParcelable("LocationData");
+        //   locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
 
 
-      //  tvLocation.setText(locationData.getLocationName());
-
+        //  tvLocation.setText(locationData.getLocationName());
 
 
         listInventoryList = new HashSet<>();
         scannedList = new HashSet<>();
 
-       // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
+        // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
 
-        if(whichInventory.equals("global"))
-        {
+        if (whichInventory.equals("global")) {
             foundLocParent.setVisibility(View.GONE);
             foundForDifferentParent.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             foundLocParent.setVisibility(View.VISIBLE);
             foundForDifferentParent.setVisibility(View.VISIBLE);
         }
@@ -252,11 +246,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         ivScanBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!etRfid.getText().toString().isEmpty())
-                {
-                    locationName=etRfid.getText().toString().trim();
-                   tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationName)));
-
+                if (!etRfid.getText().toString().isEmpty()) {
+                    locationName = etRfid.getText().toString().trim();
+                    tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationIdRR(locationName)));
                 }
 
             }
@@ -282,12 +274,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //                }
 //           }
 //        });
-        if(scannedList.size() < 10 && scannedList.size()>0)
-        {
-            uniqueTags.setText("0"+scannedList.size());
-        }
-        else
-        {
+        if (scannedList.size() < 10 && scannedList.size() > 0) {
+            uniqueTags.setText("0" + scannedList.size());
+        } else {
             uniqueTags.setText(Integer.toString(scannedList.size()));
         }
 
@@ -375,7 +364,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
         ivBack.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         });
 
 
@@ -394,16 +383,16 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 llBottomParent.setVisibility(View.VISIBLE);
                 btnScan.setImageResource(android.R.drawable.ic_media_play);
                 addDataToScanTag();
-            //    showCountFound();
-              //  updateCountInDb();
+                //    showCountFound();
+                //  updateCountInDb();
             }
         });
 
         btnReconcile.setOnClickListener(v -> {
-            LocationMaster locationData=new LocationMaster();
+            LocationMaster locationData = new LocationMaster();
             Bundle bundle = new Bundle();
-            bundle.putInt("locationId",0);
-            bundle.putString("INVENTORY_NAME",whichInventory);
+            bundle.putInt("locationId", 0);
+            bundle.putString("INVENTORY_NAME", whichInventory);
             bundle.putParcelable("LocationData", locationData);
             ReconcileAssetsFragment fragInfo = new ReconcileAssetsFragment();
             fragInfo.setArguments(bundle);
@@ -411,13 +400,12 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                     fragInfo, TAG_CONTENT_FRAGMENT).addToBackStack(null).commit();
         });
 
-        if(isFromReconsile)
-        {
+        if (isFromReconsile) {
             btnScan.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
             btnScan.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
-          //  showCountFound();
+            //  showCountFound();
         }
         ReconcileAssetsFragment.Companion.setFragmentCallback(this);
     }
@@ -854,13 +842,13 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
     @Override
     public void onDataSent(boolean isBack) {
-        Log.d("tag12", "onDataSent: "+isBack);
-        isFromReconsile=isBack;
+        Log.d("tag12", "onDataSent: " + isBack);
+        isFromReconsile = isBack;
         btnScan.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
         btnScan.setImageResource(android.R.drawable.ic_media_play);
         addDataToScanTag();
-       // showCountFound();
+        // showCountFound();
     }
 
 }
