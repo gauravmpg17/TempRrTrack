@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.LocationMaster
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants.setTitleImage
 import com.bumptech.glide.Glide
 import com.markss.rfidtemplate.R
@@ -29,11 +30,11 @@ interface OnResultClickListener {
 class ResultAdapter(
     private val context: Context,
     private val onGoalClickListener: OnResultClickListener,
-    private var items: ArrayList<BookAndAssetData>,
+    private var items: ArrayList<AssetMain>,
     private var isFromLib:Boolean?=false
 ) :
     RecyclerView.Adapter<ResultAdapter.HomeGoalsHolder>(), Filterable {
-    private var mFilteredList: List<BookAndAssetData>? = null
+    private var mFilteredList: List<AssetMain>? = null
 
 
     inner class HomeGoalsHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -54,67 +55,58 @@ class ResultAdapter(
     }
 
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
-        val homeGoalsItem = items[position]
-        holder.tvTitle.text = homeGoalsItem.assetCatalogue?.assetName
-
-        if( homeGoalsItem.bookAttributes?.author.isNullOrEmpty())
-        {
-            holder.tvAuthor.text = "-"
-        }
-        else
-        {
-            holder.tvAuthor.text = homeGoalsItem.bookAttributes?.author
-        }
-
-        if( homeGoalsItem.assetCatalogue.subCategoryName.equals("") || homeGoalsItem.assetCatalogue.subCategoryName.isNullOrBlank())
-        {
-            holder.tvCategory.text = homeGoalsItem.assetCatalogue.categoryName
-        }
-        else
-        {
-            holder.tvCategory.text ="${homeGoalsItem.assetCatalogue.categoryName} - ${homeGoalsItem.assetCatalogue.subCategoryName}"
-        }
-
-        if(homeGoalsItem.assetCatalogue?.locationName.equals("") || homeGoalsItem.assetCatalogue?.locationName.isNullOrBlank())
-        {
-            holder.tvTag.text = "-"
-        }
-        else
-        {
-            holder.tvTag.text = homeGoalsItem.assetCatalogue?.locationName
-        }
-
-
-        if(isFromLib==true)
-        {
-            holder.tvSearch.visibility=View.VISIBLE
-        }
-        else
-        {
-            holder.tvSearch.visibility=View.GONE
-        }
-//        if(homeGoalsItem.assetCatalogue.imagePathFile?.isNotEmpty()==true)
-//        {
-          //  holder.ivBook.visibility=View.VISIBLE
-            holder.tv.visibility=View.GONE
-            Glide.with(context)
-                .load(File(homeGoalsItem.assetCatalogue.imagePathFile.toString()))
-                .placeholder(R.color.light_gray)
-                .fitCenter()
-                .error(R.drawable.ic_not_found_error)
-                .into(holder.ivBook)
-      //  }
-//        else{
-//            holder.ivBook.visibility=View.GONE
-//            holder.tv.visibility=View.VISIBLE
-//            holder.tv.text = homeGoalsItem.assetCatalogue?.assetName?.substring(0,2)?.toUpperCase()
+        val  homeGoalsItem = items[position]
+//        holder.tvTitle.text = homeGoalsItem.assetCatalogue?.assetName
 //
+//        if( homeGoalsItem.bookAttributes?.author.isNullOrEmpty())
+//        {
+//            holder.tvAuthor.text = "-"
 //        }
-
-
-        holder.itemView.setOnClickListener {
-            onGoalClickListener.onGoalClick(homeGoalsItem)
-        }
+//        else
+//        {
+//            holder.tvAuthor.text = homeGoalsItem.bookAttributes?.author
+//        }
+//
+//        if( homeGoalsItem.assetCatalogue.subCategoryName.equals("") || homeGoalsItem.assetCatalogue.subCategoryName.isNullOrBlank())
+//        {
+//            holder.tvCategory.text = homeGoalsItem.assetCatalogue.categoryName
+//        }
+//        else
+//        {
+//            holder.tvCategory.text ="${homeGoalsItem.assetCatalogue.categoryName} - ${homeGoalsItem.assetCatalogue.subCategoryName}"
+//        }
+//
+//        if(homeGoalsItem.assetCatalogue?.locationName.equals("") || homeGoalsItem.assetCatalogue?.locationName.isNullOrBlank())
+//        {
+//            holder.tvTag.text = "-"
+//        }
+//        else
+//        {
+//            holder.tvTag.text = homeGoalsItem.assetCatalogue?.locationName
+//        }
+//
+//
+//        if(isFromLib==true)
+//        {
+//            holder.tvSearch.visibility=View.VISIBLE
+//        }
+//        else
+//        {
+//            holder.tvSearch.visibility=View.GONE
+//        }
+//
+//            holder.tv.visibility=View.GONE
+//            Glide.with(context)
+//                .load(File(homeGoalsItem.assetCatalogue.imagePathFile.toString()))
+//                .placeholder(R.color.light_gray)
+//                .fitCenter()
+//                .error(R.drawable.ic_not_found_error)
+//                .into(holder.ivBook)
+//
+//
+//        holder.itemView.setOnClickListener {
+//            onGoalClickListener.onGoalClick(homeGoalsItem)
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -131,20 +123,20 @@ class ResultAdapter(
             @SuppressLint("DefaultLocale")
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val oReturn = FilterResults()
-                val results = ArrayList<BookAndAssetData>()
+                val results = ArrayList<AssetMain>()
                 if (mFilteredList == null)
                     mFilteredList = items
                 if (constraint != null) {
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
-                            if (mFilterData.assetCatalogue.assetName?.lowercase()?.contains(constraint.toString().lowercase())==true
-                                || mFilterData.bookAttributes?.author?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
+//                            if (mFilterData.assetCatalogue.assetName?.lowercase()?.contains(constraint.toString().lowercase())==true
+//                                || mFilterData.bookAttributes?.author?.lowercase()?.contains(constraint.toString().lowercase())==true ||
+//                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
 
                                 results.add(mFilterData)
                         }
@@ -160,7 +152,7 @@ class ResultAdapter(
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = (results.values as ArrayList<BookAndAssetData>)
+                items = (results.values as ArrayList<AssetMain>)
                 notifyDataSetChanged()
             }
         }

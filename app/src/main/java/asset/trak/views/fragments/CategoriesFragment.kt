@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.CategoryMaster
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants
 import asset.trak.views.adapter.CategoriesAdapter
 import asset.trak.views.adapter.OnResultClickListener
@@ -24,7 +25,7 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), OnResultC
     private lateinit var categoriedAdapter: CategoriesAdapter
     private var listCategories = ArrayList<CategoryMaster>()
     private lateinit var resultAdapter: ResultAdapter
-    private var listBook = ArrayList<BookAndAssetData>()
+    private var listBook = ArrayList<AssetMain>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

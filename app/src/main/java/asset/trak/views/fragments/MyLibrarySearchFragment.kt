@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigator
 import asset.trak.database.daoModel.BookAndAssetData
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants
 import asset.trak.views.adapter.OnResultClickListener
 import asset.trak.views.adapter.ResultAdapter
@@ -27,7 +28,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     OnResultClickListener {
 
     private lateinit var resultAdapter: ResultAdapter
-    private var listBook = ArrayList<BookAndAssetData>()
+    private var listBook = ArrayList<AssetMain>()
     private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,32 +56,33 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
     override fun onGoalClick(bookAttributes: BookAndAssetData) {
 
-        Application.locateTag = bookAttributes.assetCatalogue.rfidTag
-        RFIDController.accessControlTag = bookAttributes.assetCatalogue.rfidTag
-        Application.PreFilterTag = bookAttributes.assetCatalogue.rfidTag
-        Application.comefrom ="show"
-
-
-
-        replaceFragment(requireActivity().supportFragmentManager, LocateOperationsFragment(), R.id.content_frame)
+//        Application.locateTag = bookAttributes.assetCatalogue.rfidTag
+//        RFIDController.accessControlTag = bookAttributes.assetCatalogue.rfidTag
+//        Application.PreFilterTag = bookAttributes.assetCatalogue.rfidTag
+//        Application.comefrom ="show"
+//
+//
+//
+//        replaceFragment(requireActivity().supportFragmentManager, LocateOperationsFragment(), R.id.content_frame)
     }
 
     private fun setAdaptor() {
         listBook.clear()
         listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
-        for (i in 0 until listBook.size)  {
-            var locationName=Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
-            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category=Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
-            var subcategory=Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
 
-        }
+//        for (i in 0 until listBook.size)  {
+//            var locationName=Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
+//            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
+//            var category=Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//            var subcategory=Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
+//
+//        }
 
 
 
-        Log.e("ss",""+listBook[0].assetCatalogue.imagePathFile)
+//        Log.e("ss",""+listBook[0].assetCatalogue.imagePathFile)
 
         resultAdapter = ResultAdapter(requireContext(), this, listBook,true)
         rvResult.adapter = resultAdapter

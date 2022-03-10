@@ -25,8 +25,8 @@ interface BookDao {
     fun addMasterVendor(masterVendor: List<MasterVendor>)
     /**/
 
-    @Query("SELECT * FROM tblAssetCatalogue")
-    fun getBooks(): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain")
+    fun getBooks(): List<AssetMain>
 
     @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE assetClassId IN (:assetId)")
     fun getAssetCount(assetId: Int): Int
@@ -76,8 +76,8 @@ interface BookDao {
     @Query("SELECT * FROM tblAssetCatalogue WHERE categoryId IN (:categoryId) AND subCategoryId IN (:subCategoryId)")
     fun getBooksCategoryAndSubCategory(categoryId: Int, subCategoryId: Int): List<BookAndAssetData>
 
-    @Query("SELECT * FROM tblAssetCatalogue WHERE categoryId IN (:categoryId)")
-    fun getBooksCategory(categoryId: Int): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain WHERE categoryId IN (:categoryId)")
+    fun getBooksCategory(categoryId: Int): List<AssetMain>
 
     @Query("SELECT * FROM tblCatSubCatMap WHERE categoryId IN (:CatId)")
     fun getCatSubCatMapByCatId(CatId: Int): List<CatSubCatMap>
