@@ -197,12 +197,15 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                     tvAuthor.setText(list.get(0).getSampleType());
                 }
                 if (list.get(0).getSampleNature() != null) {
-                    tvTag.setText(list.get(0).getSampleNature());
+                    tvTag.setText(list.get(0).getSampleNature()+" | "+list.get(0).getSeason());
                 }
 
                 if (list.get(0).getSeason() != null) {
-                    tvCategory.setText(list.get(0).getSampleNature());
+                    tvCategory.setText(list.get(0).getLocation()+" - "+list.get(0).getClass());
                 }
+
+
+
 
                 //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
                 // CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());

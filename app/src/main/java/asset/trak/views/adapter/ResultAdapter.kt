@@ -36,7 +36,6 @@ class ResultAdapter(
     RecyclerView.Adapter<ResultAdapter.HomeGoalsHolder>(), Filterable {
     private var mFilteredList: List<AssetMain>? = null
 
-
     inner class HomeGoalsHolder(view: View) : RecyclerView.ViewHolder(view) {
         var tvTitle: AppCompatTextView = view.findViewById(R.id.tvTitle)
         var tvAuthor: AppCompatTextView = view.findViewById(R.id.tvAuthor)
