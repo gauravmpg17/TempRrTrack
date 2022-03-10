@@ -29,12 +29,8 @@ data class BookAttributes(
     var numberOfPages: Int? = null,
     var Publish: String? = null,
     var isbN10: String? = null,
-    var isbN13: String? = null
-
-    ):Parcelable
-
+    var isbN13: String? = null):Parcelable
 {
-
 //    @PrimaryKey(autoGenerate = true)
 //    var idDb: Int? = null
 }

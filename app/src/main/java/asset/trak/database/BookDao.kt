@@ -3,10 +3,28 @@ package asset.trak.database
 import androidx.room.*
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.*
+import asset.trak.modelsrrtrack.AssetMain
+import asset.trak.modelsrrtrack.InventoryScan
+import asset.trak.modelsrrtrack.MasterLocation
+import asset.trak.modelsrrtrack.MasterVendor
 
 @Dao
 interface BookDao {
-    /*Get Lists*/
+    /*RrTrack*/
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAssetMain(assetMain: List<AssetMain>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addInventoryScan(inventoryScan: List<InventoryScan>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addMasterLocation(masterLocation: List<MasterLocation>)
+
+    //MasterVendor
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addMasterVendor(masterVendor: List<MasterVendor>)
+    /**/
+
     @Query("SELECT * FROM tblAssetCatalogue")
     fun getBooks(): List<BookAndAssetData>
 

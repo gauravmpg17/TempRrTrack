@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import asset.trak.database.BookDao
 import asset.trak.database.entity.BookAttributes
-import asset.trak.database.entity.LastSyncData
-import asset.trak.model.AssetSyncRequestDataModel
+import asset.trak.modelsrrtrack.LastSyncData
+import asset.trak.modelsrrtrack.LastSyncResponse
 import asset.trak.networklayer.AssetTrakAPIInterface
 import com.markss.rfidtemplate.application.Application
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +29,7 @@ class BookRepository @Inject constructor(
     private lateinit var mbookResponse: List<BookAttributes>
     var mTakePickAction = MutableLiveData<String>()
 
-    var mLastSync = MutableLiveData<LastSyncData>()
+    var mLastSync = MutableLiveData<LastSyncResponse>()
     var mAssetSync = MutableLiveData<Int>()
     private val mRetrofitException = MutableLiveData<Boolean>()
 
@@ -51,24 +51,21 @@ class BookRepository @Inject constructor(
     }
 
 
-    suspend fun getLastSync(syncTime: String?): LiveData<LastSyncData>? {
+    suspend fun getLastSync(syncTime: String?): LiveData<LastSyncResponse>? {
 
         try {
-            val android_id = Settings.Secure.getString(Application.context.contentResolver,
-                Settings.Secure.ANDROID_ID);
+         //   val android_id = Settings.Secure.getString(Application.context.contentResolver, Settings.Secure.ANDROID_ID);
 
             val hashMap = HashMap<String, String>()
             hashMap["LastSyncDateTime"] = syncTime.toString()
             //hashMap["CurrentDateTime"] = "2022-02-08"
-            hashMap["MacId"] = android_id
+          //  hashMap["MacId"] = android_id
 
             val response = assetTrakAPIInterface.geLastSync(hashMap)
             if (!response.isSuccessful) {
-                val code = response.code()
-                //return null so that will observed from Calling point/view
                 return mLastSync
             }
-            val data = response.body()!!.data
+            val data = response.body()
             mLastSync.value = data!!
             return mLastSync
         } catch (error: Throwable) {
@@ -81,7 +78,6 @@ class BookRepository @Inject constructor(
     suspend fun postAssetSync(body:RequestBody): LiveData<Int>? {
 
         try {
-
             val response = assetTrakAPIInterface.posAssetSync(body)
             mAssetSync.value=response.code()
             return mAssetSync

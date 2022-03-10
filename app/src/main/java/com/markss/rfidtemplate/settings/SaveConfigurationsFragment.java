@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.zebra.rfid.api3.BATCH_MODE;
 import com.zebra.rfid.api3.BEEPER_VOLUME;
 import com.zebra.rfid.api3.HANDHELD_TRIGGER_EVENT_TYPE;
@@ -26,7 +24,6 @@ import com.zebra.rfid.api3.TAG_FIELD;
 import com.markss.rfidtemplate.R;
 import com.markss.rfidtemplate.common.Constants;
 import com.markss.rfidtemplate.rfid.RFIDController;
-
 import java.util.ArrayList;
 
 /**

@@ -106,6 +106,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvRfid"
                     android:background="@null"
+                    android:inputType="number"
+                    android:digits="0123456789"
                     android:layout_toStartOf="@+id/ivScanBar"
                     android:fontFamily="@font/jio_type_light"
                     android:hint="@string/scan_location_barcode"
