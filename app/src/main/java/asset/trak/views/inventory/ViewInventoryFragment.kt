@@ -1,5 +1,6 @@
 package asset.trak.views.inventory
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -32,6 +33,7 @@ class ViewInventoryFragment : BaseFragment(R.layout.fragment_view_inventory) {
     }
 
     private fun initialisation() {
+
         listOfLocations.clear()
         listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
     }

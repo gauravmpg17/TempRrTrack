@@ -39,7 +39,8 @@ data class AssetMain(
     val Color:String?,
     val StyleNo:String?,
     val AddressedTo:String?,
-    val CourierBillDetails:String?
+    val CourierBillDetails:String?,
+    val LocationId:Int
 //    val CategoryID: String?,
 //    val ClassID: String?,
 //    val CreatedBy: String?,

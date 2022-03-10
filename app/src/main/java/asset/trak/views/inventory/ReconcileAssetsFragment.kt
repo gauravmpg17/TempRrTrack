@@ -19,6 +19,7 @@ import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.database.entity.ScanTag
 import asset.trak.model.LocationUpdate
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.inter.UpdateItemInterface
 import asset.trak.views.adapter.ReconcileAssetsPagerAdapter
 import asset.trak.views.adapter.UpdateLocationAdapter
@@ -178,7 +179,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
             } else if (viewPager.currentItem == 1) { // Different Loc
                 if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
-                    val listBook = ArrayList<AssetCatalogue>()
+                    val listBook = ArrayList<AssetMain>()
                     (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
                         if (it.assetCatalogue.isSelected) {
                             val assetCatalog = it.assetCatalogue
@@ -460,9 +461,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     }
 
     fun refreshRegisteredAssetCount(){
-        var count = bookDao.getCountLocationId(locationId)
-        val totalcount = "Total Registered Assets : $count"
-        tvTotalRegisteredAssets.text = totalcount
+//        var count = bookDao.getCountLocationId(locationId)
+//        val totalcount = "Total Registered Assets : $count"
+//        tvTotalRegisteredAssets.text = totalcount
     }
     fun addScan() {
         val inventoryMasterList:List<Inventorymaster>? = bookDao.getPendingInventoryScan(locationId)

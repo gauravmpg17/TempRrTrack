@@ -1,12 +1,15 @@
 package asset.trak.modelsrrtrack
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "masterLocation")
+@Parcelize
 data class MasterLocation(
     @PrimaryKey(autoGenerate = false)
-    val LocID: Int,
+    var LocID: Int,
     val CreatedBy: String?,
     val CreatedOn: String?,
     val Description: String?,
@@ -20,6 +23,4 @@ data class MasterLocation(
     val ModifiedOn: String?,
     val Name: String?,
     val ParentLocID: Int?
-){
-    var id:Int=0
-}
+):Parcelable
