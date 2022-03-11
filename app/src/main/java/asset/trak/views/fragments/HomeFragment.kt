@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.BookAttributes
+import asset.trak.database.entity.Inventorymaster
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
@@ -19,6 +20,8 @@ import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
+import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
+import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -70,7 +73,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
 
     private fun listeners() {
-
         searchLin.setOnClickListener {
             replaceFragment(
                 requireActivity().supportFragmentManager, MyLibrarySearchFragment(),
@@ -79,8 +81,27 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
         globalInventory.setOnClickListener {
             //global
+            val pendingInventory =
+                Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+
+            val cnt = Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+//
+//            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
+//                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
+
+            if (pendingInventory.isEmpty()) {
+                val inventoryMaster = Inventorymaster(
+                    scanID = "A" + ((cnt ?: 0) + 1),
+                    deviceId = "A",
+                    deviceIdCount = ((cnt ?: 0) + 1),
+                    status = Constants.InventoryStatus.PENDING,
+                    locationId = 0
+                )
+                Application.roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+            }
             replaceFragment(
-                requireActivity().supportFragmentManager, ViewInventoryFragment("global"),
+                requireActivity().supportFragmentManager,
+                GlobalRapidReadFragment.newInstance("global"),
                 R.id.content_frame
             )
         }

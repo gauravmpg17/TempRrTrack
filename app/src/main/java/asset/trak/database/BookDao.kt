@@ -55,6 +55,9 @@ interface BookDao {
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
 
+    @Query("SELECT COUNT(DISTINCT AssetRFID) FROM assetMain")
+    fun getCountRegisterForGlobal(): Int
+
     @Query("SELECT COUNT(LocationId) FROM assetMain WHERE Location IN (:locationId)")
     fun getCountLocationIdRR(locationId: String): Int
 
@@ -149,6 +152,11 @@ interface BookDao {
     @Query("SELECT * FROM tblInventorymaster where locationId in (:locationId) AND Status='Pending' ORDER BY _id desc LIMIT 1")
     fun getPendingInventoryScan(locationId: Int): List<Inventorymaster>
 
+
+    @Query("SELECT * FROM tblInventorymaster where  Status='Pending' ORDER BY _id desc LIMIT 1")
+    fun getGlobalPendingInventoryScan(): List<Inventorymaster>
+
+
     @Query("SELECT  * FROM tblInventorymaster WHERE locationId IN (:id) AND Status ='Completed' ORDER BY ScanOn Desc LIMIT 1")
     fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
 
@@ -163,6 +171,9 @@ interface BookDao {
 
     @Query("SELECT rfidTag FROM tblScanTag  WHERE locationId IN (:locationId) AND scanId IN (:scanId)")
     fun getScanRfid(locationId: Int, scanId: String): List<String>
+
+    @Query("SELECT rfidTag FROM tblScanTag  WHERE  scanId IN (:scanId)")
+    fun getGlobalScanRfid(scanId: String): List<String>
 
     /*  @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE rfidTag IN (:scanTagIds) AND locationId IN (:locationId)")
       fun getCountOfTagsFound(scanTagIds: List<String>,locationId: Int): Int*/
@@ -200,6 +211,7 @@ interface BookDao {
 
     @Query("UPDATE assetMain  SET ScanID=NULL WHERE locationId  IN (:locationId)")
     fun resetScanIdOfAssetsAtLocation(locationId: Int)
+
 
 //    @Query("UPDATE assetMain SET locationId= (:locationId) WHERE LocationId=(:id)")
 //    fun updateLocationIdOfAssets(locationId: Int,id:String)
@@ -268,6 +280,15 @@ interface BookDao {
     /*Delete*/
     @Delete
     fun deleteScanTag(listScanTag: List<ScanTag>)
+
+    @Query("DELETE FROM tblScanTag WHERE scanId=(:scanId)")
+    fun deleteScanTagSingle(scanId:String)
+
+    @Query("DELETE FROM tblInventorymaster WHERE scanId=(:scanId)")
+    fun deleteInventorySingle(scanId:String)
+
+//    @Delete
+//    fun deleteScanTagSingle(listScanTag: ScanTag)
 
 //    @Query("UPDATE orders SET order_amount = :amount, price = :price WHERE order_id =:id")
 //void update(Float amount, Float price, int id);

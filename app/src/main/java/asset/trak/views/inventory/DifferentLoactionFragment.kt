@@ -27,7 +27,6 @@ class DifferentLoactionFragment(val locationId: Int) :
     var listBook = ArrayList<AssetMain>()
     override fun onResume() {
         super.onResume()
-
         setAdaptor()
     }
 

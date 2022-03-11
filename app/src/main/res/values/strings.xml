@@ -646,12 +646,12 @@
     <string name="lblCategory">Category</string>
     <string name="lblSubCategory">SubCategory</string>
     <string name="lblInventory">Inventory</string>
-    <string name="lblLocationInventory">Location Inventory</string>
+    <string name="lblLocationInventory">Zonal Inventory</string>
     <string name="lblReconciled">RECONCILED</string>
     <string name="lblNotReconciled">NOT RECONCILED</string>
     <string name="lblDetailAssetInventories">Details of asset inventories</string>
     <string name="lblViewInventory">View Inventory</string>
-    <string name="last_recorded_02_02_2022_10_43_am">Last recorded:</string>
+    <string name="last_recorded_02_02_2022_10_43_am">Scan started on:</string>
     <string name="last_scanned">Last scanned:</string>
     <string name="lblRecordInventory">Record Inventory</string>
     <string name="lblScanned">Scanned</string>

@@ -282,16 +282,46 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         else
                         {
 
-                            listBook.forEach {
-                                bookDao.deleteFromAssetMain(it.LocationId,it.AssetRFID!!)
-                            }
-                            refreshRegisteredAssetCount()
-                            (adapter.getCurrentFragment() as NotFoundFragment).updateList()
-                            inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
-                            var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
-                            val notFound = "Not Found ($notFoundCount)"
-                            tablayout.getTabAt(0)?.text = notFound
+                            val listRfids = ArrayList<ScanTag>()
 
+                            val scanList = bookDao.getScanTagAll()
+                            val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
+
+//                            Log.e(
+//                                "sdd",
+//                                "" + Gson().toJson((adapter.getCurrentFragment() as DifferentLoactionFragment).listBook)
+//                            )
+
+                            listBook.forEach {
+                                if (it.isSelected) {
+                                    val assetCatalogue = it
+                                    scanList.forEachIndexed { index, scanTag ->
+                                        if (scanTag.rfidTag == assetCatalogue.AssetRFID) {
+                                            listRfids.add(scanTag)
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (listRfids.isNotEmpty()) {
+                                bookDao.deleteScanTag(listRfids)
+                                (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
+                                if(inventorymaster==null)
+                                {
+                                    var notFoundCount =0
+                                    val notFound = "Not Found ($notFoundCount)"
+                                    tablayout.getTabAt(0)?.text = notFound
+                                }
+                                else
+                                {
+                                    refreshRegisteredAssetCount()
+                                    (adapter.getCurrentFragment() as NotFoundFragment).updateList()
+                                    inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
+                                    var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
+                                    val notFound = "Not Found ($notFoundCount)"
+                                    tablayout.getTabAt(0)?.text = notFound
+                                }
+                            }
                         }
                     }
                 }

@@ -97,10 +97,10 @@
                 android:layout_height="32dp" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/llSpinnerParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/twenty_dp"
                 android:background="@drawable/rectangle_border"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -109,6 +109,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvLocation"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
@@ -195,7 +196,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/llSpinnerParent" />
+                app:layout_constraintTop_toBottomOf="@id/rlTopParent" />
 
             <TextView
                 android:id="@+id/tvILastRecord12"
@@ -294,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="27dp"
-                    android:layout_marginEnd="@dimen/twenty_dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="@dimen/twenty_eight_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
@@ -307,8 +308,6 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/foundLocParent"
                 android:layout_width="0dp"
@@ -517,7 +516,6 @@
         app:layout_goneMarginBottom="@dimen/twenty_dp" />
 
 
-
     <LinearLayout
         android:id="@+id/llBottomParent2"
         android:layout_width="match_parent"
@@ -556,7 +554,7 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:text="@string/lblInventoryRecorded"
+            android:text="INVENTORY RECORDED"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_13" />
