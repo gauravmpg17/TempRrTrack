@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigator
 import asset.trak.database.daoModel.BookAndAssetData
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants
 import asset.trak.views.adapter.OnResultClickListener
 import asset.trak.views.adapter.ResultAdapter
@@ -27,7 +28,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     OnResultClickListener {
 
     private lateinit var resultAdapter: ResultAdapter
-    private var listBook = ArrayList<BookAndAssetData>()
+    private var listBook = ArrayList<AssetMain>()
     private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,11 +54,11 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
     }
 
-    override fun onGoalClick(bookAttributes: BookAndAssetData) {
+    override fun onGoalClick(bookAttributes: AssetMain) {
 
-        Application.locateTag = bookAttributes.assetCatalogue.rfidTag
-        RFIDController.accessControlTag = bookAttributes.assetCatalogue.rfidTag
-        Application.PreFilterTag = bookAttributes.assetCatalogue.rfidTag
+        Application.locateTag = bookAttributes.AssetRFID
+        RFIDController.accessControlTag =bookAttributes.AssetRFID
+        Application.PreFilterTag =bookAttributes.AssetRFID
         Application.comefrom ="show"
 
 
@@ -68,6 +69,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     private fun setAdaptor() {
         listBook.clear()
         listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+
 //        for (i in 0 until listBook.size)  {
 //            var locationName=Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
 //            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
@@ -78,6 +80,9 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 //
 //        }
 
+
+
+//        Log.e("ss",""+listBook[0].assetCatalogue.imagePathFile)
 
         resultAdapter = ResultAdapter(requireContext(), this, listBook,true)
         rvResult.adapter = resultAdapter

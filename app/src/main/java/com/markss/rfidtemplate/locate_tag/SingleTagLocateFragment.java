@@ -41,6 +41,7 @@ import java.util.List;
 import asset.trak.database.daoModel.BookAndAssetData;
 import asset.trak.database.entity.CategoryMaster;
 import asset.trak.database.entity.LocationMaster;
+import asset.trak.modelsrrtrack.AssetMain;
 
 /**
  * <p/>
@@ -166,7 +167,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
     private void getBookDetails() {
         String RFIDTag = Application.locateTag;
-        List<BookAndAssetData> list = new ArrayList<>();
+        List<AssetMain> list = new ArrayList<>();
         List<LocationMaster> itemslocation = new ArrayList<>();
         TextView tvTitle = getActivity().findViewById(R.id.tvTitle);
         TextView tvAuthor = getActivity().findViewById(R.id.tvAuthor);
@@ -182,42 +183,28 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             {
                 constLay.setVisibility(View.GONE);
             }
-            else
-            {
+            else {
                 constLay.setVisibility(View.VISIBLE);
-                if(list.get(0).getAssetCatalogue().getAssetName()==null || TextUtils.isEmpty(list.get(0).getAssetCatalogue().getAssetName()))
-                {
+                if (list.get(0).getSupplier() == null || TextUtils.isEmpty(list.get(0).getSupplier())) {
                     tvTitle.setText("-");
-                }
-                else
-                {
-                    tvTitle.setText(list.get(0).getAssetCatalogue().getAssetName());
+                } else {
+                    tvTitle.setText(list.get(0).getSupplier());
                 }
 
-                if(list.get(0).getBookAttributes()==null || list.get(0).getBookAttributes().getAuthor()==null) {
+                if (list.get(0).getSampleType() == null || list.get(0).getSampleType() ==  null) {
                     tvAuthor.setText("-");
+                } else {
+                    tvAuthor.setText(list.get(0).getSampleType());
                 }
-                else{
-                    tvAuthor.setText(list.get(0).getBookAttributes().getAuthor());
+                if (list.get(0).getSampleNature() != null) {
+                    tvTag.setText(list.get(0).getSampleNature()+" | "+list.get(0).getSeason());
                 }
-                if(list.get(0).getAssetCatalogue().getLocationId()==null)
-                {
-                    tvTag.setText("-");
+
+                if (list.get(0).getSeason() != null) {
+                    tvCategory.setText(list.get(0).getLocation()+" - "+list.get(0).getClass());
                 }
-                else
-                {
-                    LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
-                    tvTag.setText(locationMaster.getLocationName());
-                }
-                if(list.get(0).getAssetCatalogue().getCategoryId()==null)
-                {
-                    tvCategory.setText("-");
-                }
-                else
-                {
-//                    CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
-//                    tvCategory.setText(categoryMaster.getCategoryName());
-                }
+
+
 
 
                 //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
@@ -225,25 +212,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
 //            tvTag.setText(locationMaster.getLocationName());
                 //     tvCategory.setText(categoryMaster.getCategoryName());
-                if(list.get(0).getAssetCatalogue().getImagePathFile()!=null && !list.get(0).getAssetCatalogue().getImagePathFile().isEmpty())
-                {
-                  //  ivBook.setVisibility(View.VISIBLE);
-                    tv.setVisibility(View.GONE);
-                    Glide.with(requireActivity())
-                            .load(list.get(0).getAssetCatalogue().getImagePathFile())
-                            .into(ivBook);
-                }
-                else {
 
-                 //   ivBook.setVisibility(View.VISIBLE);
-                    tv.setVisibility(View.GONE);
-                    Glide.with(requireActivity())
-                            .load(list.get(0).getAssetCatalogue().getImagePathFile())
-                            .centerCrop()
-                            .error(R.drawable.ic_not_found_error)
-                            .into(ivBook);
-                    //    tv.setText(list.get(0).getAssetCatalogue().getAssetName().substring(0,2).toUpperCase());
-                }
             }
         }
 

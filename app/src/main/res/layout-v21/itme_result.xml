@@ -6,12 +6,15 @@
     android:background="@drawable/rectangle_background"
     app:cardCornerRadius="2dp"
     app:cardBackgroundColor="#F3F3F3"
+
     app:cardPreventCornerOverlap="false"
     android:layout_width="match_parent"
     android:layout_marginTop="@dimen/ten_dp"
     android:layout_marginBottom="@dimen/ten_dp"
     android:layout_height="wrap_content">
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:paddingBottom="@dimen/ten_dp"
+    android:paddingTop="@dimen/ten_dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.Barrier
@@ -135,6 +138,7 @@
         tools:text="@string/dummy" />
 
     <TextView
+
         android:id="@+id/tvSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

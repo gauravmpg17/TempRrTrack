@@ -46,6 +46,8 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
         var ivCheck: ImageView = view.findViewById(R.id.ivCheck)
 
 
+
+
     }
 
     @NonNull
@@ -57,7 +59,21 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 
     override fun onBindViewHolder(holder: NotFoundHolder, position: Int) {
         val item = items[position]
-        holder.tvTitle.text = item?.Location
+
+
+
+        holder.tvTitle.text = item?.Supplier
+
+        if( item.SampleType.isNullOrEmpty())
+        {
+            holder.tvAuthor.text = "-"
+        }
+        else
+        {
+            holder.tvAuthor.text = item.SampleType
+        }
+        holder.tvCategory.text = item.SampleNature+" | "+item.Season
+        holder.tvEdition.text = item.Location+" - "+item.Class
 //       holder.tvAuthor.text = item.bookAttributes?.author
 //        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
 //        {
@@ -71,6 +87,10 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
         holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
 //        if (item.isSelected) holder.ivCheck.visibility=View.VISIBLE
 //        else holder.ivCheck.visibility=View.GONE
+
+
+
+
 
 
         holder.clMain.setOnClickListener {

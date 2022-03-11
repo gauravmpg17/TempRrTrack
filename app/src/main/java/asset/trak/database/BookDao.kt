@@ -3,8 +3,6 @@ package asset.trak.database
 import androidx.room.*
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.*
-import asset.trak.model.MasterClass
-import asset.trak.model.SamplingArticles
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.modelsrrtrack.InventoryScan
 import asset.trak.modelsrrtrack.MasterLocation
@@ -20,20 +18,15 @@ interface BookDao {
     fun addInventoryScan(inventoryScan: List<InventoryScan>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMasterClass(masterClass: List<MasterClass>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMasterLocation(masterLocation: List<MasterLocation>)
 
+    //MasterVendor
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMasterVendor(masterVendor: List<MasterVendor>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addSamplingArticles(masterLocation: List<SamplingArticles>)
     /**/
 
-    @Query("SELECT * FROM tblAssetCatalogue")
-    fun getBooks(): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain")
+    fun getBooks(): List<AssetMain>
 
     @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE assetClassId IN (:assetId)")
     fun getAssetCount(assetId: Int): Int
@@ -131,8 +124,8 @@ interface BookDao {
     @Query("SELECT * FROM tblAssetClassification")
     fun getAssetClassficationMasterList(): List<AssetClassification>
 
-    @Query("SELECT * FROM tblAssetCatalogue WHERE rfidTag IN (:rfidTag)")
-    fun getBookForRFID(rfidTag: String): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain WHERE AssetRFID IN (:rfidTag)")
+    fun getBookForRFID(rfidTag: String): List<AssetMain>
 
     @Query("SELECT * FROM tblInventorymaster WHERE _id IN (:id)")
     fun getInventoryMaster(id: Int): List<Inventorymaster>

@@ -60,10 +60,10 @@ class ScanFragment : BaseFragment(R.layout.fragment_scan),
                 }
                 else
                 {
-                    listOfAsset.addAll(
-                        Application.roomDatabaseBuilder.getBookDao()
-                            .getBookForRFID(inventoryListItem?.tagID)
-                    )
+//                    listOfAsset.addAll(
+//                        Application.roomDatabaseBuilder.getBookDao()
+//                            .getBookForRFID(inventoryListItem?.tagID)
+//                    )
 
                     if(listOfAsset.isNullOrEmpty())
                     {

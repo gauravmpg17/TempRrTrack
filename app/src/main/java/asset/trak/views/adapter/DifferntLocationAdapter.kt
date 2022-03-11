@@ -48,6 +48,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
         var tvEdition: TextView =view.findViewById(R.id.tvTag)
 
 
+
     }
 
     @NonNull
@@ -60,6 +61,18 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
     override fun onBindViewHolder(holder: NotFoundHolder, position: Int) {
         val item = items[position]
         holder.tvTitle.text = item.Supplier
+
+
+        if( item.SampleType.isNullOrEmpty())
+        {
+            holder.tvAuthor.text = "-"
+        }
+        else
+        {
+            holder.tvAuthor.text = item.SampleType
+        }
+        holder.tvCategory.text = item.SampleNature+" | "+item.Season
+        holder.tvEdition.text = item.Location+" - "+item.Class
 //        if( item.bookAttributes?.author.isNullOrEmpty())
 //        {
 //            holder.tvAuthor.text = "-"

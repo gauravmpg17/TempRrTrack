@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_categories.*
 
 
 @AndroidEntryPoint
-class CategoriesFragment : BaseFragment(R.layout.fragment_categories), OnResultClickListener {
+class CategoriesFragment : BaseFragment(R.layout.fragment_categories) {
     private lateinit var navController: NavController
     private lateinit var categoriedAdapter: CategoriesAdapter
     private var listCategories = ArrayList<CategoryMaster>()
@@ -124,7 +124,7 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), OnResultC
 
 
         if (arguments == null) {
-            listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+            //listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
         } else {
 
 
@@ -132,7 +132,7 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), OnResultC
             listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooksCategory(categoryId ?: 1) ?: emptyList())
         }
         Log.d("data==",listBook.size.toString())
-        resultAdapter = ResultAdapter(requireContext(), this, listBook)
+       // resultAdapter = ResultAdapter(requireContext(), this, listBook)
         rvCategories.adapter = resultAdapter
     }
 
@@ -180,16 +180,16 @@ class CategoriesFragment : BaseFragment(R.layout.fragment_categories), OnResultC
 
 
     }
-
-    override fun onGoalClick(bookCatalogue: BookAndAssetData) {
-        val bundle = Bundle()
-        bundle.putParcelable(Constants.BookData, bookCatalogue)
-        val fragment = SubCategoryFragment()
-        fragment.arguments = bundle
-        replaceFragment(
-            requireActivity().supportFragmentManager, fragment,
-            R.id.content_frame
-        )
-    }
+//
+//    override fun onGoalClick(bookCatalogue: BookAndAssetData) {
+//        val bundle = Bundle()
+//        bundle.putParcelable(Constants.BookData, bookCatalogue)
+//        val fragment = SubCategoryFragment()
+//        fragment.arguments = bundle
+//        replaceFragment(
+//            requireActivity().supportFragmentManager, fragment,
+//            R.id.content_frame
+//        )
+//    }
 
 }
