@@ -3,6 +3,7 @@ package asset.trak.views.inventory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import asset.trak.database.entity.Inventorymaster
@@ -14,8 +15,12 @@ import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
+import com.markss.rfidtemplate.rfid.RFIDController
 import com.shashank.sony.fancytoastlib.FancyToast
+import com.zebra.rfid.api3.InvalidUsageException
+import com.zebra.rfid.api3.OperationFailureException
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
+import java.lang.Exception
 import java.util.*
 
 
@@ -68,36 +73,41 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
                         false
                     ).show()
                 }
-                else
+                else if(s.toString().length >=4)
                 {
-                    barCodeName= etRfid.text.toString().trim()
+                    barCodeName= s.toString().trim()
                     //here
                     currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
-                    currLocId=currMasterLocation!!.LocID
-                    var lastScanId=""
-                    var lastRecodedDate=""
-                    var registeredAsPerLastScan=0
-                    var newlyRegistered=0
-                    if (currLocId != null) {
-                        val invData =  roomDatabaseBuilder.getBookDao().getLastRecordedInventoryOfLocation(currLocId)
-                        if(invData.count()>0){
-                            lastRecodedDate= invData.get(0).scanOn.toString()
-                            lastScanId=invData.get(0).scanID
-                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                            registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountOfRegisteredAsPerLastInventoryOfLocation(currLocId,lastScanId)
-                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId,lastScanId)
+                    currMasterLocation?.let {
+                        currLocId=currMasterLocation!!.LocID
+                        var lastScanId=""
+                        var lastRecodedDate=""
+                        var registeredAsPerLastScan=0
+                        var newlyRegistered=0
+                        if (currLocId != null) {
+                            val invData =  roomDatabaseBuilder.getBookDao().getLastRecordedInventoryOfLocation(currLocId)
+                            if(invData.count()>0){
+                                lastRecodedDate= invData.get(0).scanOn.toString()
+                                lastScanId=invData.get(0).scanID
+                                //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                                registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountOfRegisteredAsPerLastInventoryOfLocation(currLocId,lastScanId)
+                                newlyRegistered= roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId,lastScanId)
 
-                        }else{
-                            registeredAsPerLastScan=0
-                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                            }else{
+                                registeredAsPerLastScan=0
+                                newlyRegistered= roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                            }
                         }
+
+
+                        tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                        tvNewlyScanCount.text = newlyRegistered.toString()
+
                     }
-
-
-                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                    tvNewlyScanCount.text = newlyRegistered.toString()
-
-
+                }
+                else
+                {
+                    Log.d("tag1111", "afterTextChanged: Length ${s.length}")
                 }
             }
 
@@ -120,6 +130,25 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
 
         buttonscan.setOnClickListener {
             /*Add a Entry to Table with Pending Status*/
+
+//            try {
+//                if (!RFIDController.mConnectedReader.isConnected) {
+//                    RFIDController.is_disconnection_requested = false
+//                    try {
+//                        RFIDController.mConnectedReader.connect()
+//                    } catch (e: InvalidUsageException) {
+//                        e.printStackTrace()
+//                    } catch (e: OperationFailureException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }
+//            catch (e:Exception)
+//            {
+//                e.printStackTrace()
+//            }
+
+
 
             if(currMasterLocation==null)
             {

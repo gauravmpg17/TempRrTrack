@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 private const val TAG = "HomeFragment"
@@ -86,13 +85,24 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         locationInventory.setOnClickListener {
+//            if (RFIDController.mConnectedReader.isConnected) {
+//                RFIDController.is_disconnection_requested = true
+//                try {
+//                    RFIDController.mConnectedReader.disconnect()
+//                } catch (e: InvalidUsageException) {
+//                    e.printStackTrace()
+//                } catch (e: OperationFailureException) {
+//                    e.printStackTrace()
+//                }
+//            }
+
+
             replaceFragment(
                 requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
                 R.id.content_frame
             )
         }
         configLin.setOnClickListener {
-
             replaceFragment(
                 requireActivity().supportFragmentManager, SettingListFragment(),
                 R.id.content_frame
@@ -151,6 +161,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
                    if (!it.MasterVendor.isNullOrEmpty()) {
                        bookDao?.addMasterVendor(it.MasterVendor)
+                   }
+
+                   if(!it.Inventorymaster.isNullOrEmpty()){
+                       bookDao?.addInventoryMaster(it.Inventorymaster)
                    }
                }
                 Application.isFirstTime = false

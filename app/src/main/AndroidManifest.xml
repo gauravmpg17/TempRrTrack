@@ -19,43 +19,44 @@
     <application
         android:name=".application.Application"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RFIDTemplate"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name="asset.trak.views.activity.TestActivity"
+            android:exported="false" />
         <activity
             android:name="asset.trak.views.activity.SplashAssetTrak"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".modules.login.activity.LoginActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" />
         <activity
-            android:launchMode="singleInstance"
             android:name=".home.MainActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" />
         <activity
             android:name=".settings.SettingsDetailActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:label="@string/title_activity_settings_detail"
- />
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -67,7 +68,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-
         <service
             android:name=".notifications.NotificationsService"
             android:exported="false" />
@@ -77,6 +77,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
+
                 <!-- Actions to be handled in the background should be registered here -->
                 <action android:name="com.rfidreader.battery.low" />
                 <action android:name="com.rfidreader.battery.critical" />
