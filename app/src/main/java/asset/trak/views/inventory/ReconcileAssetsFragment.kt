@@ -20,6 +20,7 @@ import asset.trak.database.entity.LocationMaster
 import asset.trak.database.entity.ScanTag
 import asset.trak.model.LocationUpdate
 import asset.trak.modelsrrtrack.AssetMain
+import asset.trak.modelsrrtrack.MasterLocation
 import asset.trak.utils.inter.UpdateItemInterface
 import asset.trak.views.adapter.ReconcileAssetsPagerAdapter
 import asset.trak.views.adapter.UpdateLocationAdapter
@@ -117,9 +118,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         }
         locationId = arguments?.getInt("locationId") ?: 0
         whichInventory=arguments?.getString("INVENTORY_NAME") ?: ""
-        val locationData = arguments?.getParcelable<LocationMaster>("LocationData")
+        val locationData = arguments?.getParcelable<MasterLocation>("LocationData")
 
-        tvFloorTitle.text = locationData?.locationName
+        tvFloorTitle.text = locationData?.Name
         var locationRegsiterCount = bookDao.getCountLocationId(locationId)
         val totalcount = "Total Registered Assets : $locationRegsiterCount"
         tvTotalRegisteredAssets.text = totalcount

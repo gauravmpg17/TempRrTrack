@@ -3,36 +3,26 @@ package asset.trak.views.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import asset.trak.database.entity.AssetCatalogue
 import asset.trak.database.entity.BookAttributes
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
+import asset.trak.views.inventory.ViewInventoryFragment
 import asset.trak.views.module.InventoryViewModel
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
-import com.markss.rfidtemplate.rapidread.RapidReadFragment
-import com.markss.rfidtemplate.settings.AdvancedOptionItemFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.*
 import java.io.File
-import java.io.IOException
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -89,14 +79,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         globalInventory.setOnClickListener {
+            //global
             replaceFragment(
-                requireActivity().supportFragmentManager, RapidReadFragment.newInstance("global"),
+                requireActivity().supportFragmentManager, ViewInventoryFragment("global"),
                 R.id.content_frame
             )
         }
         locationInventory.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, RapidReadFragment.newInstance("location"),
+                requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
                 R.id.content_frame
             )
         }
