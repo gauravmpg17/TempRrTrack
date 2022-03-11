@@ -87,44 +87,62 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </RelativeLayout>
 
-            <RelativeLayout
+
+            <LinearLayout
                 android:id="@+id/llSpinnerParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginTop="@dimen/twenty_dp"
                 android:background="@drawable/rectangle_border"
-                android:padding="@dimen/fifteen_dp"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
-
-                <TextView
-                    android:id="@+id/etRfid"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvRfid"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/ivScanBar"
-                    android:background="@null"
-                    android:fontFamily="@font/jio_type_light"
-                    android:hint="@string/scan_location_barcode"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sixteen_sp"
-                    app:iconifiedByDefault="false" />
+                    android:padding="@dimen/ten_dp" />
+            </LinearLayout>
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/llSpinnerParent"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/margin_20"-->
+<!--                android:background="@drawable/rectangle_border"-->
+<!--                android:padding="@dimen/fifteen_dp"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
+<!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivScanBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/five_dp"
-                    android:src="@drawable/ic_barcode" />
 
-            </RelativeLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/etRfid"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/tvRfid"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_toStartOf="@+id/ivScanBar"-->
+<!--                    android:background="@null"-->
+<!--                    android:fontFamily="@font/jio_type_light"-->
+<!--                    android:hint="@string/scan_location_barcode"-->
+<!--                    android:imeOptions="actionDone"-->
+<!--                    android:inputType="text"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/sixteen_sp"-->
+<!--                    app:iconifiedByDefault="false" />-->
+
+<!--                <androidx.appcompat.widget.AppCompatImageView-->
+<!--                    android:id="@+id/ivScanBar"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginEnd="@dimen/five_dp"-->
+<!--                    android:src="@drawable/ic_barcode" />-->
+
+<!--            </RelativeLayout>-->
 
 <!--            <LinearLayout-->
 <!--                android:id="@+id/llSpinnerParent"-->
@@ -159,7 +177,7 @@
 
 
             <TextView
-                android:id="@+id/tvLocation"
+                android:id="@+id/tvInventoryReport"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -182,7 +200,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_15"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/tvLocation" />
+                app:layout_constraintTop_toBottomOf="@id/tvInventoryReport" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

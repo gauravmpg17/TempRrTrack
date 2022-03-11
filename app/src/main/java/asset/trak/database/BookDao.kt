@@ -159,6 +159,9 @@ interface BookDao {
     @Query("SELECT  * FROM tblInventorymaster WHERE locationId IN (:id) AND Status ='Completed' ORDER BY ScanOn Desc LIMIT 1")
     fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
 
+    @Query("SELECT  COUNT(ScanID) FROM assetMain WHERE locationId IN (:locationId) AND ScanID =(:scanId)")
+    fun getCountOfRegisteredAsPerLastInventoryOfLocation(locationId: Int, scanId: String): Int
+
     @Query("SELECT * FROM tblScanTag")
     fun getScanTagAll(): List<ScanTag>
 
