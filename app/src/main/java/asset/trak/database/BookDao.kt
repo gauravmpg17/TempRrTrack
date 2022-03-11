@@ -189,7 +189,7 @@ interface BookDao {
     @Query("SELECT * FROM assetMain  WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getAssetDifferentLoc(scanId: String, locationId: Int): List<AssetMain>
 
-    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from assetMain WHERE rfidTag IS NOT NULL)")
+    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT AssetRFID from assetMain WHERE AssetRFID IS NOT NULL)")
     fun getAssetNotRegistered(scanId: String): List<ScanTag>
 
     @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")

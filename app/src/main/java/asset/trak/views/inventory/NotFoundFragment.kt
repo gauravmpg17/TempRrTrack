@@ -95,8 +95,6 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
         val inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
         if(inventoryMasterList.isEmpty())
         {
-
-
         }
         else{
             val inventorymaster= inventoryMasterList.get(0)
