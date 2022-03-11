@@ -25,10 +25,10 @@ data class AssetMain(
     @PrimaryKey(autoGenerate = false)
     val AssetID: String,
     val AssetRFID: String?,
-    val ScanID: Int?,
+    var ScanID: Int?,
     val ScanDate: String?,
     val Class:String?,
-    val Location:String?,
+    var Location:String?,
     val EntryDate: String?,
     val ExitDate: String?,
     val VendorBarcode:String?,
@@ -40,7 +40,8 @@ data class AssetMain(
     val StyleNo:String?,
     val AddressedTo:String?,
     val CourierBillDetails:String?,
-    val LocationId:Int
+    var LocationId:Int,
+    var isSelected:Boolean
 //    val CategoryID: String?,
 //    val ClassID: String?,
 //    val CreatedBy: String?,

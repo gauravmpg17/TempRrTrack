@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.fragments.ScanFragment
 import com.bumptech.glide.Glide
 
@@ -29,9 +30,9 @@ import com.markss.rfidtemplate.rfid.RFIDController
 import java.io.File
 
 
-class NotFoundAdapter(private val context: Context, private val fragment: FragmentManager, private var items: ArrayList<BookAndAssetData>, ) :
+class NotFoundAdapter(private val context: Context, private val fragment: FragmentManager, private var items: ArrayList<AssetMain>, ) :
     RecyclerView.Adapter<NotFoundAdapter.NotFoundHolder>(),Filterable {
-    private var mFilteredList: List<BookAndAssetData>? = null
+    private var mFilteredList: List<AssetMain>? = null
 
     inner class NotFoundHolder(view: View) : RecyclerView.ViewHolder(view) {
         var tvTitle: TextView = view.findViewById(R.id.tvTitle)
@@ -56,33 +57,34 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 
     override fun onBindViewHolder(holder: NotFoundHolder, position: Int) {
         val item = items[position]
-        holder.tvTitle.text = item.assetCatalogue?.assetName
-       holder.tvAuthor.text = item.bookAttributes?.author
-        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
-        {
-            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
-        }
-        else
-        {
-            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
-        }
-
-//        if (item.assetCatalogue.isSelected) holder.ivCheck.visibility=View.VISIBLE
+        holder.tvTitle.text = item?.Location
+//       holder.tvAuthor.text = item.bookAttributes?.author
+//        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
+//        {
+//            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
+//        }
+//        else
+//        {
+//            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
+//        }
+//
+        holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
+//        if (item.isSelected) holder.ivCheck.visibility=View.VISIBLE
 //        else holder.ivCheck.visibility=View.GONE
 
 
         holder.clMain.setOnClickListener {
-//            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
-//            notifyDataSetChanged()
+            items[position].isSelected=!items[position].isSelected
+            notifyDataSetChanged()
         }
 
-        holder.tvCategory.text = item.assetCatalogue.categoryName
+        holder.tvCategory.text = item.Supplier
         holder.tvSearch.visibility=View.VISIBLE
         holder.tvSearch.setOnClickListener{
 
-           Application.locateTag = item.assetCatalogue.rfidTag
-           RFIDController.accessControlTag = item.assetCatalogue.rfidTag
-           Application.PreFilterTag = item.assetCatalogue.rfidTag
+           Application.locateTag = item.AssetRFID
+           RFIDController.accessControlTag = item.AssetRFID
+           Application.PreFilterTag = item.AssetRFID
             Application.comefrom ="show"
        // holder.tvSearch.visibility=View.GONE
 
@@ -97,12 +99,12 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 //        {
        //     holder.ivBook.visibility=View.VISIBLE
             holder.tv.visibility=View.GONE
-            Glide.with(context)
-                .load(File(item.assetCatalogue.imagePathFile.toString()))
-                .placeholder(R.color.light_gray)
-                .fitCenter()
-                .error(R.drawable.ic_not_found_error)
-                .into(holder.ivBook)
+//            Glide.with(context)
+//                .load(File(item.imagePathFile.toString()))
+//                .placeholder(R.color.light_gray)
+//                .fitCenter()
+//                .error(R.drawable.ic_not_found_error)
+//                .into(holder.ivBook)
      //   }
 //        else{
 //            holder.ivBook.visibility=View.GONE
@@ -127,7 +129,7 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
             @SuppressLint("DefaultLocale")
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val oReturn = FilterResults()
-                val results = ArrayList<BookAndAssetData>()
+                val results = ArrayList<AssetMain>()
 
 
                 if (mFilteredList == null)
@@ -136,16 +138,17 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
 
-                            if (mFilterData.assetCatalogue.assetName?.lowercase()?.contains(constraint.toString().lowercase())==true
-                                || mFilterData.bookAttributes?.author?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true)
+//                                || mFilterData.Location?.lowercase()?.contains(constraint.toString().lowercase())==true ||
+//                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
 
-                                results.add(mFilterData)                        }
+                                results.add(mFilterData)
+                        }
                     }
                     oReturn.count = results.size
                     oReturn.values = results
@@ -158,7 +161,7 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = (results.values as ArrayList<BookAndAssetData>)
+                items = (results.values as ArrayList<AssetMain>)
                 notifyDataSetChanged()
             }
         }

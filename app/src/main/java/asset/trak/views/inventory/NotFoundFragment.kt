@@ -35,7 +35,46 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
         setAdaptor()
         Log.d("NotFoundFragment", "setAdaptor: ${locationId}")
         searchView.queryHint = Html.fromHtml("<font color = #D3D3D3>" + getResources().getString(R.string.search) + "</font>");
-
+        tvSelectAll.setOnClickListener {
+            if(tvSelectAll.getTag().equals("0"))
+            {
+                if(!listBook.isEmpty())
+                {
+                    tvSelectAll.visibility=View.VISIBLE
+                    tvSelectAll.setTag("1")
+                    tvSelectAll.text=getString(R.string.deselect_all)
+                    for (i in 0 until listBook.size)  {
+                        var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+                        listBook[i].Location= locationName?.locationName?:""
+                        listBook[i].isSelected=true
+                    }
+                    notFoundAdapter = NotFoundAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
+                    rvNotFound.adapter = notFoundAdapter
+                    notFoundAdapter?.notifyDataSetChanged()
+                }
+                else
+                {
+                    tvSelectAll.visibility=View.GONE
+                }
+            }
+            else
+            {
+                tvSelectAll.setTag("0")
+                tvSelectAll.text=getString(R.string.select_all)
+                for (i in 0 until listBook.size)  {
+                    var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+                    listBook[i].Location= locationName?.locationName?:""
+//                    var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
+//                    listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//                    var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//                    listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
+                    listBook[i]?.isSelected=false
+                }
+                notFoundAdapter = NotFoundAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
+                rvNotFound.adapter = notFoundAdapter
+                notFoundAdapter?.notifyDataSetChanged()
+            }
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -54,7 +93,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
         listBook.clear()
         Log.d("NotFoundFrag", "setAdaptor: ${locationId}")
         val inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
-        if(inventoryMasterList.isEmpty()|| inventoryMasterList==null)
+        if(inventoryMasterList.isEmpty())
         {
 
 
@@ -63,36 +102,37 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
             val inventorymaster= inventoryMasterList.get(0)
 
             listBook.addAll(bookDao?.getAssetNotFound(locationId,inventorymaster.scanID) ?: arrayListOf())
-        }
+            if(listBook.isEmpty())
+            {
+                tvSelectAll.visibility=View.GONE
+            }
 
+            for (i in 0 until listBook.size)  {
+                var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+                listBook[i]?.Location= locationName?.locationName?:""
+//            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).Supplier?:0)
+//            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//            var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
 
-
-
-
-        for (i in 0 until listBook.size)  {
-            var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).categoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
-            var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
-
-        }
+            }
 
 
             notFoundAdapter = NotFoundAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
             rvNotFound.adapter = notFoundAdapter
+            notFoundAdapter?.notifyDataSetChanged()
+        }
+
+
+
+
+
+
 
 
     }
      fun updateList() {
          setAdaptor()
-
-
      }
-
-
-
-
 
 }

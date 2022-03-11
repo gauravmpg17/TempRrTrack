@@ -694,5 +694,6 @@
     <string name="data_not_found">Data Not Found</string>
     <string name="select_all">Select All</string>
     <string name="scan_location_barcode">Scan Location Barcode</string>
+    <string name="deselect_all">Deselect All</string>
 
 </resources>

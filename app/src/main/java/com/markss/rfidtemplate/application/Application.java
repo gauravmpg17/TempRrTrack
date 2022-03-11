@@ -180,7 +180,7 @@ public class Application extends android.app.Application {
     public static String packageName;
     public static boolean isReaderConnectedThroughBluetooth = false;
     private static boolean activityVisible;
-    public static boolean isFirstTime;
+    public static boolean isFirstTime=true;
 
     public static boolean isActivityVisible() {
         return activityVisible;

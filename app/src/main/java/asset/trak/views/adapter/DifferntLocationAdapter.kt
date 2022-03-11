@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
+import asset.trak.modelsrrtrack.AssetMain
 import com.bumptech.glide.Glide
 
 import com.markss.rfidtemplate.R
@@ -29,9 +30,9 @@ import java.io.File
 
 
 class DifferntLocationAdapter(private val context: Context, private val fragment: FragmentManager,
-                              private var items: ArrayList<BookAndAssetData>) :
+                              private var items: ArrayList<AssetMain>) :
     RecyclerView.Adapter<DifferntLocationAdapter.NotFoundHolder>(),Filterable {
-    private var mFilteredList: List<BookAndAssetData>? = null
+    private var mFilteredList: List<AssetMain>? = null
 
     inner class NotFoundHolder(view: View) : RecyclerView.ViewHolder(view) {
         var tvTitle: TextView = view.findViewById(R.id.tvTitle)
@@ -58,33 +59,33 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 
     override fun onBindViewHolder(holder: NotFoundHolder, position: Int) {
         val item = items[position]
-        holder.tvTitle.text = item.assetCatalogue?.assetName
-        if( item.bookAttributes?.author.isNullOrEmpty())
-        {
-            holder.tvAuthor.text = "-"
-        }
-        else
-        {
-            holder.tvAuthor.text = item.bookAttributes?.author
-        }
-
-        holder.tvCategory.text = item.assetCatalogue.categoryName
-
-        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
-        {
-            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
-        }
-        else
-        {
-            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
-        }
+        holder.tvTitle.text = item.Supplier
+//        if( item.bookAttributes?.author.isNullOrEmpty())
+//        {
+//            holder.tvAuthor.text = "-"
+//        }
+//        else
+//        {
+//            holder.tvAuthor.text = item.bookAttributes?.author
+//        }
+//
+//        holder.tvCategory.text = item.assetCatalogue.categoryName
+//
+//        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
+//        {
+//            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
+//        }
+//        else
+//        {
+//            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
+//        }
 
         holder.tvSearch.visibility=View.VISIBLE
         holder.tvSearch.setOnClickListener{
 
-            Application.locateTag = item.assetCatalogue.rfidTag
-            RFIDController.accessControlTag = item.assetCatalogue.rfidTag
-            Application.PreFilterTag = item.assetCatalogue.rfidTag
+            Application.locateTag = item.AssetRFID
+            RFIDController.accessControlTag = item.AssetRFID
+            Application.PreFilterTag = item.AssetRFID
             Application.comefrom ="show"
 
             replaceFragment(
@@ -99,12 +100,12 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //        {
         //    holder.ivBook.visibility=View.VISIBLE
             holder.tv.visibility=View.GONE
-            Glide.with(context)
-                .load(File(item.assetCatalogue.imagePathFile.toString()))
-                .placeholder(R.color.light_gray)
-                .fitCenter()
-                .error(R.drawable.ic_not_found_error)
-                .into(holder.ivBook)
+//            Glide.with(context)
+//                .load(File(item.assetCatalogue.imagePathFile.toString()))
+//                .placeholder(R.color.light_gray)
+//                .fitCenter()
+//                .error(R.drawable.ic_not_found_error)
+//                .into(holder.ivBook)
 //        }
 //        else{
 //            holder.ivBook.visibility=View.GONE
@@ -126,10 +127,10 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //
 //        }
 
-
+        holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
         holder.clMain.setOnClickListener {
-//            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
-//            notifyDataSetChanged()
+         items[position].isSelected=!items[position].isSelected
+            notifyDataSetChanged()
 
         }
     }
@@ -147,7 +148,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
             @SuppressLint("DefaultLocale")
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val oReturn = FilterResults()
-                val results = ArrayList<BookAndAssetData>()
+                val results = ArrayList<AssetMain>()
 
 
                 if (mFilteredList == null)
@@ -156,16 +157,17 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
 
-                            if (mFilterData.assetCatalogue.assetName?.lowercase()?.contains(constraint.toString().lowercase())==true
-                                || mFilterData.bookAttributes?.author?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true
+                                || mFilterData.Location?.lowercase()?.contains(constraint.toString().lowercase())==true)
+//                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
+//                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
 
-                                results.add(mFilterData)                            }
+                                results.add(mFilterData)
+                        }
                     }
                     oReturn.count = results.size
                     oReturn.values = results
@@ -178,7 +180,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = (results.values as ArrayList<BookAndAssetData>)
+                items = (results.values as ArrayList<AssetMain>)
                 notifyDataSetChanged()
             }
         }

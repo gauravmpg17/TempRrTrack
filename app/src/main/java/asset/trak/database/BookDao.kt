@@ -37,11 +37,11 @@ interface BookDao {
 
 
 
-    @Query("SELECT * FROM tblLocationMaster WHERE id IN (:locationId)")
+    @Query("SELECT * FROM masterLocation WHERE LocID IN (:locationId)")
     fun getLocationName(locationId: Int): LocationMaster
 
-    @Query("SELECT * FROM tblCategoryMaster WHERE id IN (:catId)")
-    fun getCatgeoryName(catId: Int): CategoryMaster
+//    @Query("SELECT * FROM assetMain WHERE id IN (:catId)")
+//    fun getCatgeoryName(catId: Int): CategoryMaster
 
     @Query("SELECT * FROM tblSubCategoryMaster WHERE id IN (:catId)")
     fun getSubCatgeoryName(catId: Int): SubCategoryMaster
@@ -52,7 +52,7 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue")
     fun getCount(): Int
 
-    @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId)")
+    @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
 
     @Query("SELECT COUNT(LocationId) FROM assetMain WHERE Location IN (:locationId)")
@@ -136,11 +136,12 @@ interface BookDao {
     @Query("SELECT COUNT(_id) FROM tblInventorymaster")
     fun getInventoryMasterAllCount(): Int
 
-    @Query("SELECT * FROM tblAssetCatalogue WHERE inventorySyncFlag=1")
-    fun getAssetsPendingToSync(): List<BookAndAssetData>
+    //temporary
+//    @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
+//    fun getAssetsPendingToSync(): List<AssetMain>
 
-    @Query("SELECT * FROM masterLocation WHERE LocRFID=:rfId")
-    fun getLocationMasterDataRR(rfId:String): MasterLocation
+    @Query("SELECT * FROM masterLocation WHERE LocBarcode=:locBarcode")
+    fun getLocationMasterDataRR(locBarcode:String): MasterLocation
 
 //    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
 //    fun clearSyncFlagOfAssets(ids:List<String>)
@@ -182,23 +183,27 @@ interface BookDao {
     @Query("SELECT * FROM assetMain  WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
     fun getAssetNotFound(locationId: Int, scanId: String): List<AssetMain>
 
-    @Query("SELECT * FROM tblAssetCatalogue  WHERE locationId NOT IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
-    fun getAssetDifferentLoc(scanId: String, locationId: Int): List<BookAndAssetData>
+    @Query("SELECT * FROM assetMain  WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
+    fun getAssetDifferentLoc(scanId: String, locationId: Int): List<AssetMain>
 
-    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from tblAssetCatalogue WHERE rfidTag IS NOT NULL)")
+    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from assetMain WHERE rfidTag IS NOT NULL)")
     fun getAssetNotRegistered(scanId: String): List<ScanTag>
 
     @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
-    fun getFoundAtLocation(scanId: String, locationId: Int): List<BookAndAssetData>
+    fun getFoundAtLocation(scanId: String, locationId: Int): List<AssetMain>
 
     @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=(:scanId) WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun updateScanIdOfReconciledAssets(scanId: String, locationId: Int)
 
-    @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=NULL WHERE locationId  IN (:locationId)")
+    @Query("UPDATE assetMain  SET ScanID=NULL WHERE locationId  IN (:locationId)")
     fun resetScanIdOfAssetsAtLocation(locationId: Int)
 
-    @Query("UPDATE tblAssetCatalogue SET locationId= (:locationId) WHERE id=(:id)")
-    fun updateLocationIdOfAssets(locationId: Int,id:String)
+//    @Query("UPDATE assetMain SET locationId= (:locationId) WHERE LocationId=(:id)")
+//    fun updateLocationIdOfAssets(locationId: Int,id:String)
+
+
+    @Query("DELETE FROM assetMain WHERE locationId= (:locationId) AND AssetRFID= (:rfId)")
+    fun deleteFromAssetMain(locationId: Int,rfId:String)
 
     /*Add Lists*/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -255,7 +260,7 @@ interface BookDao {
     fun updateInventoryItem(inventoryMaster: Inventorymaster)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateBookAndAssetData(listBookAndAssetData: List<AssetCatalogue>)
+    fun updateBookAndAssetData(listBookAndAssetData: List<AssetMain>)
 
     /*Delete*/
     @Delete
