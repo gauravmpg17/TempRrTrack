@@ -154,7 +154,7 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
             {
                                 FancyToast.makeText(
                     requireActivity(),
-                    "Please Enter Bar Code.",
+                    "Please Enter Valid Bar Code.",
                     FancyToast.LENGTH_LONG,
                     FancyToast.WARNING,
                     false
