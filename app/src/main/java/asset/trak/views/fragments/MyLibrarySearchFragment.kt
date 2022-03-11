@@ -79,9 +79,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 //        }
 
 
-
-        Log.e("ss",""+listBook[0].assetCatalogue.imagePathFile)
-
         resultAdapter = ResultAdapter(requireContext(), this, listBook,true)
         rvResult.adapter = resultAdapter
     }
