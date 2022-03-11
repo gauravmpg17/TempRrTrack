@@ -68,15 +68,15 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     private fun setAdaptor() {
         listBook.clear()
         listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
-        for (i in 0 until listBook.size)  {
-            var locationName=Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
-            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
-            var category=Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
-            var subcategory=Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
-            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
-
-        }
+//        for (i in 0 until listBook.size)  {
+//            var locationName=Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).assetCatalogue.locationId?:0)
+//            listBook[i].assetCatalogue?.locationName= locationName?.locationName?:""
+//            var category=Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
+//            var subcategory=Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
+//            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
+//
+//        }
 
 
 

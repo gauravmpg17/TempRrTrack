@@ -11,10 +11,13 @@ import asset.trak.database.entity.AssetCatalogue
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.DifferntLocationAdapter
 import com.markss.rfidtemplate.R
+import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_different_loaction.*
+import kotlinx.android.synthetic.main.fragment_different_loaction.rvNotFound
+import kotlinx.android.synthetic.main.fragment_different_loaction.searchView
 
 @AndroidEntryPoint
 class DifferentLoactionFragment(val locationId: Int) :
@@ -38,6 +41,43 @@ class DifferentLoactionFragment(val locationId: Int) :
         setAdaptor()
 
         searchView.queryHint = Html.fromHtml("<font color = #D3D3D3>" + getResources().getString(R.string.search) + "</font>");
+
+        tvSelectAll.setOnClickListener {
+            if(tvSelectAll.getTag().equals("0"))
+            {
+                if(!listBook.isEmpty())
+                {
+                    tvSelectAll.visibility=View.VISIBLE
+                    tvSelectAll.setTag("1")
+                    tvSelectAll.text=getString(R.string.deselect_all)
+                    for (i in 0 until listBook.size)  {
+                        var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+                        listBook[i].Location= locationName?.locationName?:""
+                        listBook[i].isSelected=true
+                    }
+                    notFoundAdapter = DifferntLocationAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
+                    rvNotFound.adapter = notFoundAdapter
+                    notFoundAdapter?.notifyDataSetChanged()
+                }
+                else
+                {
+                    tvSelectAll.visibility=View.GONE
+                }
+            }
+            else
+            {
+                tvSelectAll.setTag("0")
+                tvSelectAll.text=getString(R.string.select_all)
+                for (i in 0 until listBook.size)  {
+                    var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
+                    listBook[i].Location= locationName?.locationName?:""
+                    listBook[i].isSelected=false
+                }
+                notFoundAdapter = DifferntLocationAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
+                rvNotFound.adapter = notFoundAdapter
+                notFoundAdapter?.notifyDataSetChanged()
+            }
+        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
@@ -65,6 +105,11 @@ class DifferentLoactionFragment(val locationId: Int) :
             listBook.addAll(
                 bookDao?.getAssetDifferentLoc(inventorymaster.scanID, locationId) ?: emptyList()
             )
+            if(listBook.isEmpty())
+            {
+                tvSelectAll.visibility=View.GONE
+            }
+
         }
 
         for (i in 0 until listBook.size)  {
@@ -75,9 +120,6 @@ class DifferentLoactionFragment(val locationId: Int) :
 //            var subcategory=roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
 //            listBook[i].assetCatalogue?.categoryName= subcategory?.subCategoryName?:""
             listBook[i].isSelected=false
-
-
-
         }
         notFoundAdapter = DifferntLocationAdapter(requireContext(), requireActivity().supportFragmentManager,listBook)
 

@@ -67,7 +67,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         listeners()
 
         if (Constants.isInternetAvailable(requireContext())) {
-            if (Application.isFirstTime || isSyncClicked) {
+            if (Application.isFirstTime) {
                 Log.e("dhdgdhdh", "getLastSync First")
                 disableUserInteraction(requireActivity())
                 getLastSync()
@@ -143,7 +143,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
-            if (it != null && it.statusCode == 200 && it.data != null)  {
+            if (it != null && it.statuscode == 200 && it.data != null)  {
                it.data.let {
                    if (!it.AssetMain.isNullOrEmpty()) {
                        bookDao?.addAssetMain(it.AssetMain)
@@ -162,7 +162,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                        bookDao?.addMasterVendor(it.MasterVendor)
                    }
                }
-
+                Application.isFirstTime = false
 
 //
 //            if (!it.categorySubCategoryMap.isNullOrEmpty()) {
@@ -277,7 +277,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                    isSyncClicked=false
 //                }
 //            }
-                Application.isFirstTime = false
+
             }
             //save last sync time in sp
             var editor = sharedPreference?.edit()

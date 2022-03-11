@@ -127,10 +127,10 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //
 //        }
 
-
+        holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
         holder.clMain.setOnClickListener {
-//            items[position].assetCatalogue.isSelected=!items[position].assetCatalogue.isSelected
-//            notifyDataSetChanged()
+         items[position].isSelected=!items[position].isSelected
+            notifyDataSetChanged()
 
         }
     }

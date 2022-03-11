@@ -215,8 +215,8 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                 }
                 else
                 {
-                    CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
-                    tvCategory.setText(categoryMaster.getCategoryName());
+//                    CategoryMaster categoryMaster = roomDatabaseBuilder.getBookDao().getCatgeoryName(list.get(0).getAssetCatalogue().getCategoryId());
+//                    tvCategory.setText(categoryMaster.getCategoryName());
                 }
 
 

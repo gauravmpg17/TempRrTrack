@@ -34,6 +34,38 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdaptor()
+        tvSelectAll.setOnClickListener {
+            if(tvSelectAll.getTag().equals("0"))
+            {
+                if(!rfidTags.isEmpty())
+                {
+                    tvSelectAll.visibility=View.VISIBLE
+                    tvSelectAll.setTag("1")
+                    tvSelectAll.text=getString(R.string.deselect_all)
+                    for (i in 0 until rfidTags.size)  {
+                        rfidTags[i].isSelected=true
+                    }
+                    notFoundAdapter = NotRegsiteredAdapter(requireContext(),requireActivity().supportFragmentManager, rfidTags)
+                    rvRegistered.adapter = notFoundAdapter
+                    notFoundAdapter?.notifyDataSetChanged()
+                }
+                else
+                {
+                    tvSelectAll.visibility=View.GONE
+                }
+            }
+            else
+            {
+                tvSelectAll.setTag("0")
+                tvSelectAll.text=getString(R.string.select_all)
+                for (i in 0 until rfidTags.size)  {
+                    rfidTags[i].isSelected=false
+                }
+                notFoundAdapter = NotRegsiteredAdapter(requireContext(),requireActivity().supportFragmentManager, rfidTags)
+                rvRegistered.adapter = notFoundAdapter
+                notFoundAdapter?.notifyDataSetChanged()
+            }
+        }
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -59,8 +91,14 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
             val inventorymaster = inventoryMasterList.get(0)
 
             rfidTags.addAll(bookDao?.getAssetNotRegistered(inventorymaster.scanID) ?: arrayListOf())
+            if(rfidTags.isEmpty())
+            {
+                tvSelectAll.visibility=View.GONE
+            }
+
             notFoundAdapter = NotRegsiteredAdapter(requireContext(),requireActivity().supportFragmentManager, rfidTags)
             rvRegistered.adapter = notFoundAdapter
+            notFoundAdapter?.notifyDataSetChanged()
         }
 
 

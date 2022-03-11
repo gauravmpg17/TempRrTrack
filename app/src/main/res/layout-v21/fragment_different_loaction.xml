@@ -96,19 +96,6 @@
     </androidx.cardview.widget.CardView>
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvResult"
-        android:visibility="gone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ten_dp"
-        android:fontFamily="@font/jio_type_bold"
-        android:text="@string/lblResults"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_16"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotFound"
@@ -122,5 +109,30 @@
         app:layout_constraintTop_toBottomOf="@+id/tvResult"
         tools:itemCount="4"
         tools:listitem="@layout/itme_result" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ten_dp"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/lblResults"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSelectAll"
+        android:textColor="@color/btn_color"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:tag="0"
+        android:layout_marginTop="@dimen/ten_dp"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/select_all"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

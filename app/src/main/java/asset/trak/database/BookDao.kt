@@ -59,7 +59,7 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue")
     fun getCount(): Int
 
-    @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId)")
+    @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
 
     @Query("SELECT COUNT(LocationId) FROM assetMain WHERE Location IN (:locationId)")
@@ -147,8 +147,8 @@ interface BookDao {
 //    @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
 //    fun getAssetsPendingToSync(): List<AssetMain>
 
-    @Query("SELECT * FROM masterLocation WHERE LocRFID=:rfId")
-    fun getLocationMasterDataRR(rfId:String): MasterLocation
+    @Query("SELECT * FROM masterLocation WHERE LocBarcode=:locBarcode")
+    fun getLocationMasterDataRR(locBarcode:String): MasterLocation
 
 //    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
 //    fun clearSyncFlagOfAssets(ids:List<String>)
@@ -193,7 +193,7 @@ interface BookDao {
     @Query("SELECT * FROM assetMain  WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getAssetDifferentLoc(scanId: String, locationId: Int): List<AssetMain>
 
-    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from tblAssetCatalogue WHERE rfidTag IS NOT NULL)")
+    @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag from assetMain WHERE rfidTag IS NOT NULL)")
     fun getAssetNotRegistered(scanId: String): List<ScanTag>
 
     @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
@@ -202,7 +202,7 @@ interface BookDao {
     @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=(:scanId) WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun updateScanIdOfReconciledAssets(scanId: String, locationId: Int)
 
-    @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=NULL WHERE locationId  IN (:locationId)")
+    @Query("UPDATE assetMain  SET ScanID=NULL WHERE locationId  IN (:locationId)")
     fun resetScanIdOfAssetsAtLocation(locationId: Int)
 
 //    @Query("UPDATE assetMain SET locationId= (:locationId) WHERE LocationId=(:id)")
