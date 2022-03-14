@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constLay123"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/rectangle_background"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="4dp"
     app:cardBackgroundColor="#F3F3F3"
-
     app:cardPreventCornerOverlap="false"
     android:layout_width="match_parent"
-    android:layout_marginTop="@dimen/ten_dp"
-    android:layout_marginBottom="@dimen/ten_dp"
+    app:cardElevation="2dp"
+    android:layout_margin="@dimen/ten_dp"
     android:layout_height="wrap_content">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:paddingBottom="@dimen/ten_dp"
+    android:background="@drawable/rectangle_background"
     android:paddingTop="@dimen/ten_dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -84,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/five_dp"
         android:layout_marginStart="@dimen/margin_10"
-        android:textSize="@dimen/margin_10"
+        android:textSize="@dimen/text_size_14"
         android:fontFamily="@font/jio_type_bold"
         android:textColor="@color/black"
         android:maxLines="2"
@@ -102,7 +101,7 @@
         android:layout_marginTop="@dimen/five_dp"
         android:fontFamily="@font/jio_type_light"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_10"
+        android:textSize="@dimen/text_size_14"
         android:maxLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/barrierLinear"
@@ -116,7 +115,7 @@
         android:layout_marginStart="@dimen/margin_10"
         android:fontFamily="@font/jio_type_light"
         android:layout_marginTop="@dimen/five_dp"
-        android:textSize="@dimen/text_size_10"
+        android:textSize="@dimen/text_size_12"
         android:maxLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/barrierLinear"
@@ -128,12 +127,13 @@
         android:layout_marginTop="@dimen/five_dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_10"
-        android:fontFamily="@font/jio_type_bold"
+        android:fontFamily="@font/jio_type_light"
         android:textColor="@color/btn_color"
-        android:textSize="@dimen/text_size_10"
+        android:textSize="@dimen/text_size_14"
         android:maxLines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/barrierLinear"
-        app:layout_constraintTop_toBottomOf="@id/barrierCategory"
+        app:layout_constraintTop_toBottomOf="@id/tvCategory"
         app:layout_constraintEnd_toStartOf="@+id/tvSearch"
         tools:text="@string/dummy" />
 
@@ -149,12 +149,9 @@
         android:gravity="right"
         android:text="Search"
         android:textColor="@color/btn_color"
-        android:textSize="@dimen/text_size_10"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tvTag"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/text_size_14"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/tvTag"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
