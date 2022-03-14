@@ -303,8 +303,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 }
                             }
 
+
                             if (listRfids.isNotEmpty()) {
-                                bookDao.deleteScanTag(listRfids)
+                                listRfids.forEach {
+                                    Log.d("tag1212", "onViewCreated: ${it.scanId!!}")
+                                    bookDao.deleteScanTagBotReg(it.scanId!!,it!!.rfidTag!!)
+                                }
+
                                 (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
                                 if(inventorymaster==null)
                                 {
@@ -420,7 +425,10 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             }
                         }
                         if (listRfids.isNotEmpty()) {
-                            bookDao.deleteScanTag(listRfids)
+                            listRfids.forEach {
+                                bookDao.deleteScanTagBotReg(it.scanId!!,it!!.rfidTag!!)
+                            }
+
                             (adapter.getCurrentFragment() as NotRegisteredFragment).updateList()
                         } else
 

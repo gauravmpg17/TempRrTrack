@@ -278,8 +278,11 @@ interface BookDao {
     fun updateBookAndAssetData(listBookAndAssetData: List<AssetMain>)
 
     /*Delete*/
-    @Delete
-    fun deleteScanTag(listScanTag: List<ScanTag>)
+//    @Delete
+//    fun deleteScanTag(listScanTag: ScanTag)
+
+    @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
+    fun deleteScanTagBotReg(scanId:String,rfidTag:String)
 
     @Query("DELETE FROM tblScanTag WHERE scanId=(:scanId)")
     fun deleteScanTagSingle(scanId:String)

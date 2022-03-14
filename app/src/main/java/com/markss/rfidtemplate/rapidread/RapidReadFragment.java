@@ -746,93 +746,116 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
     private void postAssetSync() {
-        disableUserInteraction(getActivity());
-        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
-        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
-        List<String> syncedIds = new ArrayList<>() ;
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
+        builder1.setMessage("Are you sure you want to complete Scan?.");
+        builder1.setCancelable(false);
 
-        Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        disableUserInteraction(getActivity());
+                        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
+                        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
+                        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
+                        List<String> syncedIds = new ArrayList<>() ;
 
-
-        if (String.valueOf(locationData.getLocID()) == null) {
-            locationData.setLocID(0);
-        }
-
-        assetSyncRequestDataModel.inventoryMaster.add(new InventoryMasterApi(inventoryMaster.getScanID(),
-                inventoryMaster.getDeviceId(),
-                inventoryMaster.getLocationId(),
-                inventoryMaster.getScanOn(),
-                inventoryMaster.getRegistered(),
-                inventoryMaster.getNotRegistered(),
-                inventoryMaster.getNotFound(),
-                inventoryMaster.getFoundOfDiffLocation()));
+                        Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
 
 
-        bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
-        //temporary commented
-        // pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
+                        if (String.valueOf(locationData.getLocID()) == null) {
+                            locationData.setLocID(0);
+                        }
 
-        Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
-        Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
-        for (AssetMain n : bookAndAssetData) {
-            AssetScanApi scanTag = new AssetScanApi();
-            // sending ID in rfidTag field, need to update attribute name accordingly in API
-            scanTag.setRfidTag(n.getAssetRFID());
-            if (n.getScanID() == null) {
-                n.setScanID(0);
-            }
-            scanTag.setScanId(inventoryMaster.getScanID());
-            scanTag.setNewLocationId(n.getLocationId());
-            assetSyncRequestDataModel.assetScan.add(scanTag);
-        }
-
-        // assets which location was changed
-        for (AssetMain n : pendingSyncAssetdata) {
-            AssetScanApi scanTag = new AssetScanApi();
-            scanTag.setRfidTag(n.getAssetRFID());
+                        assetSyncRequestDataModel.inventoryMaster.add(new InventoryMasterApi(inventoryMaster.getScanID(),
+                                inventoryMaster.getDeviceId(),
+                                inventoryMaster.getLocationId(),
+                                inventoryMaster.getScanOn(),
+                                inventoryMaster.getRegistered(),
+                                inventoryMaster.getNotRegistered(),
+                                inventoryMaster.getNotFound(),
+                                inventoryMaster.getFoundOfDiffLocation()));
 
 
-            scanTag.setNewLocationId(n.getLocationId());
-            assetSyncRequestDataModel.assetScan.add(scanTag);
-            //need to ask
-            syncedIds.add(n.getAssetRFID());
-        }
+                        bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
+                        //temporary commented
+                        // pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
 
-        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel),MediaType.parse("application/json"));
+                        Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
+                        Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
+                        for (AssetMain n : bookAndAssetData) {
+                            AssetScanApi scanTag = new AssetScanApi();
+                            // sending ID in rfidTag field, need to update attribute name accordingly in API
+                            scanTag.setRfidTag(n.getAssetRFID());
+                            if (n.getScanID() == null) {
+                                n.setScanID(0);
+                            }
+                            scanTag.setScanId(inventoryMaster.getScanID());
+                            scanTag.setNewLocationId(n.getLocationId());
+                            assetSyncRequestDataModel.assetScan.add(scanTag);
+                        }
+
+                        // assets which location was changed
+                        for (AssetMain n : pendingSyncAssetdata) {
+                            AssetScanApi scanTag = new AssetScanApi();
+                            scanTag.setRfidTag(n.getAssetRFID());
+
+
+                            scanTag.setNewLocationId(n.getLocationId());
+                            assetSyncRequestDataModel.assetScan.add(scanTag);
+                            //need to ask
+                            syncedIds.add(n.getAssetRFID());
+                        }
+
+                        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel),MediaType.parse("application/json"));
 
 
 
 
-        Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
-        inventoryViewModel.postAssetSync(body).observe(getViewLifecycleOwner(), response -> {
-            if (response == SUCCESS) {
-                Log.d("final", "postAssetSync: ");
-                progressBar.setVisibility(View.GONE);
-                btnInventoryRecord.setEnabled(true);
-                btnInventoryRecord.setClickable(true);
-                enableUserInteraction(getActivity());
-                inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
-                bookDao.updateInventoryItem(inventoryMaster);
-                bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
-                //temporary commented
-                //  bookDao.clearSyncFlagOfAssets(syncedIds);
+                        Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
+                        inventoryViewModel.postAssetSync(body).observe(getViewLifecycleOwner(), response -> {
+                            if (response == SUCCESS) {
+                                Log.d("final", "postAssetSync: ");
+                                progressBar.setVisibility(View.GONE);
+                                btnInventoryRecord.setEnabled(true);
+                                btnInventoryRecord.setClickable(true);
+                                enableUserInteraction(getActivity());
+                                inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
+                                bookDao.updateInventoryItem(inventoryMaster);
+                                bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
+                                //temporary commented
+                                //  bookDao.clearSyncFlagOfAssets(syncedIds);
 
-                //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
-                FancyToast.makeText(requireActivity(),getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
-                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                                //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(requireActivity(),getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
 
-            } else {
-                Log.d("final", "Failure: ");
-                progressBar.setVisibility(View.GONE);
-                btnInventoryRecord.setEnabled(true);
-                btnInventoryRecord.setClickable(true);
-                enableUserInteraction(getActivity());
-                Toast.makeText(getContext(), getString(R.string.error_data_sync), Toast.LENGTH_SHORT).show();
-                FancyToast.makeText(requireActivity(),getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                            } else {
+                                Log.d("final", "Failure: ");
+                                progressBar.setVisibility(View.GONE);
+                                btnInventoryRecord.setEnabled(true);
+                                btnInventoryRecord.setClickable(true);
+                                enableUserInteraction(getActivity());
+                                Toast.makeText(getContext(), getString(R.string.error_data_sync), Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(requireActivity(),getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
 
-            }
-        });
+                            }
+                        });
+
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 
