@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.zebra.provider.READ" />
+    <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
     <uses-permission
         android:name="android.permission.BLUETOOTH_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
@@ -90,6 +92,7 @@
                 <action android:name="com.rfidreader.NFC.outofrange" />
             </intent-filter>
         </receiver>
+        <uses-library android:name="com.symbol.emdk" />
     </application>
 
 </manifest>
