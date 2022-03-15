@@ -76,7 +76,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 
-public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler,RapidReadCallback {
+public class RapidReadFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler, RapidReadCallback {
     MatchModeProgressView progressView;
     private TextView tagReadRate;
     private TextView uniqueTags;
@@ -112,8 +112,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private int countNotFoundCurrentLocation = 0;
     private int countFoundDifferentLoc = 0;
     private int countNotRegistered = 0;
-    private boolean isFromReconsile=false;
-    private String whichInventory="";
+    private boolean isFromReconsile = false;
+    private String whichInventory = "";
     private View imgIgnore;
     private TextView tvRegisteredCount;
 
@@ -159,7 +159,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        imgIgnore=mainActivity.findViewById(R.id.imgIgnore);
+        imgIgnore = mainActivity.findViewById(R.id.imgIgnore);
         inventoryButton = mainActivity.findViewById(R.id.rr_inventoryButton);
         uniqueTags = mainActivity.findViewById(R.id.uniqueTagContent);
         uniqueTagTitle = mainActivity.findViewById(R.id.uniqueTagTitle);
@@ -181,14 +181,14 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         btnInventoryRecord = getActivity().findViewById(R.id.btnInventoryRecord);
         llBottomParent = getActivity().findViewById(R.id.llBottomParent2);
         progressBar = getActivity().findViewById(R.id.progressBar);
-         tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
+        tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
         TextView tvLocation = getActivity().findViewById(R.id.tvLocation);
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
         locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
         tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationData.getLocID())));
 
-        imgIgnore.setOnClickListener(v->{
+        imgIgnore.setOnClickListener(v -> {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
             builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
             builder1.setCancelable(false);
@@ -198,14 +198,12 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                if(pendingInventoryScan!=null && !pendingInventoryScan.isEmpty())
-                                {
+                                if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
                                     Inventorymaster lastItem = pendingInventoryScan.get(0);
                                     bookDao.deleteScanTagSingle(lastItem.getScanID());
                                     bookDao.deleteInventorySingle(lastItem.getScanID());
                                 }
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
@@ -255,7 +253,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 try {
 
                     Date latestDate = formater.parse(pendingInventoryScan.get(0).getScanOn());
-                    tvILastRecordDate.setText(getString(R.string.last_recorded_02_02_2022_10_43_am) +" "+ changedFormat.format(latestDate));
+                    tvILastRecordDate.setText(getString(R.string.last_recorded_02_02_2022_10_43_am) + " " + changedFormat.format(latestDate));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -264,12 +262,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
         }
-        if(scannedList.size() < 10 && scannedList.size()>0)
-        {
-            uniqueTags.setText("0"+scannedList.size());
-        }
-        else
-        {
+        if (scannedList.size() < 10 && scannedList.size() > 0) {
+            uniqueTags.setText("0" + scannedList.size());
+        } else {
             uniqueTags.setText(Integer.toString(scannedList.size()));
         }
 
@@ -324,7 +319,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             public void onClick(View v) {
                 if (RFIDController.mIsInventoryRunning) {
                     //   Toast.makeText(getContext(), "Inventory is running", Toast.LENGTH_SHORT).show();
-                    FancyToast.makeText(requireActivity(),"Inventory is running", FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                    FancyToast.makeText(requireActivity(), "Inventory is running", FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
 
 
                 } else {
@@ -361,7 +356,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         ivBack.setOnClickListener(v -> {
             //   requireActivity().getSupportFragmentManager().popBackStackImmediate();
             requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
 
         });
 
@@ -415,8 +410,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //            foundForDifferentParent.setVisibility(View.INVISIBLE);
 //        }
 
-        if(isFromReconsile)
-        {
+        if (isFromReconsile) {
             btnScan.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
             btnScan.setImageResource(android.R.drawable.ic_media_play);
@@ -622,17 +616,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
 //                listInventoryList.add("000000000000000000001271");
-//                listInventoryList.add("000000000000000000001258");
-//                listInventoryList.add("F00000000000000000000111");
-//                listInventoryList.add("E2801190200068DDB25F0308");
-//                listInventoryList.add("E2801190200077BCB26B0308");
+//                listInventoryList.add("E2801190200077BCB26B031B");
+//                listInventoryList.add("E2801190200068DDB25F0388");
+//                listInventoryList.add("E2801190200077BCB26B031A");
 //
 //                scannedList.add("000000000000000000001271");
-//                scannedList.add("000000000000000000001258");
-//                scannedList.add("F00000000000000000000111");
-//                scannedList.add("1E2801190200068DDB25F0308");
-//                scannedList.add("E2801190200077BCB26B0308");
-//
+//                scannedList.add("E2801190200077BCB26B031B");
+//                scannedList.add("E2801190200068DDB25F0308");
+//                scannedList.add("E2801190200077BCB26B031A");
+////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);
 //                listInventoryList.add(null);
@@ -660,7 +652,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         }
     }
 
-    private  void updateCountInDb(){
+    private void updateCountInDb() {
         Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
         inventoryMaster.setFoundOnLocation(countFoundCurrentLocation);
         inventoryMaster.setNotFound(countNotFoundCurrentLocation);
@@ -680,7 +672,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         try {
             Date latestDate = sdf.parse(dateFormat);
             SimpleDateFormat changedFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
-            tvILastRecordDate.setText(getString(R.string.last_recorded_02_02_2022_10_43_am) +" "+ changedFormat.format(latestDate));
+            tvILastRecordDate.setText(getString(R.string.last_recorded_02_02_2022_10_43_am) + " " + changedFormat.format(latestDate));
 
 
         } catch (Exception e) {
@@ -702,16 +694,14 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
 
+           // Log.d("tag116", "showCountFound: "+(inventoryMaster.getScanID());
+
             /*Get Count*/
             countFoundCurrentLocation = bookDao.getCountOfTagsFound(inventoryMaster.getScanID(), locationData.getLocID());
             countNotFoundCurrentLocation = bookDao.getCountOfTagsNotFound(locationData.getLocID(), inventoryMaster.getScanID());
             countFoundDifferentLoc = bookDao.getCountFoundDifferentLoc(inventoryMaster.getScanID(), locationData.getLocID());
             countNotRegistered = bookDao.getCountNotRegistered(inventoryMaster.getScanID());
             List<AssetMain> bookAndAssetData = bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID());
-
-            Log.e("data", "" + new Gson().toJson(bookAndAssetData));
-
-
             tvFoundLocCount.setText(String.valueOf(countFoundCurrentLocation));
             tvNotFoundLocCount.setText(String.valueOf(countNotFoundCurrentLocation));
             tvDiffLocationCount.setText(String.valueOf(countFoundDifferentLoc));
@@ -735,9 +725,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //            bookDao.updateInventoryItem(inventoryMaster);
 
 
-
-
-
         }
 
         btnInventoryRecord.setOnClickListener(v -> {
@@ -749,7 +736,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 btnInventoryRecord.setClickable(false);
                 postAssetSync();
             } else {
-                FancyToast.makeText(requireActivity(),"Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG,FancyToast.WARNING,false).show();
+                FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
                 //   Toast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", Toast.LENGTH_SHORT).show();
             }
 
@@ -774,17 +761,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
                         List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
                         AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
-                        List<String> syncedIds = new ArrayList<>() ;
+                        List<String> syncedIds = new ArrayList<>();
 
                         Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
-                        SimpleDateFormat changedFormat =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                     String scanEndTime="";
+                        SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                        String scanEndTime = "";
                         try {
                             //   String currentDate = changedFormat.format(new Date());
-                            scanEndTime= changedFormat.format(new Date());
-                        }
-                        catch (Exception e)
-                        {
+                            scanEndTime = changedFormat.format(new Date());
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -798,21 +783,21 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         inventoryMaster.setRegistered(bookDao.getCountLocationId(locationData.getLocID()));
     */
 
-                               assetSyncRequestDataModel.inventoryData.deviceID= inventoryMaster.getDeviceId();
-                                assetSyncRequestDataModel.inventoryData.foundForLoc=inventoryMaster.getFoundOnLocation();
-                                assetSyncRequestDataModel.inventoryData.foundForOtherLoc=inventoryMaster.getFoundOfDiffLocation();
-                                assetSyncRequestDataModel.inventoryData.noofAssetsScanned=scannedList.size();
-                                assetSyncRequestDataModel.inventoryData.scanDate=inventoryMaster.getScanStartDatetime();
-                                assetSyncRequestDataModel.inventoryData.locID=inventoryMaster.getLocationId();
-                                assetSyncRequestDataModel.inventoryData.locType="Z";
-                        assetSyncRequestDataModel.inventoryData.scanStartDatetime=inventoryMaster.getScanOn();
-                                assetSyncRequestDataModel.inventoryData.scanEndDatetime=scanEndTime;
-                                assetSyncRequestDataModel.inventoryData.notRegistered=Integer.parseInt(tvRegisteredCount.getText().toString());
-                                assetSyncRequestDataModel.inventoryData.scanID=inventoryMaster.getScanID();
-                                assetSyncRequestDataModel.inventoryData.scannedBy=inventoryMaster.getScannedBy();
+                       List<AssetMain> list= bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0);
+                        assetSyncRequestDataModel.inventoryData.deviceID = inventoryMaster.getDeviceId();
+                        assetSyncRequestDataModel.inventoryData.foundForLoc = inventoryMaster.getFoundOnLocation();
+                        assetSyncRequestDataModel.inventoryData.foundForOtherLoc = inventoryMaster.getFoundOfDiffLocation();
+                        assetSyncRequestDataModel.inventoryData.noofAssetsScanned = scannedList.size();
+                        assetSyncRequestDataModel.inventoryData.scanDate = inventoryMaster.getScanStartDatetime();
+                        assetSyncRequestDataModel.inventoryData.locID = inventoryMaster.getLocationId();
+                        assetSyncRequestDataModel.inventoryData.locType = "Z";
+                        assetSyncRequestDataModel.inventoryData.scanStartDatetime = inventoryMaster.getScanOn();
+                        assetSyncRequestDataModel.inventoryData.scanEndDatetime = scanEndTime;
+                        assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvRegisteredCount.getText().toString());
+                        assetSyncRequestDataModel.inventoryData.scanID = inventoryMaster.getScanID();
+                        assetSyncRequestDataModel.inventoryData.scannedBy = inventoryMaster.getScannedBy();
 
-                        Log.d("tag111", "onClick: "+inventoryMaster.getScanID()+" "+locationData.getLocID());
-
+                        Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
 
 
                         bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
@@ -824,27 +809,25 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         for (AssetMain n : bookAndAssetData) {
                             AssetData scanTag = new AssetData();
                             // sending ID in rfidTag field, need to update attribute name accordingly in API
-                            scanTag.assetRFID =n.getAssetRFID();
+                            scanTag.assetRFID = n.getAssetRFID();
                             if (n.getScanID() == null) {
                                 n.setScanID("0");
                             }
-                            scanTag.assetID=inventoryMaster.getScanID();
-                            scanTag.locID=n.getLocationId();
+                            scanTag.assetID = inventoryMaster.getScanID();
+                            scanTag.locID = n.getLocationId();
                             assetSyncRequestDataModel.assetData.add(scanTag);
                         }
 
                         // assets which location was changed
                         for (AssetMain n : pendingSyncAssetdata) {
                             AssetData scanTag = new AssetData();
-                            scanTag.assetRFID=n.getAssetRFID();
-                            scanTag.locID=n.getLocationId();
-                            scanTag.assetID=n.getAssetID();
+                            scanTag.assetRFID = n.getAssetRFID();
+                            scanTag.locID = n.getLocationId();
+                            scanTag.assetID = n.getAssetID();
                             assetSyncRequestDataModel.assetData.add(scanTag);
                         }
 
-                        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel),MediaType.parse("application/json"));
-
-
+                        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel), MediaType.parse("application/json"));
 
 
                         Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
@@ -862,7 +845,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                                 //  bookDao.clearSyncFlagOfAssets(syncedIds);
 
                                 //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
-                                FancyToast.makeText(requireActivity(),getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                                FancyToast.makeText(requireActivity(), getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
                                 requireActivity().getSupportFragmentManager().popBackStackImmediate();
 
                             } else {
@@ -871,7 +854,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                                 btnInventoryRecord.setEnabled(true);
                                 btnInventoryRecord.setClickable(true);
                                 enableUserInteraction(getActivity());
-                               FancyToast.makeText(requireActivity(),getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                FancyToast.makeText(requireActivity(), getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
 
                             }
                         });
@@ -923,8 +906,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
     @Override
     public void onDataSent(boolean isBack) {
-        Log.d("tag12", "onDataSent: "+isBack);
-        isFromReconsile=isBack;
+        Log.d("tag12", "onDataSent: " + isBack);
+        isFromReconsile = isBack;
         btnScan.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
         btnScan.setImageResource(android.R.drawable.ic_media_play);

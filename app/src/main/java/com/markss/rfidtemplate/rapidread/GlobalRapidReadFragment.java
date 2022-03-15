@@ -766,7 +766,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                         assetSyncRequestDataModel.inventoryData.notRegistered=Integer.parseInt(tvRegisteredCount.getText().toString());
                         assetSyncRequestDataModel.inventoryData.scanID=inventoryMaster.getScanID();
                         assetSyncRequestDataModel.inventoryData.scannedBy=inventoryMaster.getScannedBy();
-                   //     Log.d("tag111", "onClick: "+inventoryMaster.getScanID()+" "+locationData.getLocID());
+                        Log.d("tag111", "onClick: "+inventoryMaster.getScanID());
 
 
                         bookAndAssetData.addAll(bookDao.getFoundAtLocationGlobal(inventoryMaster.getScanID()));

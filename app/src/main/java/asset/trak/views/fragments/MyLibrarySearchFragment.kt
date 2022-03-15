@@ -47,6 +47,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+
                 resultAdapter.filter.filter(newText)
                 return true
             }
