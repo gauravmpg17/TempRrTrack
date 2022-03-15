@@ -206,6 +206,10 @@ interface BookDao {
     @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getFoundAtLocation(scanId: String, locationId: Int): List<AssetMain>
 
+    @Query("SELECT * FROM assetMain  WHERE AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
+    fun getFoundAtLocationGlobal(scanId: String): List<AssetMain>
+
+
     @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=(:scanId) WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun updateScanIdOfReconciledAssets(scanId: String, locationId: Int)
 
@@ -281,8 +285,11 @@ interface BookDao {
 //    @Delete
 //    fun deleteScanTag(listScanTag: ScanTag)
 
+    @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IS NULL")
+    fun deleteScanTagNotFound(scanId:String)
+
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
-    fun deleteScanTagBotReg(scanId:String,rfidTag:String)
+    fun deleteScanTagNotReg(scanId:String,rfidTag:String)
 
     @Query("DELETE FROM tblScanTag WHERE scanId=(:scanId)")
     fun deleteScanTagSingle(scanId:String)

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -68,7 +69,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             }
 
         }
-        Log.e("dhdgdhdh", "djd")
+       Log.e("dhdgdhdh", "djd")
     }
 
 
@@ -81,21 +82,23 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
         globalInventory.setOnClickListener {
             //global
-            val pendingInventory =
-                Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+            val pendingInventory = Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
 
             val cnt = Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
 //
 //            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
 //                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
-
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+            val cal = Calendar.getInstance()
+            val dateFormat = sdf.format(cal.time)
             if (pendingInventory.isEmpty()) {
                 val inventoryMaster = Inventorymaster(
-                    scanID = "A" + ((cnt ?: 0) + 1),
-                    deviceId = "A",
+                    scanID = "A" + UUID.randomUUID().toString(),
+                    deviceId = sharedPreference?.getString(Constants.DeviceId,"A").toString() ,
                     deviceIdCount = ((cnt ?: 0) + 1),
                     status = Constants.InventoryStatus.PENDING,
-                    locationId = 0
+                    locationId = 0,
+                    scanStartDatetime = dateFormat
                 )
                 Application.roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
             }
@@ -159,7 +162,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         var currSyncTime = sdf.format(Date())
-        var deviceId = "A"
+        var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
             .show()
 

@@ -1,5 +1,7 @@
 package asset.trak.views.inventory
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,12 +17,9 @@ import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
-import com.markss.rfidtemplate.rfid.RFIDController
 import com.shashank.sony.fancytoastlib.FancyToast
-import com.zebra.rfid.api3.InvalidUsageException
-import com.zebra.rfid.api3.OperationFailureException
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
-import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -30,10 +29,13 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
     private var listOfLocations = ArrayList<LocationMaster>()
     private var currLocId =0
     private var currMasterLocation: MasterLocation?=null
-
+    var sharedPreference: SharedPreferences?= null
+    var deviceId="A"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedPreference =  requireActivity().getSharedPreferences(Constants.PrefenceFileName,
+            Context.MODE_PRIVATE)
+        deviceId = sharedPreference?.getString(Constants.DeviceId,"A").toString()
         initialisation()
         setAdaptor()
         listeners()
@@ -169,14 +171,19 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
 //
 //            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
 //                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
-
+                //inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+                val cal = Calendar.getInstance()
+                val dateFormat = sdf.format(cal.time)
                 if (pendingInventory.isEmpty()) {
+                    Log.d("tag1212", "listeners: "+UUID.randomUUID().toString())
                     val inventoryMaster=Inventorymaster(
-                        scanID = "A" + ((cnt ?: 0) + 1),
-                        deviceId = "A",
+                        scanID = "A" + UUID.randomUUID().toString(),
+                        deviceId = deviceId,
                         deviceIdCount = ((cnt ?: 0) + 1),
                         status = Constants.InventoryStatus.PENDING,
-                        locationId = currLocId
+                        locationId = currLocId,
+                        scanStartDatetime = dateFormat
                     )
                     roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
                     roomDatabaseBuilder.getBookDao().resetScanIdOfAssetsAtLocation(currLocId)

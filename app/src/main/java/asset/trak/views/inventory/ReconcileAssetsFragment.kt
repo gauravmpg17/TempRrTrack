@@ -237,7 +237,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         )
                     } else
                         Toast.makeText(
-                            requireContext(), "Plese select item",
+                            requireContext(), "Please select item",
                             Toast.LENGTH_LONG
                         ).show()
                 }
@@ -256,7 +256,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         Log.d("UpdateLocation", "onViewCreated: ")
 
                         var totalItemCount=0
-                        val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
+                     //   val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
                             if (it.isSelected) {
                                 val assetCatalog = it
@@ -296,7 +296,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 if (it.isSelected) {
                                     val assetCatalogue = it
                                     scanList.forEachIndexed { index, scanTag ->
-                                        if (scanTag.rfidTag == assetCatalogue.AssetRFID) {
+                                        if (scanTag.scanId == assetCatalogue.ScanID) {
                                             listRfids.add(scanTag)
                                         }
                                     }
@@ -307,7 +307,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             if (listRfids.isNotEmpty()) {
                                 listRfids.forEach {
                                     Log.d("tag1212", "onViewCreated: ${it.scanId!!}")
-                                    bookDao.deleteScanTagBotReg(it.scanId!!,it!!.rfidTag!!)
+                                    bookDao.deleteScanTagNotFound(it.scanId!!)
                                 }
 
                                 (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
@@ -426,7 +426,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         }
                         if (listRfids.isNotEmpty()) {
                             listRfids.forEach {
-                                bookDao.deleteScanTagBotReg(it.scanId!!,it!!.rfidTag!!)
+                                bookDao.deleteScanTagNotReg(it.scanId!!,it!!.rfidTag!!)
                             }
 
                             (adapter.getCurrentFragment() as NotRegisteredFragment).updateList()

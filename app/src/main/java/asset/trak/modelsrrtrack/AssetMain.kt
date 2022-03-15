@@ -25,7 +25,7 @@ data class AssetMain(
     @PrimaryKey(autoGenerate = false)
     val AssetID: String,
     val AssetRFID: String?,
-    var ScanID: Int?,
+    var ScanID: String?,
     val ScanDate: String?,
     val Class:String?,
     var Location:String?,

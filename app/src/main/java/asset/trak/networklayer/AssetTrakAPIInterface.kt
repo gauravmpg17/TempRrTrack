@@ -11,7 +11,7 @@ import retrofit2.http.*
 /*https://resqqa.ril.com/RFIDService/AssetTracker/api/assetsync?LastSyncDateTime=2022-03-08%2019:35:31.463*/
 interface AssetTrakAPIInterface {
 
-    //api/assetsync
+    //AssetTracker/api/assetsync
     @GET("api/assetsync")
     suspend fun geLastSync(@QueryMap hashMap: Map<String, String>): Response<LastSyncResponse>
 
