@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
-import asset.trak.database.entity.AssetCatalogue
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.database.entity.ScanTag
@@ -27,7 +26,6 @@ import asset.trak.views.adapter.UpdateLocationAdapter
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.listener.RapidReadCallback
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
@@ -40,6 +38,8 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import com.zebra.rfid.api3.RFIDResults
 import kotlinx.android.synthetic.main.fragment_reconcile_assets.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets),  UpdateItemInterface,
@@ -76,6 +76,10 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         }
 
     }
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -254,6 +258,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                     if(adapter.getCurrentFragment() is NotFoundFragment){
 
                         Log.d("UpdateLocation", "onViewCreated: ")
+                        val inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
 
                         var totalItemCount=0
                      //   val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
@@ -284,34 +289,40 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
                             val listRfids = ArrayList<ScanTag>()
 
-                            val scanList = bookDao.getScanTagAll()
+                       //     val scanList = bookDao.getScanTagAll()
                             val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
-
+                            val pendingInventoryScan = bookDao.getPendingInventoryScan(
+                                locationData!!.LocID
+                            )
+                            val lastItem = pendingInventoryScan.get(0)
 //                            Log.e(
 //                                "sdd",
 //                                "" + Gson().toJson((adapter.getCurrentFragment() as DifferentLoactionFragment).listBook)
 //                            )
 
+                            val changedFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                            var scanEndTime: String? = ""
+                            try {
+                                //   String currentDate = changedFormat.format(new Date());
+                                scanEndTime = changedFormat.format(Date())
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+
                             listBook.forEach {
                                 if (it.isSelected) {
                                     val assetCatalogue = it
-                                    scanList.forEachIndexed { index, scanTag ->
-                                        if (scanTag.scanId == assetCatalogue.ScanID) {
-                                            listRfids.add(scanTag)
-                                        }
-                                    }
+                                    Log.d("tag12121212", "onViewCreated: "+assetCatalogue.AssetRFID)
+//                                    val scanTag = ScanTag()
+//                                        scanTag.scanId = lastItem.scanID
+//                                        scanTag.locationId = it.LocationId
+//                                        scanTag.rfidTag = it.AssetRFID
+//                                            listRfids.add(scanTag)
+                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID)
                                 }
                             }
 
-
-                            if (listRfids.isNotEmpty()) {
-                                listRfids.forEach {
-                                    Log.d("tag1212", "onViewCreated: ${it.scanId!!}")
-                                    bookDao.deleteScanTagNotFound(it.scanId!!)
-                                }
-                                //new
-
-                                (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
+                               // (adapter.getCurrentFragment() as NotFoundFragment).updateList()
                                 if(inventorymaster==null)
                                 {
                                     var notFoundCount =0
@@ -328,7 +339,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                     tablayout.getTabAt(0)?.text = notFound
                                 }
                             }
-                        }
+
                     }
                 }
                 1 -> {
