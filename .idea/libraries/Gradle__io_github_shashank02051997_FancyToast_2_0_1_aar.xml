@@ -2,8 +2,8 @@
   <library name="Gradle: io.github.shashank02051997:FancyToast:2.0.1@aar">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/75b8e270da3cae996089cecdd98296e5/transformed/jetified-FancyToast-2.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/75b8e270da3cae996089cecdd98296e5/transformed/jetified-FancyToast-2.0.1/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/75b8e270da3cae996089cecdd98296e5/transformed/jetified-FancyToast-2.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/75b8e270da3cae996089cecdd98296e5/transformed/jetified-FancyToast-2.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.shashank02051997/FancyToast/2.0.1/3181ba5bef9d3c4741c053cd31854416a91d9913/FancyToast-2.0.1-javadoc.jar!/" />
