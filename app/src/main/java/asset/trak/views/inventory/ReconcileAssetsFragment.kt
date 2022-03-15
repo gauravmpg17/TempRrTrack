@@ -309,6 +309,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                     Log.d("tag1212", "onViewCreated: ${it.scanId!!}")
                                     bookDao.deleteScanTagNotFound(it.scanId!!)
                                 }
+                                //new
 
                                 (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
                                 if(inventorymaster==null)
