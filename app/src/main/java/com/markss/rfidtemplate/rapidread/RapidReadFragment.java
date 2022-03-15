@@ -758,12 +758,18 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         dialog.cancel();
                         progressBar.setVisibility(View.VISIBLE);
                         disableUserInteraction(getActivity());
-                        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
-                        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
-                        List<String> syncedIds = new ArrayList<>();
+                       List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
+   //                    bookAndAssetData.addAll(bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0));
 
+                        List<Inventorymaster>  pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
                         Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
+                        bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
+                       // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getId()));
+
+                        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
+                         pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
+                        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
+
                         SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                         String scanEndTime = "";
                         try {
@@ -776,14 +782,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         if (String.valueOf(locationData.getLocID()) == null) {
                             locationData.setLocID(0);
                         }
-                        /*  inventoryMaster.setFoundOnLocation(countFoundCurrentLocation);
-        inventoryMaster.setNotFound(countNotFoundCurrentLocation);
-        inventoryMaster.setFoundOfDiffLocation(countFoundDifferentLoc);
-        inventoryMaster.setNotRegistered(countNotRegistered);
-        inventoryMaster.setRegistered(bookDao.getCountLocationId(locationData.getLocID()));
-    */
 
-                       List<AssetMain> list= bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0);
+                 //      List<AssetMain> list= bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0);
                         assetSyncRequestDataModel.inventoryData.deviceID = inventoryMaster.getDeviceId();
                         assetSyncRequestDataModel.inventoryData.foundForLoc = inventoryMaster.getFoundOnLocation();
                         assetSyncRequestDataModel.inventoryData.foundForOtherLoc = inventoryMaster.getFoundOfDiffLocation();
@@ -795,16 +795,10 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         assetSyncRequestDataModel.inventoryData.scanEndDatetime = scanEndTime;
                         assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvRegisteredCount.getText().toString());
                         assetSyncRequestDataModel.inventoryData.scanID = inventoryMaster.getScanID();
-                        assetSyncRequestDataModel.inventoryData.scannedBy = inventoryMaster.getScannedBy();
+                        assetSyncRequestDataModel.inventoryData.scannedBy = "ABC";
 
                         Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
-
-
-                        bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
-                        //temporary commented
-                        // pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
-
-                        Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
+                       // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
                         Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
                         for (AssetMain n : bookAndAssetData) {
                             AssetData scanTag = new AssetData();

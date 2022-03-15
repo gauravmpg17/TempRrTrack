@@ -266,6 +266,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
+                                assetCatalog.inventorySyncFlag=1
                                // listBook.add(assetCatalog)
                                 totalItemCount+=1
                             }
@@ -318,7 +319,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                                        scanTag.locationId = it.LocationId
 //                                        scanTag.rfidTag = it.AssetRFID
 //                                            listRfids.add(scanTag)
-                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID)
+                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID,1)
                                 }
                             }
 
@@ -349,6 +350,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
+                                assetCatalog.inventorySyncFlag=1
                                 listBook.add(assetCatalog)
                             }
                         }
