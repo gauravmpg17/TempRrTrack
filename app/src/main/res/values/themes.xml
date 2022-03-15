@@ -33,4 +33,8 @@
         <item name="android:activityCloseEnterAnimation">@anim/none</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_to_bottom</item>
     </style>
+
+    <style name="fabtheme" parent="Widget.Design.FloatingActionButton">
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
 </resources>

@@ -508,6 +508,7 @@
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
         android:text="@string/stop"
+        android:theme="@style/fabtheme"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"

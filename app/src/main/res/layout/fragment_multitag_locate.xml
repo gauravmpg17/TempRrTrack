@@ -19,7 +19,7 @@
             layout="@layout/autocomplete_tag"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="84"
+            android:layout_weight="8"
             android:padding="5sp"
             android:gravity="left"
             android:paddingLeft="10dp"
@@ -27,22 +27,24 @@
 
         <Button
             android:id="@+id/multiTagLocateAddItemButton"
-            style="@style/style_locate_icon"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:padding="5sp"
+            android:layout_weight="1"
             android:text="+"
+            android:padding="2dp"
+            android:textSize="@dimen/text_size_16"
             android:onClick="multiTagLocateAddTagItem"/>
 
         <Button
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:id="@+id/multiTagLocateDeleteItemButton"
-            style="@style/style_locate_icon"
             android:layout_width="0dp"
+            android:padding="2dp"
             android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:padding="5sp"
+            android:layout_weight="1"
             android:text="-"
+            android:textSize="@dimen/text_size_16"
             android:onClick="multiTagLocateDeleteTagItem"/>
 
     </LinearLayout>
@@ -77,12 +79,16 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/multiTagLocateButton"
-            app:backgroundTint="#0066ff"
-            app:srcCompat="@android:drawable/ic_media_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
             android:onClick="multiTagLocateStartOrStop"
-            android:layout_margin="@dimen/default_margin"/>
+            app:backgroundTint="#0066ff"
+            android:theme="@style/fabtheme"
+            app:srcCompat="@android:drawable/ic_media_play" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/multiTagLocateResetButton"
@@ -92,6 +98,7 @@
             android:layout_height="wrap_content"
             android:onClick="multiTagLocateReset"
             android:layout_margin="@dimen/default_margin"
+            android:theme="@style/fabtheme"
             android:layout_toEndOf="@id/multiTagLocateButton"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -101,6 +108,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
+            android:tint="@color/white"
+            android:theme="@style/fabtheme"
             android:layout_toEndOf="@id/multiTagLocateResetButton"/>
 
     </RelativeLayout>

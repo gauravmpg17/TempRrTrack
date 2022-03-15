@@ -18,14 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/twenty_dp" />
+            app:layout_constraintGuide_begin="@dimen/sixteen_dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/margin_20" />
+            app:layout_constraintGuide_end="@dimen/sixteen_dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_bottom"
@@ -72,9 +72,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAssests"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/twenty_dp"
+            android:paddingStart="4dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/jio_type_light"
             android:gravity="left"
@@ -108,36 +108,33 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvHello"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/margin_20"
             android:fontFamily="@font/jio_type_bold"
-            android:gravity="left"
             android:text="@string/hello"
             android:textColor="@color/black"
             android:textSize="50sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/parentRelative"></androidx.appcompat.widget.AppCompatTextView>
+            app:layout_constraintTop_toBottomOf="@id/parentRelative" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvManageasset"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/twenty_dp"
             android:layout_marginTop="30dp"
+            android:paddingStart="4dp"
             android:fontFamily="@font/jio_type_bold"
-            android:gravity="left"
             android:text="@string/manage_assets"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_13"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/cardView"></androidx.appcompat.widget.AppCompatTextView>
+            app:layout_constraintTop_toBottomOf="@id/cardView" />
 
         <LinearLayout
             android:id="@+id/btnLayout1"
@@ -145,22 +142,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/thirty_dp"
             android:orientation="horizontal"
-            android:weightSum="2"
+            android:weightSum="2.2"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/tvManageasset">
 
             <androidx.cardview.widget.CardView
+                android:layout_margin="4dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/search_btn"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
                     android:id="@+id/searchLin"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/search_btn"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -191,11 +190,18 @@
 
             </androidx.cardview.widget.CardView>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="match_parent"/>
+
             <androidx.cardview.widget.CardView
+                android:layout_margin="4dp"
+                app:cardBackgroundColor="@color/light_orange"
                 android:id="@+id/cvRegisteration"
-                android:layout_marginLeft="@dimen/twenty_dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
+                app:cardElevation="2dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="@dimen/margin_20">
 
@@ -203,7 +209,6 @@
                     android:id="@+id/locationInventory"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/light_orange"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -239,11 +244,10 @@
             android:id="@+id/btnLayout2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="@dimen/fourteen_dp"
             android:orientation="horizontal"
-            android:weightSum="2"
+            android:weightSum="2.2"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/btnLayout1">
 
@@ -251,14 +255,15 @@
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
-                android:background="@color/search_btn"
+                android:layout_margin="4dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/light_green"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
                     android:id="@+id/globalInventory"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/light_green"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -286,9 +291,14 @@
 
 
             </androidx.cardview.widget.CardView>
-
+            <View
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="match_parent"/>
             <androidx.cardview.widget.CardView
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_margin="4dp"
+                app:cardBackgroundColor="@color/config_btn"
+                app:cardElevation="2dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
@@ -298,7 +308,6 @@
                     android:id="@+id/configLin"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/config_btn"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -334,25 +343,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:layout_marginTop="28dp"
+            android:weightSum="2.2"
+            android:layout_marginTop="@dimen/fourteen_dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/btnLayout2">
 
             <androidx.cardview.widget.CardView
+                android:layout_margin="4dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
-                android:background="@color/search_btn"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/dark_orange"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
                     android:id="@+id/linearSync"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/dark_orange"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -380,20 +390,24 @@
 
 
             </androidx.cardview.widget.CardView>
-
+            <View
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="match_parent"/>
             <androidx.cardview.widget.CardView
+                android:layout_margin="4dp"
+                app:cardElevation="2dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
                 android:layout_weight="1"
-                android:visibility="invisible"
+                app:cardBackgroundColor="@color/config_btn"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
                     android:id="@+id/lnrTemp"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/config_btn"
                     android:gravity="center"
                     android:orientation="vertical">
 

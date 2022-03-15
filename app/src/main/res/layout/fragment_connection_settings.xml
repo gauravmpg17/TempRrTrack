@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/reader_conn_sett" />
 
             <include layout="@layout/title_divider" />
@@ -46,8 +47,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:buttonTint="@color/blue_"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <TextView
@@ -57,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/notification_settings" />
 
             <include layout="@layout/title_divider" />
@@ -80,7 +83,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -104,7 +108,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -128,7 +133,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
 
@@ -138,6 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/export_data_sett" />
 
             <include layout="@layout/title_divider" />
@@ -160,7 +167,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
 
@@ -170,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/match_mode" />
 
             <include layout="@layout/title_divider" />
@@ -192,7 +201,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -216,7 +226,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
                     android:checked="true"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <TextView
@@ -225,6 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/global_settings" />
 
             <include layout="@layout/title_divider" />
@@ -239,7 +251,7 @@
                     style="@style/style_normal_font"
                     android:layout_width="0dp"
                     android:layout_weight="85"
-                    android:gravity="left"
+                    android:gravity="center_vertical"
                     android:text="@string/enable_ascii_mode" />
 
                 <CheckBox
@@ -247,7 +259,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
         </LinearLayout>
     </ScrollView>
