@@ -7,13 +7,13 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/ten_dp"
     app:cardBackgroundColor="#FFFFFF"
-    android:background="@drawable/rectangle_background_border"
     app:cardCornerRadius="@dimen/margin_10"
     app:cardElevation="6dp"
     app:cardPreventCornerOverlap="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@drawable/rectangle_background_border"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/ten_dp"
         android:paddingBottom="@dimen/ten_dp">

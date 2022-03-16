@@ -176,20 +176,33 @@ interface BookDao {
     fun getGlobalScanRfid(scanId: String): List<String>
 
     /*  @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE rfidTag IN (:scanTagIds) AND locationId IN (:locationId)")
-      fun getCountOfTagsFound(scanTagIds: List<String>,locationId: Int): Int*/
+      fun getCountOfTagsFound(scanTagIds: List<String>,locationId: Int): Int*
+       @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
+    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
+      /
+     */
 
-    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
+      @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
     fun getCountOfTagsFound(scanId: String, locationId: Int): Int
 
+//    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
+//    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
+
+    /*   @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND rfidTag is null)")
+    fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int*/
     //   @Query("SELECT COUNT(*) FROM tblAssetCatalogue AC LEFT JOIN tblScanTag ST ON ST.rfidTag = AC.rfidTag WHERE ST.scanId IS NULL AND AC.locationId IN (:locationId)")
     @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
     fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int
+
 
     @Query("SELECT COUNT(*) FROM assetMain WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId))")
     fun getCountFoundDifferentLoc(scanId: String, locationId: Int): Int
 
     @Query("SELECT COUNT(*) FROM tblScanTag ST LEFT JOIN assetMain AC ON ST.rfidTag = AC.AssetRFID WHERE AC.AssetRFID IS NULL AND ST.scanId IN (:scanId)")
     fun getCountNotRegistered(scanId: String): Int
+
+//    @Query("SELECT COUNT(*) FROM tblScanTag  WHERE  scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag FROM assetMain WHERE rfidTag IS NOT NULL)")
+//    fun getCountNotRegistered(scanId: String): Int
 
     @Query("SELECT COUNT(*) FROM tblScanTag  WHERE rfidTag IN (:rfid) AND scanId IN (:scanId)")
     fun getCountOfTagAlready(rfid: String, scanId: String): Int
@@ -285,8 +298,11 @@ interface BookDao {
 //    @Delete
 //    fun deleteScanTag(listScanTag: ScanTag)
 
-    @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IS NULL")
-    fun deleteScanTagNotFound(scanId:String)
+    @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
+    fun deleteScanTagNotFound(scanId:String,rfidTag:String)
+
+    @Query("UPDATE assetMain SET LocationId=(:newlocationId),ScanDate=(:scanDate),ScanID=(:scanId) WHERE LocationId IN (:locationId) ")
+    fun updateLocationAssetMain(newlocationId:Int,locationId:Int,scanDate:String,scanId: String)
 
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
     fun deleteScanTagNotReg(scanId:String,rfidTag:String)
@@ -296,6 +312,11 @@ interface BookDao {
 
     @Query("DELETE FROM tblInventorymaster WHERE scanId=(:scanId)")
     fun deleteInventorySingle(scanId:String)
+
+  //  @Query("SELECT * FROM assetMain WHERE ExitDate > (:exitDate) AND ScanID=(:scanId) AND LocationId=(:locationId)  ")
+
+    @Query("SELECT * FROM assetMain WHERE ScanID=(:scanId) AND LocationId=(:locationId)")
+    fun selectAssetMainLocationNullRecords(scanId:String,locationId:Int):List<AssetMain>
 
 //    @Delete
 //    fun deleteScanTagSingle(listScanTag: ScanTag)
