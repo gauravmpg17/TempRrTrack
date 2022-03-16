@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import asset.trak.views.adapter.HomeGoalsAdapter
 import asset.trak.views.baseclasses.BaseFragment
 import com.darryncampbell.datawedgekotlin.*
 import com.markss.rfidtemplate.R
@@ -25,12 +26,12 @@ import java.util.*
 class InventoryScanFragment : BaseFragment(R.layout.activity_main_scan), Observer, View.OnTouchListener  {
 
     private var scans: ArrayList<Scan> = arrayListOf();
-    var adapter = ScanAdapter(requireActivity(), scans)
+
     private val dwInterface = DWInterface();
     private val receiver = DWReceiver()
     private var initialized = false;
     private var version65OrOver = false
-
+    private lateinit var adapter: ScanAdapter
     companion object {
         const val PROFILE_NAME = "DataWedgeKotlinDemo"
         const val PROFILE_INTENT_ACTION = "com.darryncampbell.datawedgekotlin.SCAN"
@@ -41,7 +42,7 @@ class InventoryScanFragment : BaseFragment(R.layout.activity_main_scan), Observe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+adapter = ScanAdapter(requireContext(), scans)
         listView?.adapter = adapter
         ObservableObject.instance.addObserver(this)
         btnScan.setOnTouchListener(this)
@@ -202,7 +203,7 @@ class InventoryScanFragment : BaseFragment(R.layout.activity_main_scan), Observe
             }
         }
 
-        adapter = ScanAdapter(requireActivity(), scans)
+        adapter = ScanAdapter(requireContext(), scans)
         listView?.adapter = adapter
         adapter.notifyDataSetChanged()
 

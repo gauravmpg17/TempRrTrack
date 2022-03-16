@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.markss.rfidtemplate.R
 
 //  Adapter to map Scan objects to the list in the MainActivity
-class ScanAdapter(private var activity: Activity, private var items: ArrayList<Scan>): BaseAdapter()
+class ScanAdapter(private var activity: Context, private var items: ArrayList<Scan>): BaseAdapter()
 {
     private class ViewHolder(row: View?)
     {
