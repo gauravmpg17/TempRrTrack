@@ -132,19 +132,27 @@
 
             </RelativeLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLocation"
+            android:layout_marginTop="@dimen/margin_10"
+            app:layout_constraintTop_toBottomOf="@+id/llSpinnerParent"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
         <TextView
             android:id="@+id/tvInventoryReport"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ten_dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/thirty_dp"
             android:fontFamily="@font/jio_type_bold"
             android:text="Inventory Report"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_16"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/llSpinnerParent" />
+            app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 
         <TextView
             android:id="@+id/tvILastRecord"
@@ -276,6 +284,16 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintStart_toStartOf="@id/guideline_start" />
 
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

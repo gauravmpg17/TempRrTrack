@@ -93,7 +93,7 @@
                 <action android:name="com.rfidreader.NFC.outofrange" />
             </intent-filter>
         </receiver>
-        <uses-library android:name="com.symbol.emdk" />
+<!--        <uses-library android:name="com.symbol.emdk" />-->
     </application>
 
 </manifest>

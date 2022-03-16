@@ -41,7 +41,8 @@ data class AssetMain(
     val AddressedTo:String?,
     val CourierBillDetails:String?,
     var LocationId:Int,
-    var isSelected:Boolean
+    var isSelected:Boolean,
+    var inventorySyncFlag: Int=0,
 //    val CategoryID: String?,
 //    val ClassID: String?,
 //    val CreatedBy: String?,
