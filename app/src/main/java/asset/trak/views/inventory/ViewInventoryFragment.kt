@@ -235,7 +235,7 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
                 val cal = Calendar.getInstance()
                 val dateFormat = sdf.format(cal.time)
                 if (pendingInventory.isEmpty()) {
-                    Log.d("tag1212", "listeners: "+UUID.randomUUID().toString())
+                 //   Log.d("tag1212", "listeners: "+UUID.randomUUID().toString())
                     val inventoryMaster=Inventorymaster(
                         scanID = "A" + UUID.randomUUID().toString(),
                         deviceId = deviceId,
