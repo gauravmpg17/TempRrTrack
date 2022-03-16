@@ -79,7 +79,7 @@ class NotRegsiteredAdapter(private val context: Context,private val fragment: Fr
     override fun onBindViewHolder(holder: NotFoundHolder, position: Int) {
         val item = items[position]
         holder.tvTitle.text = item.rfidTag
- holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
+ holder.clMain.setBackgroundResource(if (item.isSelected) R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
 
 
         holder.tvSearch.setOnClickListener{

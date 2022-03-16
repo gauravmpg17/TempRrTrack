@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            app:thumbTint="@color/blue_"
-            app:trackTint="#A35BD0EE"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:thumb="@drawable/custom_thumb"
+            app:track="@drawable/custom_track"/>
     </RelativeLayout>
 
     <LinearLayout

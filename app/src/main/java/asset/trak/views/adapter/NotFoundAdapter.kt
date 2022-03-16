@@ -84,7 +84,7 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 //            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
 //        }
 //
-        holder.clMain.setBackgroundResource(if (item.isSelected) R.color.lightt_blue else R.drawable.rectangle_background)
+        holder.clMain.setBackgroundResource(if (item.isSelected) /*R.color.lightt_blue*/ R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
 //        if (item.isSelected) holder.ivCheck.visibility=View.VISIBLE
 //        else holder.ivCheck.visibility=View.GONE
 

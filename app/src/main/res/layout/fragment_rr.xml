@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvLocation"
+                    android:id="@+id/tvLocation12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
@@ -349,6 +349,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/reconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/tvFoundLoc"
                     app:layout_constraintStart_toStartOf="@id/tvFoundLoc"
                     app:layout_constraintTop_toBottomOf="@+id/tvFoundLoc"
@@ -387,10 +388,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="@dimen/twenty_three_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="center"
                     android:text="0"
+                    android:layout_marginBottom="@dimen/thirteen_dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/notReconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintStart_toStartOf="@+id/tvNotFoundLoc"
@@ -485,6 +487,7 @@
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintEnd_toEndOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintTop_toBottomOf="@+id/tvDifferentLocationCount" />
@@ -494,7 +497,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnScan123"
@@ -508,6 +511,7 @@
         android:paddingEnd="@dimen/thirty_dp"
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
+        android:theme="@style/fabtheme"
         android:text="@string/stop"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"

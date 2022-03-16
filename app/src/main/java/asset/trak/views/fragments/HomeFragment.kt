@@ -121,15 +121,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //            }
 
 
-            replaceFragment(
-                requireActivity().supportFragmentManager, InventoryScanFragment(),
-                R.id.content_frame
-            )
-
 //            replaceFragment(
-//                requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
+//                requireActivity().supportFragmentManager, InventoryScanFragment(),
 //                R.id.content_frame
 //            )
+
+            replaceFragment(
+                requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
+                R.id.content_frame
+            )
         }
         configLin.setOnClickListener {
             replaceFragment(

@@ -181,6 +181,7 @@ public class Application extends android.app.Application {
     public static boolean isReaderConnectedThroughBluetooth = false;
     private static boolean activityVisible;
     public static boolean isFirstTime=true;
+    public static boolean isReconsiled=false;
 
     public static boolean isActivityVisible() {
         return activityVisible;

@@ -58,6 +58,7 @@
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" />
         <activity
             android:name=".settings.SettingsDetailActivity"
@@ -97,7 +98,7 @@
                 <action android:name="com.rfidreader.NFC.outofrange" />
             </intent-filter>
         </receiver>
-        <uses-library android:name="com.symbol.emdk" />
+<!--        <uses-library android:name="com.symbol.emdk" />-->
     </application>
 
 </manifest>

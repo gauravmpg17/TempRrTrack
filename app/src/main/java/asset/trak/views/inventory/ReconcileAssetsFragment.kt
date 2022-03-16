@@ -256,7 +256,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             when (viewPager.currentItem) {
                 0 -> {//faizan ne mana kiya
                     if(adapter.getCurrentFragment() is NotFoundFragment){
-
+                        Application.isReconsiled=true
                         Log.d("UpdateLocation", "onViewCreated: ")
                         val inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
 
@@ -266,6 +266,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
+                                assetCatalog.inventorySyncFlag=1
                                // listBook.add(assetCatalog)
                                 totalItemCount+=1
                             }
@@ -318,7 +319,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                                        scanTag.locationId = it.LocationId
 //                                        scanTag.rfidTag = it.AssetRFID
 //                                            listRfids.add(scanTag)
-                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID)
+                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID,1,it.AssetRFID!!)
                                 }
                             }
 
@@ -344,11 +345,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 }
                 1 -> {
                     if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
+                        Application.isReconsiled=true
                         val listBook = ArrayList<AssetMain>()
                         (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
+                                assetCatalog.inventorySyncFlag=1
                                 listBook.add(assetCatalog)
                             }
                         }

@@ -140,8 +140,8 @@ interface BookDao {
     fun getInventoryMasterAllCount(): Int
 
     //temporary
-//    @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
-//    fun getAssetsPendingToSync(): List<AssetMain>
+    @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
+    fun getAssetsPendingToSync(): List<AssetMain>
 
     @Query("SELECT * FROM masterLocation WHERE LocBarcode=:locBarcode")
     fun getLocationMasterDataRR(locBarcode:String): MasterLocation
@@ -215,6 +215,9 @@ interface BookDao {
 
     @Query("SELECT * FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag NOT IN (SELECT AssetRFID from assetMain WHERE AssetRFID IS NOT NULL)")
     fun getAssetNotRegistered(scanId: String): List<ScanTag>
+
+    /*  @Query("SELECT * FROM tblAssetCatalogue  WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
+    fun getFoundAtLocation(scanId: String, locationId: Int): List<BookAndAssetData>*/
 
     @Query("SELECT * FROM assetMain  WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun getFoundAtLocation(scanId: String, locationId: Int): List<AssetMain>
@@ -301,8 +304,8 @@ interface BookDao {
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
     fun deleteScanTagNotFound(scanId:String,rfidTag:String)
 
-    @Query("UPDATE assetMain SET LocationId=(:newlocationId),ScanDate=(:scanDate),ScanID=(:scanId) WHERE LocationId IN (:locationId) ")
-    fun updateLocationAssetMain(newlocationId:Int,locationId:Int,scanDate:String,scanId: String)
+    @Query("UPDATE assetMain SET LocationId=(:newlocationId),ScanDate=(:scanDate),ScanID=(:scanId),inventorySyncFlag=(:flag) WHERE LocationId IN (:locationId) AND AssetRFID IN (:rfidTag)")
+    fun updateLocationAssetMain(newlocationId:Int,locationId:Int,scanDate:String,scanId: String,flag:Int,rfidTag:String)
 
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
     fun deleteScanTagNotReg(scanId:String,rfidTag:String)
