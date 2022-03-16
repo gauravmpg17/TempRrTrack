@@ -49,7 +49,9 @@ import androidx.fragment.app.FragmentManager;
 
 import asset.trak.views.baseclasses.BaseActivity;
 import asset.trak.views.fragments.HomeFragment;
+import asset.trak.views.fragments.InventoryScanFragment;
 
+import com.darryncampbell.datawedgekotlin.DWInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.markss.rfidtemplate.R;
@@ -191,7 +193,7 @@ import static com.markss.rfidtemplate.rfid.RFIDController.toneGenerator;
 import static com.markss.rfidtemplate.settings.AdvancedOptionsContent.DPO_ITEM_INDEX;
 
 public class MainActivity extends BaseActivity implements Readers.RFIDReaderEventHandler,
-        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil , View.OnClickListener{
+        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil , View.OnClickListener {
     //Tag to identify the currently displayed fragment
     public static final String TAG_CONTENT_FRAGMENT = "ContentFragment";
     Context mCon;
@@ -320,8 +322,8 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         toolbar = findViewById(R.id.toolbar);
-        ivBack=findViewById(R.id.ivBack);
-        backLay=findViewById(R.id.backLay);
+        ivBack = findViewById(R.id.ivBack);
+        backLay = findViewById(R.id.backLay);
         setSupportActionBar(toolbar);
         mTitle = getTitle();
         mOptionTitles = getResources().getStringArray(R.array.options_array);
@@ -367,7 +369,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             loadReaders(this);
             // creates DW profile for Demo application
             getInstance().clearAllInventoryData();
-            createDWProfile();
+            // createDWProfile();
         } else if (AUTO_RECONNECT_READERS) {
             AutoConnectDevice();
 
@@ -384,9 +386,9 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
     @Override
     public void onClick(View view) {
-          if(view.getId()==R.id.ivBack){
-              onBackPressed();
-          }
+        if (view.getId() == R.id.ivBack) {
+            onBackPressed();
+        }
     }
 
 
@@ -590,7 +592,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         if (finalProgressDialog != null)
                             finalProgressDialog.dismiss();
                         if (exception != null && exception.getMessage() != null)
-                      //      Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            //      Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     exception.getMessage(),
@@ -949,8 +951,8 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         // Checks whether a hardware keyboard is available
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT);
         if (fragment != null && fragment instanceof InventoryFragment && newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-           // findViewById(R.id.inventoryDataLayout).setVisibility(View.INVISIBLE);
-           // findViewById(R.id.inventoryButton).setVisibility(View.INVISIBLE);
+            // findViewById(R.id.inventoryDataLayout).setVisibility(View.INVISIBLE);
+            // findViewById(R.id.inventoryButton).setVisibility(View.INVISIBLE);
         } else if (fragment != null && fragment instanceof InventoryFragment && newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
             findViewById(R.id.inventoryDataLayout).setVisibility(View.VISIBLE);
             findViewById(R.id.inventoryButton).setVisibility(View.VISIBLE);
@@ -983,12 +985,11 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Application.isFirstTime=true;
-                               finish();
+                                Application.isFirstTime = true;
+                                finish();
                             }
                         });
-            }
-            else if (fragment==null) {
+            } else if (fragment == null) {
                 //stop Timer
                 Inventorytimer.getInstance().stopTimer();
                 getInstance().stopTimer();
@@ -1003,8 +1004,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                 finish();
                             }
                         });
-            }
-            else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStackImmediate();
             } else {
                 super.onBackPressed();
@@ -1022,7 +1022,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     public synchronized void inventoryStartOrStop() {
 
         if (MatchModeFileLoader.getInstance(this).isImportTaskRunning()) {
-     //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.loading_csv), Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.loading_csv), Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     getResources().getString(R.string.loading_csv),
@@ -1037,7 +1037,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         if (fragment != null && fragment instanceof InventoryFragment) {
             inventoryBT = findViewById(R.id.inventoryButton);
         } else if (fragment != null && fragment instanceof RapidReadFragment) {
-          // inventoryBT = findViewById(R.id.rr_inventoryButton);
+            // inventoryBT = findViewById(R.id.rr_inventoryButton);
         }
 
         //tagListMatchNotice = false;
@@ -1121,7 +1121,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
                                 @Override
                                 public void onFailure(String message) {
-                                //    Toast.makeText(com.markss.rfidtemplate.home.MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                                    //    Toast.makeText(com.markss.rfidtemplate.home.MainActivity.this, message, Toast.LENGTH_SHORT).show();
                                     FancyToast.makeText(
                                             MainActivity.this,
                                             message,
@@ -1207,14 +1207,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 }
             }
         } else
-        //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                getResources().getString(R.string.error_disconnected),
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    getResources().getString(R.string.error_disconnected),
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
     }
 
     /**
@@ -1302,7 +1302,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     isMultiTagLocationingAborted = true;
                 }
             } else
-        //        Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
+                //        Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
                         getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
@@ -1312,14 +1312,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 ).show();
 
         } else
-        //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                getResources().getString(R.string.error_disconnected),
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    getResources().getString(R.string.error_disconnected),
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         //} else
         //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_bluetooth_disabled), Toast.LENGTH_SHORT).show();
     }
@@ -1341,7 +1341,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                     Application.multiTagLocateTagListMap.get(tagID).setProximityPercent((short) 0);
                                     Application.multiTagLocateActiveTagItemList.add(Application.multiTagLocateTagListMap.get(tagID));
                                     ((LocateOperationsFragment) getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT)).handleLocateTagResponse();
-                                 //   Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_success), Toast.LENGTH_SHORT).show();
+                                    //   Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_success), Toast.LENGTH_SHORT).show();
                                     FancyToast.makeText(
                                             getApplicationContext(),
                                             getResources().getString(R.string.multiTag_locate_add_item_success),
@@ -1350,21 +1350,21 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                             false
                                     ).show();
                                 } else
-                                //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_failed), Toast.LENGTH_SHORT).show();
-                                FancyToast.makeText(
-                                        getApplicationContext(),
-                                        getResources().getString(R.string.multiTag_locate_add_item_failed),
-                                        FancyToast.LENGTH_LONG,
-                                        FancyToast.ERROR,
-                                        false
-                                ).show();
+                                    //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_failed), Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(
+                                            getApplicationContext(),
+                                            getResources().getString(R.string.multiTag_locate_add_item_failed),
+                                            FancyToast.LENGTH_LONG,
+                                            FancyToast.ERROR,
+                                            false
+                                    ).show();
                             } catch (InvalidUsageException e) {
                                 sendNotification(Constants.ACTION_READER_STATUS_OBTAINED, e.getInfo());
                             } catch (OperationFailureException e) {
                                 sendNotification(Constants.ACTION_READER_STATUS_OBTAINED, e.getVendorMessage());
                             }
                         } else
-                     //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_failed), Toast.LENGTH_SHORT).show();
+                            //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_add_item_failed), Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     getResources().getString(R.string.multiTag_locate_add_item_failed),
@@ -1374,16 +1374,16 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             ).show();
                     }
                 } else
-          //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
-                FancyToast.makeText(
-                        getApplicationContext(),
-                        getResources().getString(R.string.multiTag_locate_error_operation_running),
-                        FancyToast.LENGTH_LONG,
-                        FancyToast.INFO,
-                        false
-                ).show();
+                    //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(
+                            getApplicationContext(),
+                            getResources().getString(R.string.multiTag_locate_error_operation_running),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.INFO,
+                            false
+                    ).show();
             } else
-      //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
+                //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
                         getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
@@ -1392,14 +1392,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         false
                 ).show();
         } else
-        //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                getResources().getString(R.string.error_disconnected),
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    getResources().getString(R.string.error_disconnected),
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         //} else
         //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_bluetooth_disabled), Toast.LENGTH_SHORT).show();
     }
@@ -1419,7 +1419,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                 if (mConnectedReader.Actions.MultiTagLocate.deleteItem(tagID) == 0) {
                                     Application.multiTagLocateActiveTagItemList.remove(Application.multiTagLocateTagListMap.get(tagID));
                                     ((LocateOperationsFragment) getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT)).handleLocateTagResponse();
-                              //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_success), Toast.LENGTH_SHORT).show();
+                                    //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_success), Toast.LENGTH_SHORT).show();
 
                                     FancyToast.makeText(
                                             getApplicationContext(),
@@ -1429,49 +1429,49 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                             false
                                     ).show();
                                 } else
-                              //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_failed), Toast.LENGTH_SHORT).show();
-                                FancyToast.makeText(
-                                        getApplicationContext(),
-                                        getResources().getString(R.string.multiTag_locate_delete_item_failed),
-                                        FancyToast.LENGTH_LONG,
-                                        FancyToast.ERROR,
-                                        false
-                                ).show();
+                                    //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_failed), Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(
+                                            getApplicationContext(),
+                                            getResources().getString(R.string.multiTag_locate_delete_item_failed),
+                                            FancyToast.LENGTH_LONG,
+                                            FancyToast.ERROR,
+                                            false
+                                    ).show();
                             } catch (InvalidUsageException e) {
                                 sendNotification(Constants.ACTION_READER_STATUS_OBTAINED, e.getInfo());
                             } catch (OperationFailureException e) {
                                 sendNotification(Constants.ACTION_READER_STATUS_OBTAINED, e.getVendorMessage());
                             }
                         } else
-                      //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_failed), Toast.LENGTH_SHORT).show();
-                        FancyToast.makeText(
-                                getApplicationContext(),
-                                getResources().getString(R.string.multiTag_locate_delete_item_failed),
-                                FancyToast.LENGTH_LONG,
-                                FancyToast.ERROR,
-                                false
-                        ).show();
+                            //      Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_delete_item_failed), Toast.LENGTH_SHORT).show();
+                            FancyToast.makeText(
+                                    getApplicationContext(),
+                                    getResources().getString(R.string.multiTag_locate_delete_item_failed),
+                                    FancyToast.LENGTH_LONG,
+                                    FancyToast.ERROR,
+                                    false
+                            ).show();
                     }
                 } else
-               //     Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(
+                            getApplicationContext(),
+                            getResources().getString(R.string.multiTag_locate_error_operation_running),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.INFO,
+                            false
+                    ).show();
+            } else
+                //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
-                        getResources().getString(R.string.multiTag_locate_error_operation_running),
+                        getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
                         FancyToast.LENGTH_LONG,
-                        FancyToast.INFO,
+                        FancyToast.ERROR,
                         false
                 ).show();
-            } else
-      //          Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
-            FancyToast.makeText(
-                    getApplicationContext(),
-                    getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
-                    FancyToast.LENGTH_LONG,
-                    FancyToast.ERROR,
-                    false
-            ).show();
         } else
-       //     Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
+            //     Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     getResources().getString(R.string.error_disconnected),
@@ -1494,25 +1494,25 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         ((LocateOperationsFragment) fragment).resetMultiTagLocateDetail(false);
                     }
                 } else
-                //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_operation_running), Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(
+                            getApplicationContext(),
+                            getResources().getString(R.string.multiTag_locate_error_operation_running),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.INFO,
+                            false
+                    ).show();
+            } else
+                //         Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
-                        getResources().getString(R.string.multiTag_locate_error_operation_running),
+                        getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
                         FancyToast.LENGTH_LONG,
-                        FancyToast.INFO,
+                        FancyToast.ERROR,
                         false
                 ).show();
-            } else
-       //         Toast.makeText(getApplicationContext(), getResources().getString(R.string.multiTag_locate_error_no_data_loaded), Toast.LENGTH_SHORT).show();
-            FancyToast.makeText(
-                    getApplicationContext(),
-                    getResources().getString(R.string.multiTag_locate_error_no_data_loaded),
-                    FancyToast.LENGTH_LONG,
-                    FancyToast.ERROR,
-                    false
-            ).show();
         } else
-     //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_disconnected), Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     getResources().getString(R.string.error_disconnected),
@@ -1582,43 +1582,43 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             tagValue = asciitohex.convert(tagId);
         else tagValue = tagId;
         if (mConnectedReader == null || !mConnectedReader.isConnected())
-          //  Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                this,
-                "No Active Connection with Reader.",
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //  Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    this,
+                    "No Active Connection with Reader.",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         else if (!mConnectedReader.isCapabilitiesReceived())
-     //       Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                this,
-                "Reader capabilities not updated.",
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //       Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    this,
+                    "Reader capabilities not updated.",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         else if (tagValue.isEmpty())
-           // Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Please fill Tag Id",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-        ).show();
+            // Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Please fill Tag Id",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+            ).show();
         else if (offsetText.isEmpty())
-         //   Toast.makeText(getApplicationContext(), "Please fill offset", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Please fill offset",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-        ).show();
+            //   Toast.makeText(getApplicationContext(), "Please fill offset", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Please fill offset",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+            ).show();
         else if (lengthText.isEmpty())
-     //       Toast.makeText(getApplicationContext(), "Please fill length", Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getApplicationContext(), "Please fill length", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "Please fill length",
@@ -1648,7 +1648,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             } else if (exception instanceof OperationFailureException) {
                                 sendNotification(Constants.ACTION_READER_STATUS_OBTAINED, ((OperationFailureException) exception).getVendorMessage());
                             } else {
-                              //  Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
                                 FancyToast.makeText(
                                         getApplicationContext(),
                                         exception.getMessage(),
@@ -1663,7 +1663,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         @Override
                         public void onFailure(String message) {
                             progressDialog.dismiss();
-                 //           Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //           Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     message,
@@ -1699,16 +1699,16 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             tagValue = asciitohex.convert(tagId);
         else tagValue = tagId;
         if (mConnectedReader == null || !mConnectedReader.isConnected())
-        //    Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "No Active Connection with Reader.",
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //    Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "No Active Connection with Reader.",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         else if (!mConnectedReader.isCapabilitiesReceived())
-   //         Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
+            //         Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "Reader capabilities not updated",
@@ -1717,7 +1717,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     false
             ).show();
         else if (tagValue.isEmpty())
-      //      Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
+            //      Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "Please fill Tag Id",
@@ -1725,17 +1725,17 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     FancyToast.WARNING,
                     false
             ).show();
-            else if (offsetText.isEmpty())
-         //   Toast.makeText(getApplicationContext(), "Please fill offset", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Please fill offset",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-        ).show();
+        else if (offsetText.isEmpty())
+            //   Toast.makeText(getApplicationContext(), "Please fill offset", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Please fill offset",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+            ).show();
         else if (lengthText.isEmpty())
-     //       Toast.makeText(getApplicationContext(), "Please fill length", Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getApplicationContext(), "Please fill length", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "Please fill length",
@@ -1750,7 +1750,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         public void onSuccess(Object object) {
                             progressDialog.dismiss();
                             startbeepingTimer();
-                    //        Toast.makeText(getApplicationContext(), getString(R.string.msg_write_succeed), Toast.LENGTH_SHORT).show();
+                            //        Toast.makeText(getApplicationContext(), getString(R.string.msg_write_succeed), Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     getString(R.string.msg_write_succeed),
@@ -1774,7 +1774,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         @Override
                         public void onFailure(String message) {
                             progressDialog.dismiss();
-                    //        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     message,
@@ -1828,7 +1828,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             tagValue = asciitohex.convert(tagId);
         else tagValue = tagId;
         if (mConnectedReader == null || !mConnectedReader.isConnected())
-     //       Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "No Active Connection with Reader",
@@ -1837,24 +1837,24 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     false
             ).show();
         else if (!mConnectedReader.isCapabilitiesReceived())
-        //    Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
 
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Reader capabilities not updated",
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Reader capabilities not updated",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         else if (tagValue.isEmpty())
-        //    Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Please fill Tag Id",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-        ).show();
+            //    Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Please fill Tag Id",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+            ).show();
         else
             getInstance().accessOperationLock(tagValue, accessRWpassword, lockDataField, lockPrivilege,
                     new RfidListeners() {
@@ -1862,7 +1862,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         public void onSuccess(Object object) {
                             progressDialog.dismiss();
                             startbeepingTimer();
-                          //  Toast.makeText(getApplicationContext(), getString(R.string.msg_lock_succeed), Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(getApplicationContext(), getString(R.string.msg_lock_succeed), Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     getString(R.string.msg_lock_succeed),
@@ -1890,7 +1890,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
-                                   message,
+                                    message,
                                     FancyToast.LENGTH_LONG,
                                     FancyToast.ERROR,
                                     false
@@ -1918,16 +1918,16 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             tagValue = asciitohex.convert(tagId);
         else tagValue = tagId;
         if (mConnectedReader == null || !mConnectedReader.isConnected())
-       //     Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-               "No Active Connection with Reader",
-                FancyToast.LENGTH_LONG,
-                FancyToast.ERROR,
-                false
-        ).show();
+            //     Toast.makeText(getApplicationContext(), "No Active Connection with Reader", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "No Active Connection with Reader",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.ERROR,
+                    false
+            ).show();
         else if (!mConnectedReader.isCapabilitiesReceived())
-  //          Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
+            //          Toast.makeText(getApplicationContext(), "Reader capabilities not updated", Toast.LENGTH_SHORT).show();
             FancyToast.makeText(
                     getApplicationContext(),
                     "Reader capabilities not updated",
@@ -1936,14 +1936,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     false
             ).show();
         else if (tagValue.isEmpty())
-       //     Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
-        FancyToast.makeText(
-                getApplicationContext(),
-                "Please fill Tag Id",
-                FancyToast.LENGTH_LONG,
-                FancyToast.WARNING,
-                false
-        ).show();
+            //     Toast.makeText(getApplicationContext(), "Please fill Tag Id", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(
+                    getApplicationContext(),
+                    "Please fill Tag Id",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+            ).show();
         else
             getInstance().accessOperationsKill(tagValue, accessRWpassword,
                     new RfidListeners() {
@@ -1951,7 +1951,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         public void onSuccess(Object object) {
                             progressDialog.dismiss();
                             startbeepingTimer();
-                         //   Toast.makeText(getApplicationContext(), getString(R.string.msg_kill_succeed), Toast.LENGTH_SHORT).show();
+                            //   Toast.makeText(getApplicationContext(), getString(R.string.msg_kill_succeed), Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     getString(R.string.msg_kill_succeed),
@@ -1974,7 +1974,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         @Override
                         public void onFailure(String message) {
                             progressDialog.dismiss();
-                      //      Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            //      Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                             FancyToast.makeText(
                                     getApplicationContext(),
@@ -2002,7 +2002,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
             lt_et_epc.setFocusable(false);
             if (btn_locate != null) {
-               // btn_locate.setImageResource(R.drawable.ic_play_stop);
+                // btn_locate.setImageResource(R.drawable.ic_play_stop);
             }
             RangeGraph locationBar = findViewById(R.id.locationBar);
             locationBar.setValue(0);
@@ -2011,7 +2011,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         } else {
             isLocationingAborted = true;
             if (btn_locate != null) {
-               // btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                // btn_locate.setImageResource(android.R.drawable.ic_media_play);
             }
             (findViewById(R.id.lt_et_epc)).setFocusableInTouchMode(true);
             (findViewById(R.id.lt_et_epc)).setFocusable(true);
@@ -2040,7 +2040,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             @Override
             public void onFailure(String message) {
                 //  progressDialog.dismiss();
-        //        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                //        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
                         message,
@@ -3449,7 +3449,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             if (action.equalsIgnoreCase(Constants.ACTION_READER_BATTERY_CRITICAL) || action.equalsIgnoreCase(Constants.ACTION_READER_BATTERY_LOW)) {
                 new CustomToast(com.markss.rfidtemplate.home.MainActivity.this, R.layout.toast_layout, data).show();
             } else {
-         //       Toast.makeText(getApplicationContext(), data, Toast.LENGTH_SHORT).show();
+                //       Toast.makeText(getApplicationContext(), data, Toast.LENGTH_SHORT).show();
                 FancyToast.makeText(
                         getApplicationContext(),
                         data,
@@ -3551,4 +3551,6 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         i.putExtra("COMMAND_IDENTIFIER", Application.RFID_DATAWEDGE_DISABLE_SCANNER);  //Unique identifier
         sendBroadcast(i);
     }
+
+
 }
