@@ -763,10 +763,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom"
-        android:layout_weight="10"
+        android:layout_weight="8"
+        android:layout_marginHorizontal="@dimen/margin_20"
         android:gravity="center"
+        android:background="@drawable/button_bg"
         android:onClick="saveConfigClicked"
         android:text="@string/save_to_sled" />
+    <View
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 </LinearLayout>
 
 

@@ -19,7 +19,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="10"
-
+                android:textColor="@color/black"
                 android:gravity="bottom"
                 android:text="@string/tag_report_settings_title" />
 
@@ -46,8 +46,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
+                    android:buttonTint="@color/blue_"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -73,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -99,7 +101,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -124,8 +127,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
+                    android:buttonTint="@color/blue_"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -151,7 +155,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />
@@ -163,6 +168,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="10"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/batch_mode_settings_title" />
 
             <include layout="@layout/title_divider" />
@@ -195,6 +201,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="10"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="@string/unique_tag_settings" />
 
             <include layout="@layout/title_divider" />
@@ -219,7 +226,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:buttonTint="@color/blue_"
+                    android:gravity="center_vertical" />
             </TableRow>
 
 
@@ -230,6 +238,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="10"
                 android:gravity="bottom"
+                android:textColor="@color/black"
                 android:text="NXP BrandID Check" />
 
             <include layout="@layout/title_divider" />
@@ -253,8 +262,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="15"
+                    android:buttonTint="@color/blue_"
                     android:checked="false"
-                    android:gravity="left" />
+                    android:gravity="center_vertical" />
             </TableRow>
 
             <include layout="@layout/normal_divider" />

@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/lt_book_info"
-        layout="@layout/itme_result"
+        layout="@layout/itme_result_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

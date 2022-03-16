@@ -7,16 +7,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/ten_dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="@dimen/margin_10"
-    app:cardElevation="6dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
     app:cardPreventCornerOverlap="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/rectangle_background_border"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/ten_dp"
-        android:paddingBottom="@dimen/ten_dp">
+        android:paddingTop="@dimen/ten_dp">
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierTitle"
@@ -83,7 +81,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
             android:layout_marginTop="@dimen/five_dp"
             android:ellipsize="end"
             android:fontFamily="@font/jio_type_bold"
@@ -99,7 +97,7 @@
             android:id="@+id/tvAuthor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
             android:layout_marginTop="@dimen/five_dp"
             android:fontFamily="@font/jio_type_light"
             android:maxLines="2"
@@ -114,7 +112,7 @@
             android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
             android:layout_marginTop="@dimen/five_dp"
             android:fontFamily="@font/jio_type_light"
             android:maxLines="2"
@@ -133,6 +131,7 @@
             android:layout_marginVertical="@dimen/five_dp"
             android:fontFamily="@font/jio_type_light"
             android:maxLines="2"
+            android:paddingBottom="@dimen/ten_dp"
             android:textColor="@color/btn_color"
             android:textSize="@dimen/text_size_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -142,11 +141,12 @@
             tools:text="@string/dummy" />
 
         <TextView
+
             android:id="@+id/tvSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginEnd="@dimen/ten_dp"
+            android:layout_marginRight="@dimen/ten_dp"
             android:autoLink="email"
             android:fontFamily="@font/jio_type_light"
             android:gravity="right"
@@ -156,6 +156,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTag" />
 
-
+        <View
+            android:background="@color/blue_"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -51,7 +52,7 @@ public class MultiTagLocateFragment extends Fragment implements ResponseHandlerI
     private static final int LOCATE_TAG_CSV_IMPORT = 0;
     private MultiTagLocateInventoryAdapter tagListAdapter;
 
-    private LinearLayout tagItemDataLayout;
+    private RelativeLayout tagItemDataLayout;
     private AutoCompleteTextView tagItemView;
     private Button addItemButton;
     private Button deleteItemButton;
@@ -113,7 +114,7 @@ public class MultiTagLocateFragment extends Fragment implements ResponseHandlerI
         super.onActivityCreated(savedInstanceState);
         //((ActionBarActivity) getActivity()).getSupportActionBar().setIcon(R.drawable.dl_loc);
 
-        tagItemDataLayout = (LinearLayout) getActivity().findViewById(R.id.multiTagLocateDataLayout);
+        tagItemDataLayout = (RelativeLayout) getActivity().findViewById(R.id.multiTagLocateDataLayout);
         tagItemView = (AutoCompleteTextView) getActivity().findViewById(R.id.multiTagLocate_epc);
         addItemButton = (Button) getActivity().findViewById(R.id.multiTagLocateAddItemButton);
         deleteItemButton = (Button) getActivity().findViewById(R.id.multiTagLocateDeleteItemButton);

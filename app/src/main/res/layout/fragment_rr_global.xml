@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -190,7 +190,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/ten_dp"
+                android:layout_marginTop="@dimen/fourty_dp"
                 android:fontFamily="@font/jio_type_bold"
                 tools:text="Inventory Report"
                 android:textColor="@color/black"
@@ -213,12 +213,15 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginBottom="@dimen/margin_20"
                 android:id="@+id/registeredParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ten_dp"
-                android:background="@drawable/rectangle_border_inventory_gry"
+                android:layout_marginTop="@dimen/margin_20"
+                android:paddingVertical="@dimen/margin_20"
+                android:background="@drawable/rectangle_background_border"
                 android:orientation="horizontal"
+                android:elevation="6dp"
                 app:cardCornerRadius="@dimen/fourteen_dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -236,9 +239,9 @@
                     android:text="@string/lblRegistered"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/tvRegisteredCountrr"
+                    app:layout_constraintTop_toTopOf="@id/tvRegisteredCountrr" />
 
                 <TextView
                     android:id="@+id/tvRegisteredCountrr"
@@ -246,31 +249,28 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/twenty_three_dp"
-                    android:layout_marginTop="@dimen/twenty_eight_dp"
-                    android:layout_marginBottom="27dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tvRegistered"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="@dimen/margin_20"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <View
                     android:id="@+id/view2"
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/margin_5"
-                    android:layout_marginTop="@dimen/thirty_dp"
-                    android:layout_marginEnd="@dimen/margin_5"
-                    android:layout_marginBottom="@dimen/thirty_dp"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/fourteen_dp"
+                    android:layout_marginEnd="@dimen/fourteen_dp"
                     android:background="@color/divider_color_inventory"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvRegisteredCountrr"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toTopOf="@id/uniqueTagContent"
+                    android:layout_marginVertical="@dimen/margin_10"
+                    app:layout_constraintStart_toStartOf="parent" />
 
 
                 <TextView
@@ -278,36 +278,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/twenty_dp"
                     android:fontFamily="@font/jio_type_medium"
                     android:text="@string/lblScanned"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvScannedCount"
-                    app:layout_constraintStart_toStartOf="@+id/view2"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/uniqueTagContent"
+                    app:layout_constraintTop_toTopOf="@id/uniqueTagContent"
+                    app:layout_constraintStart_toStartOf="@id/tvRegistered" />
 
                 <TextView
                     android:id="@+id/uniqueTagContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="27dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="@dimen/twenty_eight_dp"
+                    android:layout_marginEnd="@dimen/twenty_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     tools:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
+                    app:layout_constraintTop_toBottomOf="@id/view2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_10"
+                app:layout_constraintTop_toBottomOf="@id/registeredParent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_30"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/foundLocParent"
                 android:layout_width="0dp"
@@ -493,7 +496,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnScan123"
