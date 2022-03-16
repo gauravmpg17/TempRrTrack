@@ -1,18 +1,26 @@
 package asset.trak.views.inventory
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
 import asset.trak.utils.Constants
+import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
+import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
@@ -30,6 +38,7 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
     private var currLocId =0
     private var currMasterLocation: MasterLocation?=null
     var sharedPreference: SharedPreferences?= null
+    private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var deviceId="A"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,10 +48,63 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
         initialisation()
         setAdaptor()
         listeners()
+        Log.d("tag1212121", "onViewCreated: ${Application.isReconsiled}")
+        if(Application.isReconsiled)
+        {
+          getLastSync()
+        }
+    }
+
+    private fun getLastSync() {
+        progressBar.visibility = View.VISIBLE
+        disableUserInteraction(requireActivity())
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
+        val currSyncTime = sdf.format(Date())
+        val deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+        Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
+            .show()
+
+        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
+
+            if (it != null && it.statuscode == 200 && it.data != null)  {
+                it.data.let {
+                    if (!it.AssetMain.isNullOrEmpty()) {
+                        Application.bookDao?.addAssetMain(it.AssetMain)
+                    }
+
+                    if (!it.InventoryScan.isNullOrEmpty()) {
+                        Application.bookDao?.addInventoryScan(it.InventoryScan)
+                    }
+
+                    if (!it.MasterLocation.isNullOrEmpty()) {
+                        Application.bookDao?.addMasterLocation(it.MasterLocation)
+                    }
+
+
+                    if (!it.MasterVendor.isNullOrEmpty()) {
+                        Application.bookDao?.addMasterVendor(it.MasterVendor)
+                    }
+
+                    if(!it.Inventorymaster.isNullOrEmpty()){
+                        Application.bookDao?.addInventoryMaster(it.Inventorymaster)
+                    }
+                }
+                Application.isReconsiled = false
+            }
+            //save last sync time in sp
+            var editor = sharedPreference?.edit()
+            editor?.putString(Constants.LastSyncTs, currSyncTime)
+            editor?.putString(Constants.DeviceId, deviceId)
+            editor?.commit()
+            progressBar.visibility = View.INVISIBLE
+            Constants.enableUserInteraction(requireActivity())
+            Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     private fun initialisation() {
-
         listOfLocations.clear()
         listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
     }
@@ -54,19 +116,12 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
             listOfItems.add(it.locationName ?: "")
         }
 
-        val spinnerArrayAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                listOfItems
-            )
-
-
         etRfid.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
                 if(s.toString().trim().isEmpty())
                 {
+                    tvLocation.text=""
                     FancyToast.makeText(
                         requireActivity(),
                         "Please Enter Barcode.",
@@ -81,6 +136,10 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
                     //here
                     currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
                     currMasterLocation?.let {
+                        it.Name?.let {
+                            tvLocation.text=it
+                        }
+
                         currLocId=currMasterLocation!!.LocID
                         var lastScanId=""
                         var lastRecodedDate=""
@@ -109,6 +168,7 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
                 }
                 else
                 {
+                    tvLocation.text=""
                     Log.d("tag1111", "afterTextChanged: Length ${s.length}")
                 }
             }
@@ -150,8 +210,7 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
 //                e.printStackTrace()
 //            }
 
-
-
+            requireActivity().hideKeyboard(it)
             if(currMasterLocation==null)
             {
                                 FancyToast.makeText(
@@ -210,6 +269,14 @@ class ViewInventoryFragment(val isFromWhat: String) : BaseFragment(R.layout.frag
 
         }
     }
+
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+
 
 
 }

@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvLocation"
+                    android:id="@+id/tvLocation12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
