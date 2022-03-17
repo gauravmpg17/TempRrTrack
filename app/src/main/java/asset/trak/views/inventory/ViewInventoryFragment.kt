@@ -266,7 +266,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                 barCodeName= etRfid.text.toString().trim()
                 Log.d("newwww", "listeners2: ${barCodeName}")
                 //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(etRfid.text.toString().trim())
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
 
        //         Log.d("newwww", "listeners211: ${currMasterLocation!!.Name}")
             //    Toast.makeText(activity, "1  ${currMasterLocation!!.Name}", Toast.LENGTH_SHORT).show()
