@@ -74,11 +74,10 @@ public class InventoryFragment extends Fragment implements Spinner.OnItemSelecte
     private ArrayAdapter<CharSequence> invAdapter;
 
     //ID to maintain the memory bank selected
-    private String memoryBankID = "none";
+    private String memoryBankID = "TID";
     private FloatingActionButton inventoryButton;
     private FloatingActionButton fabMatchMode;
     private FloatingActionButton fabReset;
-
     private long prevTime = 0;
     private TextView timeText;
     private Spinner invSpinner;
@@ -96,8 +95,6 @@ public class InventoryFragment extends Fragment implements Spinner.OnItemSelecte
                 toggle(view, position);
                 RFIDController.accessControlTag = adapter.getItem(position).getTagID();
                 Application.locateTag = adapter.getItem(position).getTagID();
-
-
                 Application.PreFilterTag = adapter.getItem(position).getTagID();
             }
         }
