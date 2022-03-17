@@ -16,7 +16,7 @@ data class MasterLocation(
     val DisplayName: String?,
     val ImageURL: String?,
     val InactiveOn: String?,
-    val LocBarcode: String?,
+    val LocBarcode: String,
     val LocQRCode: String?,
     val LocRFID: String?,
     val ModifiedBy: String?,

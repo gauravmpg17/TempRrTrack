@@ -44,6 +44,8 @@ class ViewInventoryFragment(val isFromWhat: String) :
     BaseFragment(R.layout.fragment_view_inventory), Observer {
 
     private var barCodeName: String = ""
+
+    //   private var barCodeName: String = ""
     private var listOfLocations = ArrayList<LocationMaster>()
     private var currLocId = 0
     private var currMasterLocation: MasterLocation? = null
@@ -165,79 +167,79 @@ class ViewInventoryFragment(val isFromWhat: String) :
             listOfItems.add(it.locationName ?: "")
         }
 
-       /* etRfid.addTextChangedListener(object : TextWatcher {
+        /* etRfid.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(s: Editable) {
-                if (s.toString().trim().isEmpty()) {
-                    tvLocation.text = ""
-                    FancyToast.makeText(
-                        requireActivity(),
-                        "Please Enter Barcode.",
-                        FancyToast.LENGTH_LONG,
-                        FancyToast.WARNING,
-                        false
-                    ).show()
-                } else if (s.toString().length >= 4) {
-                    barCodeName = s.toString().trim()
-                    //here
-                    currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
-                    currMasterLocation?.let {
-                        it.Name?.let {
-                            tvLocation.text = it
-                        }
+             override fun afterTextChanged(s: Editable) {
+                 if (s.toString().trim().isEmpty()) {
+                     tvLocation.text = ""
+                     FancyToast.makeText(
+                         requireActivity(),
+                         "Please Enter Barcode.",
+                         FancyToast.LENGTH_LONG,
+                         FancyToast.WARNING,
+                         false
+                     ).show()
+                 } else if (s.toString().length >= 4) {
+                     barCodeName = s.toString().trim()
+                     //here
+                     currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
+                     currMasterLocation?.let {
+                         it.Name?.let {
+                             tvLocation.text = it
+                         }
 
-                        currLocId = currMasterLocation!!.LocID
-                        var lastScanId = ""
-                        var lastRecodedDate = ""
-                        var registeredAsPerLastScan = 0
-                        var newlyRegistered = 0
-                        if (currLocId != null) {
-                            val invData = roomDatabaseBuilder.getBookDao()
-                                .getLastRecordedInventoryOfLocation(currLocId)
-                            if (invData.count() > 0) {
-                                lastRecodedDate = invData.get(0).scanOn.toString()
-                                lastScanId = invData.get(0).scanID
-                                //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                                registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                    .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                        currLocId,
-                                        lastScanId
-                                    )
-                                newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                    .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+                         currLocId = currMasterLocation!!.LocID
+                         var lastScanId = ""
+                         var lastRecodedDate = ""
+                         var registeredAsPerLastScan = 0
+                         var newlyRegistered = 0
+                         if (currLocId != null) {
+                             val invData = roomDatabaseBuilder.getBookDao()
+                                 .getLastRecordedInventoryOfLocation(currLocId)
+                             if (invData.count() > 0) {
+                                 lastRecodedDate = invData.get(0).scanOn.toString()
+                                 lastScanId = invData.get(0).scanID
+                                 //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                                 registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+                                     .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                         currLocId,
+                                         lastScanId
+                                     )
+                                 newlyRegistered = roomDatabaseBuilder.getBookDao()
+                                     .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
 
-                            } else {
-                                registeredAsPerLastScan = 0
-                                newlyRegistered =
-                                    roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                            }
-                        }
+                             } else {
+                                 registeredAsPerLastScan = 0
+                                 newlyRegistered =
+                                     roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                             }
+                         }
 
 
-                        tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                        tvNewlyScanCount.text = newlyRegistered.toString()
+                         tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                         tvNewlyScanCount.text = newlyRegistered.toString()
 
-                    }
-                } else {
-                    tvLocation.text = ""
-                    Log.d("tag1111", "afterTextChanged: Length ${s.length}")
-                }
-            }
+                     }
+                 } else {
+                     tvLocation.text = ""
+                     Log.d("tag1111", "afterTextChanged: Length ${s.length}")
+                 }
+             }
 
-            override fun beforeTextChanged(
-                s: CharSequence, start: Int,
-                count: Int, after: Int
-            ) {
-            }
+             override fun beforeTextChanged(
+                 s: CharSequence, start: Int,
+                 count: Int, after: Int
+             ) {
+             }
 
-            override fun onTextChanged(
-                s: CharSequence, start: Int,
-                before: Int, count: Int
-            ) {
-                // tvSample.setText("Text is : "+s)
+             override fun onTextChanged(
+                 s: CharSequence, start: Int,
+                 before: Int, count: Int
+             ) {
+                 // tvSample.setText("Text is : "+s)
 
-            }
-        })*/
+             }
+         })*/
     }
 
     private fun listeners() {
@@ -246,11 +248,12 @@ class ViewInventoryFragment(val isFromWhat: String) :
         }
 
         buttonscan.setOnClickListener {
-         //   Log.d("newwww", "listeners1: ${it}")
+            //   Log.d("newwww", "listeners1: ${it}")
+            barCodeName = etRfid.text.toString()
+            //  etRfid.setText("9789743226370")
 
-            if(etRfid.text.toString().trim().isEmpty())
-            {
-                tvLocation.text=""
+            if (barCodeName.isEmpty()) {
+                tvLocation.text = ""
                 FancyToast.makeText(
                     requireActivity(),
                     "Please Enter Barcode.",
@@ -258,43 +261,39 @@ class ViewInventoryFragment(val isFromWhat: String) :
                     FancyToast.WARNING,
                     false
                 ).show()
-            }
-            else if(etRfid.text.toString().isNotEmpty())
-            {
-                Toast.makeText(activity, "2  ${etRfid.text.toString().trim()}", Toast.LENGTH_SHORT)
-                    .show()
-                barCodeName= etRfid.text.toString().trim()
-                Log.d("newwww", "listeners2: ${barCodeName}")
+            } else if (barCodeName.isNotEmpty()) {
                 //here
                 currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
-
-       //         Log.d("newwww", "listeners211: ${currMasterLocation!!.Name}")
-            //    Toast.makeText(activity, "1  ${currMasterLocation!!.Name}", Toast.LENGTH_SHORT).show()
                 currMasterLocation?.let {
                     it.Name?.let {
-                        tvLocation.text=it
-                        Toast.makeText(activity, "3  ${etRfid.text.toString().trim()}", Toast.LENGTH_SHORT)
-                            .show()
-                        Log.d("newwww", "listeners3: ${it}")
+                        tvLocation.text = it
+                     //   Log.d("newwww", "listeners3: ${it}")
                     }
 
-                    currLocId=currMasterLocation!!.LocID
-                    var lastScanId=""
-                    var lastRecodedDate=""
-                    var registeredAsPerLastScan=0
-                    var newlyRegistered=0
+                    currLocId = currMasterLocation!!.LocID
+                    var lastScanId = ""
+                    var lastRecodedDate = ""
+                    var registeredAsPerLastScan = 0
+                    var newlyRegistered = 0
                     if (currLocId != 0) {
-                        val invData =  roomDatabaseBuilder.getBookDao().getLastRecordedInventoryOfLocation(currLocId)
-                        if(invData.count()>0){
-                            lastRecodedDate= invData.get(0).scanOn.toString()
-                            lastScanId=invData.get(0).scanID
+                        val invData = roomDatabaseBuilder.getBookDao()
+                            .getLastRecordedInventoryOfLocation(currLocId)
+                        if (invData.count() > 0) {
+                            lastRecodedDate = invData.get(0).scanOn.toString()
+                            lastScanId = invData.get(0).scanID
                             //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                            registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountOfRegisteredAsPerLastInventoryOfLocation(currLocId,lastScanId)
-                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId,lastScanId)
+                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                    currLocId,
+                                    lastScanId
+                                )
+                            newlyRegistered = roomDatabaseBuilder.getBookDao()
+                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
 
-                        }else{
-                            registeredAsPerLastScan=0
-                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                        } else {
+                            registeredAsPerLastScan = 0
+                            newlyRegistered =
+                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
                         }
                     }
 
@@ -302,7 +301,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                     tvRegisteredCount.text = registeredAsPerLastScan.toString()
                     tvNewlyScanCount.text = newlyRegistered.toString()
 
-                  //  requireActivity().hideKeyboard(it)
+                    //  requireActivity().hideKeyboard(it)
                     if (currMasterLocation == null) {
                         FancyToast.makeText(
                             requireActivity(),
@@ -335,7 +334,8 @@ class ViewInventoryFragment(val isFromWhat: String) :
                                 scanStartDatetime = dateFormat
                             )
                             roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
-                            roomDatabaseBuilder.getBookDao().resetScanIdOfAssetsAtLocation(currLocId)
+                            roomDatabaseBuilder.getBookDao()
+                                .resetScanIdOfAssetsAtLocation(currLocId)
                         }
 
                         val fragment = RapidReadFragment()
@@ -361,10 +361,8 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
 
                 }
-            }
-            else
-            {
-                tvLocation.text=""
+            } else {
+                tvLocation.text = ""
             }
             /*Add a Entry to Table with Pending Status*/
 
@@ -415,43 +413,43 @@ class ViewInventoryFragment(val isFromWhat: String) :
         KBus.subscribe<String>(this) {
             if (it.isNotEmpty()) {
                 etRfid.setText(it.trim())
-           //     val s = it
-               // barCodeName = s.trim()
+                //     val s = it
+                // barCodeName = s.trim()
                 //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(etRfid.text.toString().trim())
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(it.trim())
 
-         //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
+                //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
                 currMasterLocation?.let {
                     it.Name?.let {
                         tvLocation.text = it
                     }
 
-                //    currLocId = currMasterLocation!!.LocID
+                    currLocId = currMasterLocation!!.LocID
                     var lastScanId = ""
                     var lastRecodedDate = ""
                     var registeredAsPerLastScan = 0
                     var newlyRegistered = 0
-//                    if (currLocId != null) {
-//                        val invData = roomDatabaseBuilder.getBookDao()
-//                            .getLastRecordedInventoryOfLocation(currLocId)
-//                        if (invData.count() > 0) {
-//                            lastRecodedDate = invData.get(0).scanOn.toString()
-//                            lastScanId = invData.get(0).scanID
-//                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-//                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-//                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
-//                                    currLocId,
-//                                    lastScanId
-//                                )
-//                            newlyRegistered = roomDatabaseBuilder.getBookDao()
-//                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
-//
-//                        } else {
-//                            registeredAsPerLastScan = 0
-//                            newlyRegistered =
-//                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-//                        }
-//                    }
+                    if (currLocId != null) {
+                        val invData = roomDatabaseBuilder.getBookDao()
+                            .getLastRecordedInventoryOfLocation(currLocId)
+                        if (invData.count() > 0) {
+                            lastRecodedDate = invData.get(0).scanOn.toString()
+                            lastScanId = invData.get(0).scanID
+                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                    currLocId,
+                                    lastScanId
+                                )
+                            newlyRegistered = roomDatabaseBuilder.getBookDao()
+                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+
+                        } else {
+                            registeredAsPerLastScan = 0
+                            newlyRegistered =
+                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                        }
+                    }
 
 
                     tvRegisteredCount.text = registeredAsPerLastScan.toString()

@@ -143,8 +143,8 @@ interface BookDao {
     @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
     fun getAssetsPendingToSync(): List<AssetMain>
 
-    @Query("SELECT * FROM masterLocation WHERE LocBarcode=:locBarcode")
-    fun getLocationMasterDataRR(locBarcode:String): MasterLocation
+    @Query("SELECT * FROM masterLocation WHERE LocBarcode=:loccode")
+    fun getLocationMasterDataRR(loccode:String): MasterLocation
 
 //    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
 //    fun clearSyncFlagOfAssets(ids:List<String>)

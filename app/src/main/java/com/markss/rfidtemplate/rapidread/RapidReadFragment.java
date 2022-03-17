@@ -615,9 +615,10 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     public void handleTagResponse(InventoryListItem inventoryListItem, boolean isAddedToList) {
         updateTexts();
 
-        listInventoryList.add(inventoryListItem.getTagID());
-        scannedList.add(inventoryListItem.getTagID());
+        listInventoryList.add(inventoryListItem.getMemoryBankData());
+        scannedList.add(inventoryListItem.getMemoryBankData());
         uniqueTags.setText(Integer.toString(scannedList.size()));
+      //  String memoryBankData=inventoryListItem.getMemoryBankData();
         if (tagReadRate != null) {
             if (RFIDController.mRRStartedTime == 0)
                 Application.TAG_READ_RATE = 0;
