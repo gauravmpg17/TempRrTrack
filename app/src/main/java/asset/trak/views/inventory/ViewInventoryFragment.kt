@@ -246,8 +246,9 @@ class ViewInventoryFragment(val isFromWhat: String) :
         }
 
         buttonscan.setOnClickListener {
+         //   Log.d("newwww", "listeners1: ${it}")
 
-            if(etRfid.toString().trim().isEmpty())
+            if(etRfid.text.toString().trim().isEmpty())
             {
                 tvLocation.text=""
                 FancyToast.makeText(
@@ -258,14 +259,23 @@ class ViewInventoryFragment(val isFromWhat: String) :
                     false
                 ).show()
             }
-            else if(etRfid.toString().length >=4)
+            else if(etRfid.text.toString().isNotEmpty())
             {
-                barCodeName= etRfid.toString().trim()
+                Toast.makeText(activity, "2  ${etRfid.text.toString().trim()}", Toast.LENGTH_SHORT)
+                    .show()
+                barCodeName= etRfid.text.toString().trim()
+                Log.d("newwww", "listeners2: ${barCodeName}")
                 //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(etRfid.text.toString().trim())
+
+       //         Log.d("newwww", "listeners211: ${currMasterLocation!!.Name}")
+            //    Toast.makeText(activity, "1  ${currMasterLocation!!.Name}", Toast.LENGTH_SHORT).show()
                 currMasterLocation?.let {
                     it.Name?.let {
                         tvLocation.text=it
+                        Toast.makeText(activity, "3  ${etRfid.text.toString().trim()}", Toast.LENGTH_SHORT)
+                            .show()
+                        Log.d("newwww", "listeners3: ${it}")
                     }
 
                     currLocId=currMasterLocation!!.LocID
@@ -273,7 +283,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                     var lastRecodedDate=""
                     var registeredAsPerLastScan=0
                     var newlyRegistered=0
-                    if (currLocId != null) {
+                    if (currLocId != 0) {
                         val invData =  roomDatabaseBuilder.getBookDao().getLastRecordedInventoryOfLocation(currLocId)
                         if(invData.count()>0){
                             lastRecodedDate= invData.get(0).scanOn.toString()
@@ -405,41 +415,43 @@ class ViewInventoryFragment(val isFromWhat: String) :
         KBus.subscribe<String>(this) {
             if (it.isNotEmpty()) {
                 etRfid.setText(it.trim())
-                val s = it
-                barCodeName = s.trim()
+           //     val s = it
+               // barCodeName = s.trim()
                 //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(etRfid.text.toString().trim())
+
+         //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
                 currMasterLocation?.let {
                     it.Name?.let {
                         tvLocation.text = it
                     }
 
-                    currLocId = currMasterLocation!!.LocID
+                //    currLocId = currMasterLocation!!.LocID
                     var lastScanId = ""
                     var lastRecodedDate = ""
                     var registeredAsPerLastScan = 0
                     var newlyRegistered = 0
-                    if (currLocId != null) {
-                        val invData = roomDatabaseBuilder.getBookDao()
-                            .getLastRecordedInventoryOfLocation(currLocId)
-                        if (invData.count() > 0) {
-                            lastRecodedDate = invData.get(0).scanOn.toString()
-                            lastScanId = invData.get(0).scanID
-                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                    currLocId,
-                                    lastScanId
-                                )
-                            newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
-
-                        } else {
-                            registeredAsPerLastScan = 0
-                            newlyRegistered =
-                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                        }
-                    }
+//                    if (currLocId != null) {
+//                        val invData = roomDatabaseBuilder.getBookDao()
+//                            .getLastRecordedInventoryOfLocation(currLocId)
+//                        if (invData.count() > 0) {
+//                            lastRecodedDate = invData.get(0).scanOn.toString()
+//                            lastScanId = invData.get(0).scanID
+//                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+//                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+//                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
+//                                    currLocId,
+//                                    lastScanId
+//                                )
+//                            newlyRegistered = roomDatabaseBuilder.getBookDao()
+//                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+//
+//                        } else {
+//                            registeredAsPerLastScan = 0
+//                            newlyRegistered =
+//                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+//                        }
+//                    }
 
 
                     tvRegisteredCount.text = registeredAsPerLastScan.toString()
