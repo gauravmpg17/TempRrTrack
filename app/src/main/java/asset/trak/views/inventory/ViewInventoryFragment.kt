@@ -246,6 +246,116 @@ class ViewInventoryFragment(val isFromWhat: String) :
         }
 
         buttonscan.setOnClickListener {
+
+            if(etRfid.toString().trim().isEmpty())
+            {
+                tvLocation.text=""
+                FancyToast.makeText(
+                    requireActivity(),
+                    "Please Enter Barcode.",
+                    FancyToast.LENGTH_LONG,
+                    FancyToast.WARNING,
+                    false
+                ).show()
+            }
+            else if(etRfid.toString().length >=4)
+            {
+                barCodeName= etRfid.toString().trim()
+                //here
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
+                currMasterLocation?.let {
+                    it.Name?.let {
+                        tvLocation.text=it
+                    }
+
+                    currLocId=currMasterLocation!!.LocID
+                    var lastScanId=""
+                    var lastRecodedDate=""
+                    var registeredAsPerLastScan=0
+                    var newlyRegistered=0
+                    if (currLocId != null) {
+                        val invData =  roomDatabaseBuilder.getBookDao().getLastRecordedInventoryOfLocation(currLocId)
+                        if(invData.count()>0){
+                            lastRecodedDate= invData.get(0).scanOn.toString()
+                            lastScanId=invData.get(0).scanID
+                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                            registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountOfRegisteredAsPerLastInventoryOfLocation(currLocId,lastScanId)
+                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId,lastScanId)
+
+                        }else{
+                            registeredAsPerLastScan=0
+                            newlyRegistered= roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                        }
+                    }
+
+
+                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                    tvNewlyScanCount.text = newlyRegistered.toString()
+
+                  //  requireActivity().hideKeyboard(it)
+                    if (currMasterLocation == null) {
+                        FancyToast.makeText(
+                            requireActivity(),
+                            "Please Enter Valid Bar Code.",
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.WARNING,
+                            false
+                        ).show()
+                    } else {
+                        currLocId = currMasterLocation!!.LocID
+                        val pendingInventory =
+                            roomDatabaseBuilder.getBookDao().getPendingInventoryScan(currLocId)
+
+                        val cnt = roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+//
+//            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
+//                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
+                        //inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
+                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+                        val cal = Calendar.getInstance()
+                        val dateFormat = sdf.format(cal.time)
+                        if (pendingInventory.isEmpty()) {
+                            Log.d("tag1212", "listeners: " + UUID.randomUUID().toString())
+                            val inventoryMaster = Inventorymaster(
+                                scanID = "A" + UUID.randomUUID().toString(),
+                                deviceId = deviceId,
+                                deviceIdCount = ((cnt ?: 0) + 1),
+                                status = Constants.InventoryStatus.PENDING,
+                                locationId = currLocId,
+                                scanStartDatetime = dateFormat
+                            )
+                            roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+                            roomDatabaseBuilder.getBookDao().resetScanIdOfAssetsAtLocation(currLocId)
+                        }
+
+                        val fragment = RapidReadFragment()
+                        val bundle = Bundle()
+                        bundle.putParcelable(
+                            "LocationData",
+                            currMasterLocation
+                        )
+                        bundle.putString("INVENTORY_NAME", isFromWhat)
+                        bundle.putInt(
+                            "totalRegistered", tvRegisteredCount.text.toString().toInt().plus(
+                                tvNewlyScanCount.text.toString().toInt()
+                            )
+                        )
+
+                        fragment.arguments = bundle
+                        replaceFragment(
+                            requireActivity().supportFragmentManager, fragment,
+                            R.id.content_frame
+                        )
+
+                    }
+
+
+                }
+            }
+            else
+            {
+                tvLocation.text=""
+            }
             /*Add a Entry to Table with Pending Status*/
 
 //            try {
@@ -265,62 +375,6 @@ class ViewInventoryFragment(val isFromWhat: String) :
 //                e.printStackTrace()
 //            }
 
-            requireActivity().hideKeyboard(it)
-            if (currMasterLocation == null) {
-                FancyToast.makeText(
-                    requireActivity(),
-                    "Please Enter Valid Bar Code.",
-                    FancyToast.LENGTH_LONG,
-                    FancyToast.WARNING,
-                    false
-                ).show()
-            } else {
-                currLocId = currMasterLocation!!.LocID
-                val pendingInventory =
-                    roomDatabaseBuilder.getBookDao().getPendingInventoryScan(currLocId)
-
-                val cnt = roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
-//
-//            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
-//                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
-                //inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
-                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-                val cal = Calendar.getInstance()
-                val dateFormat = sdf.format(cal.time)
-                if (pendingInventory.isEmpty()) {
-                    Log.d("tag1212", "listeners: " + UUID.randomUUID().toString())
-                    val inventoryMaster = Inventorymaster(
-                        scanID = "A" + UUID.randomUUID().toString(),
-                        deviceId = deviceId,
-                        deviceIdCount = ((cnt ?: 0) + 1),
-                        status = Constants.InventoryStatus.PENDING,
-                        locationId = currLocId,
-                        scanStartDatetime = dateFormat
-                    )
-                    roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
-                    roomDatabaseBuilder.getBookDao().resetScanIdOfAssetsAtLocation(currLocId)
-                }
-
-                val fragment = RapidReadFragment()
-                val bundle = Bundle()
-                bundle.putParcelable(
-                    "LocationData",
-                    currMasterLocation
-                )
-                bundle.putString("INVENTORY_NAME", isFromWhat)
-                bundle.putInt(
-                    "totalRegistered", tvRegisteredCount.text.toString().toInt().plus(
-                        tvNewlyScanCount.text.toString().toInt()
-                    )
-                )
-
-                fragment.arguments = bundle
-                replaceFragment(
-                    requireActivity().supportFragmentManager, fragment,
-                    R.id.content_frame
-                )
-
-            }
 
         }
     }
