@@ -40,8 +40,6 @@ import kotlinx.android.synthetic.main.fragment_reconcile_assets.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-
-
 class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets),  UpdateItemInterface,
     ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler,
     ResponseHandlerInterfaces.ResponseStatusHandler {
@@ -76,10 +74,6 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         }
 
     }
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,7 +131,6 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             val differentLocation = "Different Location ($differntLocationCount)"
             var countofNotRegistered = 0
             val notRegistered = "Not Registered ($countofNotRegistered)"
-
             tablayout.addTab(tablayout.newTab().setText(notFound));
 
 
@@ -164,7 +157,6 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             tablayout.addTab(tablayout.newTab().setText(notRegistered))
         }
         tablayout.tabGravity = TabLayout.GRAVITY_FILL
-        viewPager.setCurrentItem(selectedPosition12)
         viewPager.offscreenPageLimit = 3
 
         adapter = ReconcileAssetsPagerAdapter(this)
@@ -313,17 +305,20 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             listBook.forEach {
                                 if (it.isSelected) {
                                     val assetCatalogue = it
-                                    Log.d("tag12121212", "onViewCreated: "+assetCatalogue.AssetRFID)
-//                                    val scanTag = ScanTag()
-//                                        scanTag.scanId = lastItem.scanID
-//                                        scanTag.locationId = it.LocationId
-//                                        scanTag.rfidTag = it.AssetRFID
-//                                            listRfids.add(scanTag)
+                                    if (it.AssetRFID.isNullOrEmpty()) {
+                                        FancyToast.makeText(
+                                            requireActivity(),
+                                            "Asset RFID Tag Not Found",
+                                            FancyToast.LENGTH_LONG,
+                                            FancyToast.WARNING,
+                                            false
+                                        ).show()
+                                        return@setOnClickListener
+                                    }
+
                                     bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID,1,it.AssetRFID!!)
                                 }
                             }
-
-                               // (adapter.getCurrentFragment() as NotFoundFragment).updateList()
                                 if(inventorymaster==null)
                                 {
                                     var notFoundCount =0
@@ -539,15 +534,18 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
             override fun onTabReselected(tab: TabLayout.Tab) {
                 Log.d("location", "onTabReselected: ")
-                if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
 
-                    (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
-                        it.isSelected = false
+                if(adapter.getCurrentFragment() is NotFoundFragment)
+                {
+                    if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
+
+                        (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
+                            it.isSelected = false
+                        }
+                        adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
+                        viewPager.adapter = adapter
                     }
-                    adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
-                    viewPager.adapter = adapter
                 }
-
             }
         })
 
@@ -593,34 +591,39 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                     }
                 }
             }
-
         }
-
-
-
     }
 
     override fun onResume() {
         super.onResume()
         if(viewPager!=null)
         {
-            viewPager.setCurrentItem(selectedPosition12)
+
             Handler().postDelayed(
                 { tablayout.getTabAt(selectedPosition12)?.select() }, 100
             )
-           adapter = ReconcileAssetsPagerAdapter(this)
-            viewPager.adapter = adapter
+            try {
+                viewPager.offscreenPageLimit = 3
+                adapter = ReconcileAssetsPagerAdapter(this)
+                viewPager.adapter = adapter
+                viewPager.setCurrentItem(selectedPosition12)
+            }
+            catch (e:Exception)
+            {
+                e.printStackTrace()
+            }
+
         }
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
         requireView().setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                return if (event.action === KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-
+                return if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     Log.d("backpress", "onKey:Back ")
                     fragmentCallback1.onDataSent(true)
-                    requireActivity().supportFragmentManager.popBackStackImmediate()
+                  //  requireActivity().supportFragmentManager.popBackStackImmediate()
+                    requireActivity().onBackPressed()
                     true
                 } else false
             }

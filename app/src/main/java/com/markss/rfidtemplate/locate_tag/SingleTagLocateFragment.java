@@ -33,6 +33,7 @@ import com.markss.rfidtemplate.common.asciitohex;
 import com.markss.rfidtemplate.common.hextoascii;
 import com.markss.rfidtemplate.home.MainActivity;
 import com.markss.rfidtemplate.rfid.RFIDController;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zebra.rfid.api3.RFIDResults;
 
 import java.util.ArrayList;
@@ -182,6 +183,13 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             if(list.isEmpty())
             {
                 constLay.setVisibility(View.GONE);
+                FancyToast.makeText(
+                        requireActivity(),
+                        "Asset RFID Tag Not Found",
+                        FancyToast.LENGTH_LONG,
+                        FancyToast.WARNING,
+                        false
+                ).show();
             }
             else {
                 constLay.setVisibility(View.VISIBLE);

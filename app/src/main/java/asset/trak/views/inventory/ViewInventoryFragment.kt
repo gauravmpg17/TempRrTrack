@@ -118,7 +118,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
-            if (it != null && it.statuscode == 200 && it.data != null) {
+            if (it != null && it.statuscode == 200 && it.data != null)  {
                 it.data.let {
                     if (!it.AssetMain.isNullOrEmpty()) {
                         Application.bookDao?.addAssetMain(it.AssetMain)
@@ -137,7 +137,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                         Application.bookDao?.addMasterVendor(it.MasterVendor)
                     }
 
-                    if (!it.Inventorymaster.isNullOrEmpty()) {
+                    if(!it.Inventorymaster.isNullOrEmpty()){
                         Application.bookDao?.addInventoryMaster(it.Inventorymaster)
                     }
                 }
@@ -162,7 +162,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
     private fun setAdaptor() {
         val listOfItems = ArrayList<String>()
-        listOfItems.add(0, "Select Location")
+        listOfItems.add(0,"Select Location")
         listOfLocations.forEach {
             listOfItems.add(it.locationName ?: "")
         }

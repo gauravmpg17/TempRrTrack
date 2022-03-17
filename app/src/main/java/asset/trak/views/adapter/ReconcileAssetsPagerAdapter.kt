@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import asset.trak.database.entity.AssetCatalogue
 
 
-class ReconcileAssetsPagerAdapter (private val fm: ReconcileAssetsFragment) : FragmentStatePagerAdapter(fm.parentFragmentManager) {
+class ReconcileAssetsPagerAdapter (private val fm: ReconcileAssetsFragment) : FragmentStatePagerAdapter(fm.childFragmentManager) {
 
 
     private var mCurrentFragment: Fragment? = null

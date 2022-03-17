@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,6 +111,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
     private boolean isFromReconsile=false;
     private String whichInventory="";
     private TextView tvRegisteredCount;
+    private AlertDialog alert111;
 
     public static GlobalRapidReadFragment newInstance(String whichInventory) {
         GlobalRapidReadFragment rapidReadFragment=new GlobalRapidReadFragment();
@@ -369,6 +371,8 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                                     Inventorymaster lastItem = pendingInventoryScan.get(0);
                                     bookDao.deleteScanTagSingle(lastItem.getScanID());
                                     bookDao.deleteInventorySingle(lastItem.getScanID());
+                                    requireActivity().getSupportFragmentManager().popBackStackImmediate();
+
                                 }
                             }
                             catch (Exception e){
@@ -848,11 +852,81 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
     }*/
 
 
+
     @Override
     public void onResume() {
         super.onResume();
         Log.d("scantagcheck", "onResume: " + btnScan.getTag());
+        this.getView().setFocusableInTouchMode(true);
+        this.getView().requestFocus();
+        this.getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
+                    builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
+                    builder1.setCancelable(false);
 
+                    builder1.setPositiveButton(
+                            "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    try {
+                                        if(Application.isReconsiled)
+                                        {
+                                            dialog.cancel();
+                                            if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
+                                                Inventorymaster lastItem = pendingInventoryScan.get(0);
+                                                bookDao.deleteScanTagSingle(lastItem.getScanID());
+                                                bookDao.deleteInventorySingle(lastItem.getScanID());
+
+                                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                                                //call sync api
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            dialog.cancel();
+                                            if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
+                                                Inventorymaster lastItem = pendingInventoryScan.get(0);
+                                                bookDao.deleteScanTagSingle(lastItem.getScanID());
+                                                bookDao.deleteInventorySingle(lastItem.getScanID());
+                                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        dialog.cancel();
+                                    }
+                                    //  progressBar.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                            "No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  progressBar.setVisibility(View.GONE);
+                                    dialog.cancel();
+                                }
+                            });
+
+                    alert111 = builder1.create();
+                    if(alert111!=null && !alert111.isShowing())
+                    {
+                        alert111.show();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        } );
 
         if (btnScan != null) {
 
@@ -866,7 +940,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
 
 
     }
-
 
     private void postAssetSync() {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
