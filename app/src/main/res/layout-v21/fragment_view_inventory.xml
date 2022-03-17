@@ -117,6 +117,8 @@
                     android:hint="@string/scan_location_barcode"
                     android:imeOptions="actionDone"
                     android:inputType="text"
+                    android:focusable="true"
+                    android:enabled="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sixteen_sp"
                     app:iconifiedByDefault="false" />

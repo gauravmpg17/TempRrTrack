@@ -49,9 +49,10 @@ import androidx.fragment.app.FragmentManager;
 
 import asset.trak.views.baseclasses.BaseActivity;
 import asset.trak.views.fragments.HomeFragment;
-import asset.trak.views.fragments.InventoryScanFragment;
+import asset.trak.views.inventory.ViewInventoryFragment;
+import cafe.adriel.kbus.KBus;
 
-import com.darryncampbell.datawedgekotlin.DWInterface;
+import asset.trak.scannercode.DWInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.markss.rfidtemplate.R;
@@ -193,7 +194,7 @@ import static com.markss.rfidtemplate.rfid.RFIDController.toneGenerator;
 import static com.markss.rfidtemplate.settings.AdvancedOptionsContent.DPO_ITEM_INDEX;
 
 public class MainActivity extends BaseActivity implements Readers.RFIDReaderEventHandler,
-        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil , View.OnClickListener {
+        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil, View.OnClickListener {
     //Tag to identify the currently displayed fragment
     public static final String TAG_CONTENT_FRAGMENT = "ContentFragment";
     Context mCon;
@@ -3553,4 +3554,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     }
 
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT) instanceof ViewInventoryFragment) {
+            if (intent.hasExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)) {
+                String ScanData = intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING);
+                KBus.INSTANCE.post(ScanData);
+            }
+        }
+    }
 }

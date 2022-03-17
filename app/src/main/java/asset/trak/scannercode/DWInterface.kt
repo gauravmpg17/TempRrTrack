@@ -1,4 +1,4 @@
-package com.darryncampbell.datawedgekotlin
+package asset.trak.scannercode
 
 import android.content.Context
 import android.content.Intent

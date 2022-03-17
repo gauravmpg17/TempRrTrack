@@ -1,8 +1,9 @@
-package com.darryncampbell.datawedgekotlin
+package asset.trak.scannercode
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.darryncampbell.datawedgekotlin.ObservableObject
 
 class DWReceiver : BroadcastReceiver() {
 
