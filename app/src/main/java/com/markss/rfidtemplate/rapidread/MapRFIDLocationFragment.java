@@ -599,7 +599,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
             if (pendingInventoryScan.isEmpty()) {
 
             } else {
-                     Inventorymaster lastItem = pendingInventoryScan.get(0);
+                Inventorymaster lastItem = pendingInventoryScan.get(0);
 //                listInventoryList.add("000000000000000000001271");
 //                listInventoryList.add("E2801190200077BCB26B031B");
 //                listInventoryList.add("E2801190200068DDB25F0388");
@@ -631,7 +631,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
 //                    scanTag.setRfidTag(inventoryTag);
 
                     MapRFIDLocation mapRFIDLocation = new MapRFIDLocation();
-                       mapRFIDLocation.setScanId(lastItem.getScanID());
+                    mapRFIDLocation.setScanId(lastItem.getScanID());
                     mapRFIDLocation.setLocationId(locationData.getLocID());
                     mapRFIDLocation.setBarCode(locationData.getLocBarcode());
                     mapRFIDLocation.setRfidTag(inventoryTag);
@@ -699,7 +699,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         //    Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
                         // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
 
-                        MapToLocationApiRequest mapToLocationApiRequest=new MapToLocationApiRequest();
+                        MapToLocationApiRequest mapToLocationApiRequest = new MapToLocationApiRequest();
 
                         //new logic
                         List<MapRFIDLocation> listScan = bookDao.getMapRFIDLocationAll();
@@ -707,7 +707,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         Inventorymaster lastItem = pendingInventoryScan.get(0);
                         bookDao.deleteInventorySingle(lastItem.getScanID());
                         List<AssetData> listAssetData = new ArrayList<>();
-                     //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                        //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
                         if (String.valueOf(locationData.getLocID()) == null) {
                             locationData.setLocID(0);
@@ -716,10 +716,10 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         for (MapRFIDLocation n : listScan) {
                             AssetData scanTag = new AssetData();
                             // sending ID in rfidTag field, need to update attribute name accordingly in API
-                            if( n.getRfidTag()==null) n.setRfidTag("");
+                            if (n.getRfidTag() == null) n.setRfidTag("");
                             scanTag.assetRFID = n.getRfidTag();
                             scanTag.locID = n.getLocationId();
-                         //   listAssetData.add(scanTag);
+                            //   listAssetData.add(scanTag);
                             mapToLocationApiRequest.getAssetData().add(scanTag);
                         }
 
@@ -727,7 +727,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         RequestBody body = RequestBody.create(new Gson().toJson(mapToLocationApiRequest), MediaType.parse("application/json"));
 
 
-                          Log.e("data", "" + new Gson().toJson(mapToLocationApiRequest));
+                        Log.e("data", "" + new Gson().toJson(mapToLocationApiRequest));
                         inventoryViewModel.updateMapLocation(body).observe(getViewLifecycleOwner(), response -> {
                             if (response == SUCCESS) {
                                 enableUserInteraction(getActivity());

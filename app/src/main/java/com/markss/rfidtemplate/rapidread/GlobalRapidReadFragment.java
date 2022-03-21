@@ -825,7 +825,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                         progressBar.setVisibility(View.VISIBLE);
                         disableUserInteraction(getActivity());
                         List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        //                    bookAndAssetData.addAll(bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0));
+                        // bookAndAssetData.addAll(bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0));
 
                         List<Inventorymaster>  pendingInventoryScan = bookDao.getGlobalPendingInventoryScan();
                         Inventorymaster inventoryMaster = pendingInventoryScan.get(0);

@@ -304,8 +304,6 @@ interface BookDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMapRFIDLocation(mapRFIDLocation: MapRFIDLocation)
 
-
-
     /*Update*/
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateInventoryItem(inventoryMaster: Inventorymaster)
