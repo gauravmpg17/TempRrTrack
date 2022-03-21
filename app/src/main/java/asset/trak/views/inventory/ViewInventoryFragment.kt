@@ -8,17 +8,18 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
-import asset.trak.scannercode.DWInterface
-import asset.trak.scannercode.DWReceiver
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
@@ -26,22 +27,21 @@ import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_START_ACTIVITY
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_NAME
 import asset.trak.views.module.InventoryViewModel
+import cafe.adriel.kbus.KBus
+import cafe.adriel.kbus.KBus.post
 import com.darryncampbell.datawedgekotlin.ObservableObject
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
-import com.markss.rfidtemplate.common.ResponseHandlerInterfaces
 import com.markss.rfidtemplate.home.MainActivity
+import com.markss.rfidtemplate.rapidread.MapRFIDLocationFragment
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.shashank.sony.fancytoastlib.FancyToast
-import com.zebra.rfid.api3.ReaderDevice
-import com.zebra.rfid.api3.Readers
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@AndroidEntryPoint
+
 class ViewInventoryFragment(val isFromWhat: String) :
     BaseFragment(R.layout.fragment_view_inventory), Observer {
 
@@ -60,6 +60,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
     private val receiver = DWReceiver()
     private var initialized = false
     private var version65OrOver = false
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,39 +68,11 @@ class ViewInventoryFragment(val isFromWhat: String) :
             Constants.PrefenceFileName,
             Context.MODE_PRIVATE
         )
-
-
-        // deattach to reader list handler
-        Readers.deattach(object :Readers.RFIDReaderEventHandler{
-            override fun RFIDReaderAppeared(p0: ReaderDevice?) {
-
-            }
-
-            override fun RFIDReaderDisappeared(p0: ReaderDevice?) {
-            }
-        })
-        // remove notification handlers
-        // remove notification handlers
-        MainActivity.removeReaderDeviceFoundHandler(object :
-            ResponseHandlerInterfaces.ReaderDeviceFoundHandler{
-            override fun ReaderDeviceConnected(device: ReaderDevice?) {
-
-            }
-
-            override fun ReaderDeviceDisConnected(device: ReaderDevice?) {
-            }
-
-            override fun ReaderDeviceConnFailed(device: ReaderDevice?) {
-            }
-        })
-        MainActivity.removeBatteryNotificationHandler { level, charging, cause -> }
-
-
         deviceId = sharedPreference?.getString(Constants.DeviceId, "A").toString()
         initialisation()
         setAdaptor()
         listeners()
-        Log.d("tag1212121", "onViewCreated: ${Application.isReconsiled}")
+    //    Log.d("tag1212121", "onViewCreated: ${Application.isReconsiled}")
         if (Application.isReconsiled) {
             getLastSync()
         }
@@ -110,79 +83,32 @@ class ViewInventoryFragment(val isFromWhat: String) :
         intentFilter.addCategory(DWInterface.DATAWEDGE_RETURN_CATEGORY)
         requireActivity().registerReceiver(receiver, intentFilter)
 
-        ivScanBar.setOnTouchListener { _, event ->
-            when (event?.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    dwInterface.sendCommandString(
-                        requireActivity().applicationContext,
-                        DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
-                        "START_SCANNING"
-                    )
-                    return@setOnTouchListener true
-                }
-                MotionEvent.ACTION_UP -> {
-                    dwInterface.sendCommandString(
-                        requireActivity().applicationContext,
-                        DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
-                        "STOP_SCANNING"
-                    )
-                    return@setOnTouchListener true
-                }
-            }
-            return@setOnTouchListener false
-        }
+//        etRfid.doOnTextChanged { text, start, before, count ->
+//            inventoryViewModel.b
+//        }
 
-        inventoryViewModel.barCode.observe(viewLifecycleOwner){
-            if (it.isNotEmpty()) {
-                etRfid.setText(it.trim())
-                //     val s = it
-                // barCodeName = s.trim()
-                //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(it.trim())
+//        ivScanBar.setOnTouchListener { _, event ->
+//            when (event?.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    dwInterface.sendCommandString(
+//                        requireActivity().applicationContext,
+//                        DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+//                        "START_SCANNING"
+//                    )
+//                    return@setOnTouchListener true
+//                }
+//            }
+//            return@setOnTouchListener false
+     //   }
+    }
 
-                //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
-                currMasterLocation?.let {
-                    it.Name?.let {
-                        tvLocation.text = it
-                    }
-
-                    currLocId = currMasterLocation!!.LocID
-                    var lastScanId = ""
-                    var lastRecodedDate = ""
-                    var registeredAsPerLastScan = 0
-                    var newlyRegistered = 0
-                    if (currLocId != null) {
-                        val invData = roomDatabaseBuilder.getBookDao()
-                            .getLastRecordedInventoryOfLocation(currLocId)
-                        if (invData.count() > 0) {
-                            lastRecodedDate = invData.get(0).scanOn.toString()
-                            lastScanId = invData.get(0).scanID
-                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                    currLocId,
-                                    lastScanId
-                                )
-                            newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
-
-                        } else {
-                            registeredAsPerLastScan = 0
-                            newlyRegistered =
-                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                        }
-                    }
-
-
-                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                    tvNewlyScanCount.text = newlyRegistered.toString()
-
-                }
-
-
-            }
-        }
-
+    override fun onStop() {
+        super.onStop()
+        dwInterface.sendCommandString(
+            requireActivity().applicationContext,
+            DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+            "STOP_SCANNING"
+        )
     }
 
 
@@ -331,7 +257,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
         buttonscan.setOnClickListener {
             //   Log.d("newwww", "listeners1: ${it}")
             barCodeName = etRfid.text.toString()
-            //  etRfid.setText("9789743226370")
+           // barCodeName="1000024"
 
             if (barCodeName.isEmpty()) {
                 tvLocation.text = ""
@@ -418,53 +344,36 @@ class ViewInventoryFragment(val isFromWhat: String) :
                             roomDatabaseBuilder.getBookDao()
                                 .resetScanIdOfAssetsAtLocation(currLocId)
                         }
-
-                        val fragment = RapidReadFragment()
+                        val fragmentRapidReadFragment = RapidReadFragment()
+                        val mapRFIDLocationFragment = MapRFIDLocationFragment()
                         val bundle = Bundle()
                         bundle.putParcelable(
                             "LocationData",
                             currMasterLocation
                         )
-                        bundle.putString("INVENTORY_NAME", isFromWhat)
                         bundle.putInt(
                             "totalRegistered", tvRegisteredCount.text.toString().toInt().plus(
                                 tvNewlyScanCount.text.toString().toInt()
                             )
                         )
-
-                        fragment.arguments = bundle
-                        replaceFragment(
-                            requireActivity().supportFragmentManager, fragment,
-                            R.id.content_frame
-                        )
-
+                        fragmentRapidReadFragment.arguments = bundle
+                        mapRFIDLocationFragment.arguments = bundle
+                        if (isFromWhat.equals("location")) {
+                            replaceFragment(
+                                requireActivity().supportFragmentManager, fragmentRapidReadFragment,
+                                R.id.content_frame
+                            )
+                        } else if (isFromWhat.equals("rfidlocation")) {
+                            replaceFragment(
+                                requireActivity().supportFragmentManager, mapRFIDLocationFragment,
+                                R.id.content_frame
+                            )
+                        }
                     }
-
-
                 }
             } else {
                 tvLocation.text = ""
             }
-            /*Add a Entry to Table with Pending Status*/
-
-//            try {
-//                if (!RFIDController.mConnectedReader.isConnected) {
-//                    RFIDController.is_disconnection_requested = false
-//                    try {
-//                        RFIDController.mConnectedReader.connect()
-//                    } catch (e: InvalidUsageException) {
-//                        e.printStackTrace()
-//                    } catch (e: OperationFailureException) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            }
-//            catch (e:Exception)
-//            {
-//                e.printStackTrace()
-//            }
-
-
         }
     }
 
@@ -489,59 +398,72 @@ class ViewInventoryFragment(val isFromWhat: String) :
         }
     }
 
-   /* override fun onStart() {
+    override fun onStart() {
         super.onStart()
-        KBus.subscribe<String>(this) {
-            if (it.isNotEmpty()) {
-                etRfid.setText(it.trim())
-                //     val s = it
-                // barCodeName = s.trim()
-                //here
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(it.trim())
+        dwInterface.sendCommandString(
+            requireActivity().applicationContext,
+            DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+            "START_SCANNING"
+        )
+        if (childFragmentManager.findFragmentByTag(MainActivity.TAG_CONTENT_FRAGMENT) is ViewInventoryFragment) {
+            if (requireActivity().intent.hasExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)) {
+                val ScanData: String? =
+                    requireActivity().intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)
+               // post(ScanData)
+                ScanData?.let {
+                    if (it.isNotEmpty()) {
+                        etRfid.setText(it.trim())
+                        //     val s = it
+                        // barCodeName = s.trim()
+                        //here
+                        currMasterLocation = Application.bookDao.getLocationMasterDataRR(it.trim())
 
-                //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
-                currMasterLocation?.let {
-                    it.Name?.let {
-                        tvLocation.text = it
-                    }
+                        //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
+                        currMasterLocation?.let {
+                            it.Name?.let {
+                                tvLocation.text = it
+                            }
 
-                    currLocId = currMasterLocation!!.LocID
-                    var lastScanId = ""
-                    var lastRecodedDate = ""
-                    var registeredAsPerLastScan = 0
-                    var newlyRegistered = 0
-                    if (currLocId != null) {
-                        val invData = roomDatabaseBuilder.getBookDao()
-                            .getLastRecordedInventoryOfLocation(currLocId)
-                        if (invData.count() > 0) {
-                            lastRecodedDate = invData.get(0).scanOn.toString()
-                            lastScanId = invData.get(0).scanID
-                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                    currLocId,
-                                    lastScanId
-                                )
-                            newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+                            currLocId = currMasterLocation!!.LocID
+                            var lastScanId = ""
+                            var lastRecodedDate = ""
+                            var registeredAsPerLastScan = 0
+                            var newlyRegistered = 0
+                            if (currLocId != null) {
+                                val invData = roomDatabaseBuilder.getBookDao()
+                                    .getLastRecordedInventoryOfLocation(currLocId)
+                                if (invData.count() > 0) {
+                                    lastRecodedDate = invData.get(0).scanOn.toString()
+                                    lastScanId = invData.get(0).scanID
+                                    //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                                    registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+                                        .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                            currLocId,
+                                            lastScanId
+                                        )
+                                    newlyRegistered = roomDatabaseBuilder.getBookDao()
+                                        .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
 
-                        } else {
-                            registeredAsPerLastScan = 0
-                            newlyRegistered =
-                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                                } else {
+                                    registeredAsPerLastScan = 0
+                                    newlyRegistered =
+                                        roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                                }
+                            }
+
+
+                            tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                            tvNewlyScanCount.text = newlyRegistered.toString()
+
                         }
+
+
                     }
-
-
-                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                    tvNewlyScanCount.text = newlyRegistered.toString()
-
                 }
-
 
             }
         }
-    }*/
+    }
 
     override fun update(p0: Observable?, p1: Any?) {
         var receivedIntent = p1 as Intent
@@ -557,7 +479,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
     }
 
 
-    fun createDataWedgeProfile() {
+    private fun createDataWedgeProfile() {
         dwInterface.sendCommandString(
             requireActivity(),
             DWInterface.DATAWEDGE_SEND_CREATE_PROFILE,
@@ -609,11 +531,5 @@ class ViewInventoryFragment(val isFromWhat: String) :
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().unregisterReceiver(receiver)
-//        KBus.unsubscribe(this)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        inventoryViewModel.updateBarCode("")
     }
 }

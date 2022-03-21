@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -47,18 +46,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import asset.trak.views.baseclasses.BaseActivity;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ViewInventoryFragment;
-import asset.trak.views.module.InventoryViewModel;
 import cafe.adriel.kbus.KBus;
 
 import asset.trak.scannercode.DWInterface;
-import dagger.hilt.android.AndroidEntryPoint;
-
-import com.darryncampbell.datawedgekotlin.ObservableObject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.markss.rfidtemplate.R;
@@ -123,8 +117,6 @@ import com.zebra.rfid.api3.STOP_TRIGGER_TYPE;
 import com.zebra.rfid.api3.TagData;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -200,11 +192,9 @@ import static com.markss.rfidtemplate.rfid.RFIDController.tagListMatchAutoStop;
 import static com.markss.rfidtemplate.rfid.RFIDController.tagListMatchNotice;
 import static com.markss.rfidtemplate.rfid.RFIDController.toneGenerator;
 import static com.markss.rfidtemplate.settings.AdvancedOptionsContent.DPO_ITEM_INDEX;
-import static asset.trak.views.fragments.InventoryScanFragment.PROFILE_NAME;
 
-@AndroidEntryPoint
 public class MainActivity extends BaseActivity implements Readers.RFIDReaderEventHandler,
-        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil, View.OnClickListener, Observer {
+        NavigationView.OnNavigationItemSelectedListener, ISettingsUtil, View.OnClickListener {
     //Tag to identify the currently displayed fragment
     public static final String TAG_CONTENT_FRAGMENT = "ContentFragment";
     Context mCon;
@@ -326,21 +316,10 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     private static final int TIME_DELAY = 4000;
     private static long lastToastShowTime = 0;
 
-    InventoryViewModel inventoryViewModel;
-
-    Boolean version65OrOver = false;
-
-
-    private DWInterface dwInterface;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dwInterface = new DWInterface();
-
-        inventoryViewModel = new ViewModelProvider(this).get(InventoryViewModel.class);
         mCon = this;
-
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         toolbar = findViewById(R.id.toolbar);
@@ -402,7 +381,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         bluetoothFilter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
         registerReceiver(mReceiver, bluetoothFilter);
 
-        ObservableObject.Companion.getInstance().addObserver(this);
+
         ivBack.setOnClickListener(this);
     }
 
@@ -2724,57 +2703,6 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         locatebeep = null;
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        Intent receivedIntent = (Intent) o;
-        if (receivedIntent.hasExtra(DWInterface.DATAWEDGE_RETURN_VERSION)) {
-            Bundle version = receivedIntent.getBundleExtra(DWInterface.DATAWEDGE_RETURN_VERSION);
-            String dataWedgeVersion = version.getString(DWInterface.DATAWEDGE_RETURN_VERSION_DATAWEDGE);
-            if (dataWedgeVersion != null && Float.parseFloat(dataWedgeVersion) >= 6.5 && !version65OrOver) {
-                version65OrOver = true;
-                createDataWedgeProfile();
-            }
-        }
-    }
-
-    void createDataWedgeProfile() {
-        dwInterface.sendCommandString(
-                this,
-                DWInterface.DATAWEDGE_SEND_CREATE_PROFILE,
-                PROFILE_NAME, false
-        );
-        Bundle profileConfig = new Bundle();
-        profileConfig.putString("PROFILE_NAME", "DataWedgeKotlinDemo");
-        profileConfig.putString("PROFILE_ENABLED", "true");
-        profileConfig.putString("CONFIG_MODE", "UPDATE");
-        Bundle barcodeConfig = new Bundle();
-        barcodeConfig.putString("PLUGIN_NAME", "BARCODE");
-        barcodeConfig.putString("RESET_CONFIG", "true");
-        Bundle barcodeProps = new Bundle();
-        barcodeConfig.putBundle("PARAM_LIST", barcodeProps);
-        profileConfig.putBundle("PLUGIN_CONFIG", barcodeConfig);
-        Bundle appConfig = new Bundle();
-        appConfig.putString("PACKAGE_NAME", getPackageName());
-        appConfig.putStringArray("ACTIVITY_LIST", new String[]{"*"});
-        profileConfig.putParcelableArray("APP_LIST", (Parcelable[])(new Bundle[]{appConfig}));
-
-        dwInterface.sendCommandBundle(this, "com.symbol.datawedge.api.SET_CONFIG", profileConfig);
-        profileConfig.remove("PLUGIN_CONFIG");
-        Bundle intentConfig = new Bundle();
-        intentConfig.putString("PLUGIN_NAME", "INTENT");
-        intentConfig.putString("RESET_CONFIG", "true");
-        Bundle intentProps = new Bundle();
-        intentProps.putString("intent_output_enabled", "true");
-        intentProps.putString("intent_action", "com.rrtrack.SCAN");
-        intentProps.putString("intent_delivery", "0");
-        intentConfig.putBundle("PARAM_LIST", intentProps);
-        profileConfig.putBundle("PLUGIN_CONFIG", intentConfig);
-        dwInterface.sendCommandBundle(this, "com.symbol.datawedge.api.SET_CONFIG", profileConfig);
-    }
-
-
-
-
     public class EventHandler implements RfidEventsListener {
 
         @Override
@@ -3626,15 +3554,11 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     }
 
 
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT) instanceof ViewInventoryFragment) {
-            if (intent.hasExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)) {
-                String ScanData = intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING);
-//                KBus.INSTANCE.post(ScanData);
-                inventoryViewModel.updateBarCode(ScanData);
-            }
-        }
+        setIntent(intent);
     }
 }

@@ -13,7 +13,7 @@ import asset.trak.modelsrrtrack.MasterVendor
 @Database(
     entities = [AssetMain::class, InventoryScan::class, MasterLocation::class, MasterVendor::class,MasterClass::class,SamplingArticles::class,BookAttributes::class, CategoryMaster::class, AssetClassification::class, AssetClassCatMap::class,
         LocationMaster::class, AssetCatalogue::class, CatSubCatMap::class, SubCategoryMaster::class,Inventorymaster::class,
-        ScanTag::class],
+        ScanTag::class,MapRFIDLocation::class],
     version = 1,
     exportSchema = false
 )

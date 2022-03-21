@@ -342,7 +342,6 @@
             android:id="@+id/btnLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:weightSum="2.2"
             android:layout_marginTop="@dimen/fourteen_dp"
             android:orientation="horizontal"
@@ -379,7 +378,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/jio_type_bold"
                         android:gravity="center"
-                        android:maxLines="1"
+                        android:maxLines="2"
                         android:paddingTop="@dimen/ten_dp"
                         android:paddingBottom="@dimen/ten_dp"
                         android:text="@string/data_sync"
@@ -401,7 +400,7 @@
                 android:layout_height="150dp"
                 android:layout_weight="1"
                 app:cardBackgroundColor="@color/config_btn"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout

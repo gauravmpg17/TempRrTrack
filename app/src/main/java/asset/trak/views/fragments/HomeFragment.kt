@@ -35,7 +35,6 @@ private const val TAG = "HomeFragment"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
-
     private var isSyncClicked: Boolean = false
     private var badgeBitmap: Bitmap? = null
     private var badgeURI: Uri? = null
@@ -139,11 +138,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         linearSync.setOnClickListener {
-            if (Constants.isInternetAvailable(requireContext())) {
-                isSyncClicked = true
-                //    progressBar.visibility=View.VISIBLE
-                getLastSync()
-            }
+            replaceFragment(
+                requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation"),
+                R.id.content_frame
+            )
         }
 
 //        configLin.setOnClickListener {
@@ -164,7 +162,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun getLastSync() {
         progressBar.visibility = View.VISIBLE
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         var currSyncTime = sdf.format(Date())
         var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
@@ -324,93 +321,5 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
                 .show()
         }
-
-
-        var savePath: String? = null
-
-//    fun downloadImage(imageUrl:String,fileName: String):String{
-//        Glide.with(this)
-//            .asBitmap()
-//            .load(imageUrl)
-//            .into(object : CustomTarget<Bitmap>(){
-//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//                    badgeBitmap=resource
-//                    val savedUri = saveToInternalStorage(requireContext(),fileName)
-//                    savePath=savedUri.toString()
-//                }
-//                override fun onLoadCleared(placeholder: Drawable?) {
-//
-//                }
-//            })
-//
-//        return savePath?:""
-//    }
-
-//    private fun DownloadImageFromPath(path: String?,fileName: String) {
-//        Log.d("img==",path.toString())
-//
-//        val urlImage = URL(path.toString())
-//        val result: Deferred<Bitmap?> = GlobalScope.async {
-//            urlImage.toBitmap()
-//        }
-//
-//        GlobalScope.launch(Dispatchers.Main) {
-//            val bitmap: Bitmap? = result.await()
-//            bitmap?.apply {
-//                badgeBitmap = this
-//                val savedUri: Uri? = saveToInternalStorage(requireContext(),fileName)
-////                roomDatabaseBuilder.
-//                Log.d("uri==", savedUri.toString())
-//            }
-//        }
-//    }
-//
-//    // extension function to get / download bitmap from url
-//    private fun URL.toBitmap(): Bitmap? {
-//        return try {
-//            BitmapFactory.decodeStream(openStream())
-//        } catch (e: IOException) {
-//            null
-//        }
-//    }
-//
-//    // extension function to save an image to internal storage
-//    private fun saveToInternalStorage(context: Context,fileName:String): Uri? {
-//        return try {
-//            val downLoadfileName: String = Constants.convertBitmapToFile(context,badgeBitmap!!,fileName)!!
-//            val file = File(downLoadfileName)
-//            badgeImage = file
-//            isImagedownloaded = true
-//            badgeURI = Uri.parse(file.absolutePath)
-//            Uri.parse(file.absolutePath)
-//        } catch (e: Exception) { // catch the exception
-//            e.printStackTrace()
-//            null
-//        }
-//    }
-//    @SuppressLint("CheckResult")
-//    private fun downloadImage(url: String, index: Int) {
-//        val client = OkHttpClient()
-//        val request = Request.Builder()
-//            .url(url)
-//            .build()
-//
-//        try {
-//            val response = client.newCall(request).execute()
-//            val bitmap = BitmapFactory.decodeStream(response.body?.byteStream())
-//
-//            .saveBitmap(mContext, bitmap, image.title).subscribe({ img ->
-//                displayNotification(ProgressUpdateEvent(image.title, 3, index + 1))
-//                EventBus.getDefault().post(ImageDownloadedEvent(img, image.title, image.id))
-//            }, { error ->
-//                error.printStackTrace()
-//            })
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//    }
-
-
     }
 }
