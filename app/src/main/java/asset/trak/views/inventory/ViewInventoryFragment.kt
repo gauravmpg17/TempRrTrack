@@ -8,8 +8,6 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -19,6 +17,8 @@ import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
+import asset.trak.scannercode.DWInterface
+import asset.trak.scannercode.DWReceiver
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
@@ -26,20 +26,22 @@ import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_START_ACTIVITY
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_NAME
 import asset.trak.views.module.InventoryViewModel
-import cafe.adriel.kbus.KBus
-import asset.trak.scannercode.DWInterface
-import asset.trak.scannercode.DWReceiver
 import com.darryncampbell.datawedgekotlin.ObservableObject
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
+import com.markss.rfidtemplate.common.ResponseHandlerInterfaces
+import com.markss.rfidtemplate.home.MainActivity
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.shashank.sony.fancytoastlib.FancyToast
+import com.zebra.rfid.api3.ReaderDevice
+import com.zebra.rfid.api3.Readers
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class ViewInventoryFragment(val isFromWhat: String) :
     BaseFragment(R.layout.fragment_view_inventory), Observer {
 
@@ -58,7 +60,6 @@ class ViewInventoryFragment(val isFromWhat: String) :
     private val receiver = DWReceiver()
     private var initialized = false
     private var version65OrOver = false
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,6 +67,34 @@ class ViewInventoryFragment(val isFromWhat: String) :
             Constants.PrefenceFileName,
             Context.MODE_PRIVATE
         )
+
+
+        // deattach to reader list handler
+        Readers.deattach(object :Readers.RFIDReaderEventHandler{
+            override fun RFIDReaderAppeared(p0: ReaderDevice?) {
+
+            }
+
+            override fun RFIDReaderDisappeared(p0: ReaderDevice?) {
+            }
+        })
+        // remove notification handlers
+        // remove notification handlers
+        MainActivity.removeReaderDeviceFoundHandler(object :
+            ResponseHandlerInterfaces.ReaderDeviceFoundHandler{
+            override fun ReaderDeviceConnected(device: ReaderDevice?) {
+
+            }
+
+            override fun ReaderDeviceDisConnected(device: ReaderDevice?) {
+            }
+
+            override fun ReaderDeviceConnFailed(device: ReaderDevice?) {
+            }
+        })
+        MainActivity.removeBatteryNotificationHandler { level, charging, cause -> }
+
+
         deviceId = sharedPreference?.getString(Constants.DeviceId, "A").toString()
         initialisation()
         setAdaptor()
@@ -102,6 +131,58 @@ class ViewInventoryFragment(val isFromWhat: String) :
             }
             return@setOnTouchListener false
         }
+
+        inventoryViewModel.barCode.observe(viewLifecycleOwner){
+            if (it.isNotEmpty()) {
+                etRfid.setText(it.trim())
+                //     val s = it
+                // barCodeName = s.trim()
+                //here
+                currMasterLocation = Application.bookDao.getLocationMasterDataRR(it.trim())
+
+                //       Toast.makeText(requireContext(),"Location ${currMasterLocation!!.Name.toString()}",Toast.LENGTH_LONG).show()
+                currMasterLocation?.let {
+                    it.Name?.let {
+                        tvLocation.text = it
+                    }
+
+                    currLocId = currMasterLocation!!.LocID
+                    var lastScanId = ""
+                    var lastRecodedDate = ""
+                    var registeredAsPerLastScan = 0
+                    var newlyRegistered = 0
+                    if (currLocId != null) {
+                        val invData = roomDatabaseBuilder.getBookDao()
+                            .getLastRecordedInventoryOfLocation(currLocId)
+                        if (invData.count() > 0) {
+                            lastRecodedDate = invData.get(0).scanOn.toString()
+                            lastScanId = invData.get(0).scanID
+                            //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
+                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                    currLocId,
+                                    lastScanId
+                                )
+                            newlyRegistered = roomDatabaseBuilder.getBookDao()
+                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+
+                        } else {
+                            registeredAsPerLastScan = 0
+                            newlyRegistered =
+                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                        }
+                    }
+
+
+                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                    tvNewlyScanCount.text = newlyRegistered.toString()
+
+                }
+
+
+            }
+        }
+
     }
 
 
@@ -118,7 +199,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
-            if (it != null && it.statuscode == 200 && it.data != null)  {
+            if (it != null && it.statuscode == 200 && it.data != null) {
                 it.data.let {
                     if (!it.AssetMain.isNullOrEmpty()) {
                         Application.bookDao?.addAssetMain(it.AssetMain)
@@ -137,7 +218,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                         Application.bookDao?.addMasterVendor(it.MasterVendor)
                     }
 
-                    if(!it.Inventorymaster.isNullOrEmpty()){
+                    if (!it.Inventorymaster.isNullOrEmpty()) {
                         Application.bookDao?.addInventoryMaster(it.Inventorymaster)
                     }
                 }
@@ -162,7 +243,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
     private fun setAdaptor() {
         val listOfItems = ArrayList<String>()
-        listOfItems.add(0,"Select Location")
+        listOfItems.add(0, "Select Location")
         listOfLocations.forEach {
             listOfItems.add(it.locationName ?: "")
         }
@@ -267,7 +348,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                 currMasterLocation?.let {
                     it.Name?.let {
                         tvLocation.text = it
-                     //   Log.d("newwww", "listeners3: ${it}")
+                        //   Log.d("newwww", "listeners3: ${it}")
                     }
 
                     currLocId = currMasterLocation!!.LocID
@@ -408,7 +489,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
         }
     }
 
-    override fun onStart() {
+   /* override fun onStart() {
         super.onStart()
         KBus.subscribe<String>(this) {
             if (it.isNotEmpty()) {
@@ -460,7 +541,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
 
             }
         }
-    }
+    }*/
 
     override fun update(p0: Observable?, p1: Any?) {
         var receivedIntent = p1 as Intent
@@ -476,7 +557,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
     }
 
 
-    private fun createDataWedgeProfile() {
+    fun createDataWedgeProfile() {
         dwInterface.sendCommandString(
             requireActivity(),
             DWInterface.DATAWEDGE_SEND_CREATE_PROFILE,
@@ -528,6 +609,11 @@ class ViewInventoryFragment(val isFromWhat: String) :
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().unregisterReceiver(receiver)
-        KBus.unsubscribe(this)
+//        KBus.unsubscribe(this)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        inventoryViewModel.updateBarCode("")
     }
 }
