@@ -20,6 +20,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
     private var mAssetSyncData = MutableLiveData<Int>()
      var listBookAttributes:ArrayList<BookAttributes> = ArrayList()
 
+
     fun getLastSync(syncTime: String?): LiveData<LastSyncResponse> {
         viewModelScope.launch {
             val data = bookRepository.getLastSync(syncTime)

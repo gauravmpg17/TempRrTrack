@@ -166,6 +166,12 @@ interface BookDao {
     @Query("SELECT * FROM tblScanTag")
     fun getScanTagAll(): List<ScanTag>
 
+    @Query("DELETE FROM tblScanTag")
+    fun deleteScanTagAll()
+
+    @Query("DELETE FROM mapRFIDLocation")
+    fun deletemapRFIDLocationAll()
+
     @Query("SELECT * FROM tblScanTag  WHERE locationId IN (:locationId) AND scanId IN (:scanId)")
     fun getScanTag(locationId: Int, scanId: String): List<ScanTag>
 
@@ -206,6 +212,10 @@ interface BookDao {
 
     @Query("SELECT COUNT(*) FROM tblScanTag  WHERE rfidTag IN (:rfid) AND scanId IN (:scanId)")
     fun getCountOfTagAlready(rfid: String, scanId: String): Int
+
+    @Query("SELECT COUNT(*) FROM mapRFIDLocation  WHERE rfidTag IN (:rfid) AND scanId IN (:scanId)")
+    fun getCountOfMapLocationAlready(rfid: String, scanId: String): Int
+
 
     @Query("SELECT * FROM assetMain  WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
     fun getAssetNotFound(locationId: Int, scanId: String): List<AssetMain>
@@ -287,6 +297,9 @@ interface BookDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addScanTag(scanTag: ScanTag)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addMapRFIDLocation(mapRFIDLocation: MapRFIDLocation)
 
 
 

@@ -34,7 +34,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.markss.rfidtemplate.R;
@@ -183,7 +182,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
         btnReconcile = getActivity().findViewById(R.id.btnReconcile);
         btnInventoryRecord = getActivity().findViewById(R.id.btnInventoryRecord);
         llBottomParent = getActivity().findViewById(R.id.llBottomParent2);
-        progressBar = getActivity().findViewById(R.id.progressBar);
+        progressBar = getActivity().findViewById(R.id.progressBar4);
          tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
         TextView tvLocation = getActivity().findViewById(R.id.tvLocation);
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
@@ -649,17 +648,17 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
 
-//                listInventoryList.add("000000000000000000001271");
-//                listInventoryList.add("300833B2DDD9014000000000");
-//                listInventoryList.add("10011011003");
-//                listInventoryList.add("10011011005");
-//                listInventoryList.add("122110110053434");
-//
-//                scannedList.add("000000000000000000001271");
-//                scannedList.add("300833B2DDD9014000000000");
-//                scannedList.add("10011011003");
-//                scannedList.add("10011011005");
-//                scannedList.add("122110110053434");
+                listInventoryList.add("000000000000000000001271");
+                listInventoryList.add("300833B2DDD9014000000000");
+                listInventoryList.add("10011011003");
+                listInventoryList.add("10011011005");
+                listInventoryList.add("122110110053434");
+
+                scannedList.add("000000000000000000001271");
+                scannedList.add("300833B2DDD9014000000000");
+                scannedList.add("10011011003");
+                scannedList.add("10011011005");
+                scannedList.add("122110110053434");
 
 
 
@@ -724,133 +723,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
             btnReconcile.setVisibility(View.GONE);
             btnInventoryRecord.setVisibility(View.VISIBLE);
     }
-
-
- /*   private void postAssetSync() {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-        builder1.setMessage("Are you sure you want to complete Scan?.");
-        builder1.setCancelable(false);
-
-        builder1.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        progressBar.setVisibility(View.VISIBLE);
-                        disableUserInteraction(getActivity());
-                        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
-                        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
-                        List<String> syncedIds = new ArrayList<>() ;
-
-                        Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
-                        SimpleDateFormat changedFormat =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                        String scanEndTime="";
-                        try {
-                            //   String currentDate = changedFormat.format(new Date());
-                            scanEndTime= changedFormat.format(new Date());
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-
-
-                         //   inventoryMaster.setNoOfAssetsScanned(scannedList.size());
-
-
-                        assetSyncRequestDataModel.inventoryData.deviceID= inventoryMaster.getDeviceId();
-                        assetSyncRequestDataModel.inventoryData.foundForLoc=0;
-                        assetSyncRequestDataModel.inventoryData.foundForOtherLoc=0;
-                        assetSyncRequestDataModel.inventoryData.noofAssetsScanned=scannedList.size();
-                        assetSyncRequestDataModel.inventoryData.scanDate=inventoryMaster.getScanOn();
-                        assetSyncRequestDataModel.inventoryData.locID=0;
-                        assetSyncRequestDataModel.inventoryData.locType="G";
-                        assetSyncRequestDataModel.inventoryData.scanStartDatetime=inventoryMaster.getScanOn();
-                        assetSyncRequestDataModel.inventoryData.scanEndDatetime=scanEndTime;
-                        assetSyncRequestDataModel.inventoryData.notRegistered=Integer.parseInt(tvRegisteredCount.getText().toString());
-                        assetSyncRequestDataModel.inventoryData.scanID=inventoryMaster.getScanID();
-                        assetSyncRequestDataModel.inventoryData.scannedBy=inventoryMaster.getScannedBy();
-                        Log.d("tag111", "onClick: "+inventoryMaster.getScanID());
-
-
-                        bookAndAssetData.addAll(bookDao.getFoundAtLocationGlobal(inventoryMaster.getScanID()));
-                        //temporary commented
-                        // pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
-
-                        Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
-                        Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
-                        for (AssetMain n : bookAndAssetData) {
-                            AssetData scanTag = new AssetData();
-                            // sending ID in rfidTag field, need to update attribute name accordingly in API
-                            scanTag.assetRFID =n.getAssetRFID();
-                            if (n.getScanID() == null) {
-                                n.setScanID("0");
-                            }
-                            scanTag.assetID=inventoryMaster.getScanID();
-                            scanTag.locID=n.getLocationId();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
-                        }
-
-                        // assets which location was changed
-                        for (AssetMain n : pendingSyncAssetdata) {
-                            AssetData scanTag = new AssetData();
-                            scanTag.assetRFID=n.getAssetRFID();
-                            scanTag.locID=n.getLocationId();
-                            scanTag.assetID=n.getAssetID();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
-                        }
-
-                        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel),MediaType.parse("application/json"));
-
-
-
-
-                        Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
-                        inventoryViewModel.postAssetSync(body).observe(getViewLifecycleOwner(), response -> {
-                            if (response == SUCCESS) {
-                                enableUserInteraction(getActivity());
-                                Log.d("final", "postAssetSync: ");
-                                progressBar.setVisibility(View.GONE);
-                                btnInventoryRecord.setEnabled(true);
-                                btnInventoryRecord.setClickable(true);
-                                inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
-                                bookDao.updateInventoryItem(inventoryMaster);
-                                bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
-                                //temporary commented
-                                //  bookDao.clearSyncFlagOfAssets(syncedIds);
-
-                                //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
-                                FancyToast.makeText(requireActivity(),getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
-                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
-
-                            } else {
-                                Log.d("final", "Failure: ");
-                                progressBar.setVisibility(View.GONE);
-                                btnInventoryRecord.setEnabled(true);
-                                btnInventoryRecord.setClickable(true);
-                                enableUserInteraction(getActivity());
-                               FancyToast.makeText(requireActivity(),getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-
-                            }
-                        });
-
-                    }
-                });
-
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-    }*/
-
 
 
     @Override
@@ -997,7 +869,8 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                         assetSyncRequestDataModel.inventoryData.locType="G";
                         assetSyncRequestDataModel.inventoryData.scanStartDatetime=inventoryMaster.getScanStartDatetime();
                         assetSyncRequestDataModel.inventoryData.scanEndDatetime=scanEndTime;
-                        assetSyncRequestDataModel.inventoryData.notRegistered=Integer.parseInt(tvRegisteredCount.getText().toString());
+                 //       assetSyncRequestDataModel.inventoryData.notRegistered=Integer.parseInt(tvRegisteredCount.getText().toString());
+                        assetSyncRequestDataModel.inventoryData.notRegistered=countNotRegistered;
                         assetSyncRequestDataModel.inventoryData.scanID=inventoryMaster.getScanID();
                         assetSyncRequestDataModel.inventoryData.scannedBy="ABC";
 

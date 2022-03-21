@@ -184,7 +184,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         btnReconcile = getActivity().findViewById(R.id.btnReconcile);
         btnInventoryRecord = getActivity().findViewById(R.id.btnInventoryRecord);
         llBottomParent = getActivity().findViewById(R.id.llBottomParent2);
-        progressBar = getActivity().findViewById(R.id.progressBar);
+        progressBar = getActivity().findViewById(R.id.progressBar1);
         tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
          tvLocation = getActivity().findViewById(R.id.tvLocation12);
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
@@ -244,7 +244,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         });
 
         //   tvRegisteredCount.setText(String.valueOf(totalRegisteredCount));
-        whichInventory = getArguments().getString("INVENTORY_NAME");
+      //  whichInventory = getArguments().getString("INVENTORY_NAME");
       /*  if (whichInventory.equals("global")) {
             foundLocParent.setVisibility(View.GONE);
             foundForDifferentParent.setVisibility(View.GONE);
@@ -637,15 +637,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
-//                listInventoryList.add("000000000000000000001271");
-//                listInventoryList.add("E2801190200077BCB26B031B");
-//                listInventoryList.add("E2801190200068DDB25F0388");
-//                listInventoryList.add("E2801190200077BCB26B031A");
-//
-//                scannedList.add("000000000000000000001271");
-//                scannedList.add("E2801190200077BCB26B031B");
-//                scannedList.add("E2801190200068DDB25F0308");
-//                scannedList.add("E2801190200077BCB26B031A");
+                listInventoryList.add("000000000000000000001271");
+                listInventoryList.add("E2801190200077BCB26B031B");
+                listInventoryList.add("E2801190200068DDB25F0388");
+                listInventoryList.add("E2801190200077BCB26B031A");
+
+                scannedList.add("000000000000000000001271");
+                scannedList.add("E2801190200077BCB26B031B");
+                scannedList.add("E2801190200068DDB25F0308");
+                scannedList.add("E2801190200077BCB26B031A");
 ////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);
@@ -661,6 +661,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
                 for (String inventoryTag : listInventoryList) {
+                    //code here
                     ScanTag scanTag = new ScanTag();
                     scanTag.setScanId(lastItem.getScanID());
                     scanTag.setLocationId(locationData.getLocID());
@@ -924,10 +925,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                                                 Inventorymaster lastItem = pendingInventoryScan.get(0);
                                                 bookDao.deleteScanTagSingle(lastItem.getScanID());
                                                 bookDao.deleteInventorySingle(lastItem.getScanID());
-
                                                 requireActivity().getSupportFragmentManager().popBackStackImmediate();
                                                 //call sync api
-
                                             }
                                         }
                                         else

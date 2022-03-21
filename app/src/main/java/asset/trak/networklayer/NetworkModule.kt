@@ -109,13 +109,14 @@ object NetworkModule {
         return retrofit.create(AssetTrakAPIInterface::class.java)
     }
 
+    /*user.name === "AssetTracker" && user.pass === "ZVC=v^A>f[29N<Nv"*/
 
     class BasicAuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
             val authenticatedRequest = request.newBuilder()
                 .header("Authorization",
-                    Credentials.basic("uname","pwd")).build()
+                    Credentials.basic("AssetTracker","ZVC=v^A>f[29N<Nv")).build()
             return chain.proceed(authenticatedRequest)
         }
     }

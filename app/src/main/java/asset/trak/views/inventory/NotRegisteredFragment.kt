@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.fragment_not_registered.*
 @AndroidEntryPoint
 class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragment_not_registered) {
     private lateinit var notFoundAdapter: NotRegsiteredAdapter
-
-
      var rfidTags = ArrayList<ScanTag>()
     override fun onResume() {
         super.onResume()

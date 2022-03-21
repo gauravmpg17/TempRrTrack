@@ -3554,14 +3554,11 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     }
 
 
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT) instanceof ViewInventoryFragment) {
-            if (intent.hasExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)) {
-                String ScanData = intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING);
-                KBus.INSTANCE.post(ScanData);
-            }
-        }
+        setIntent(intent);
     }
 }
