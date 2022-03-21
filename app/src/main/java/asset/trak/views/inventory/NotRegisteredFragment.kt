@@ -35,7 +35,7 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
         tvSelectAll.setOnClickListener {
             if(tvSelectAll.getTag().equals("0"))
             {
-                if(!rfidTags.isEmpty())
+                if(!rfidTags.isNullOrEmpty())
                 {
                     tvSelectAll.visibility=View.VISIBLE
                     tvSelectAll.setTag("1")
@@ -88,7 +88,9 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
         else{
             val inventorymaster = inventoryMasterList.get(0)
 
-            rfidTags.addAll(bookDao?.getAssetNotRegistered(inventorymaster.scanID) ?: arrayListOf())
+            val tempList = bookDao?.getAssetNotRegistered(inventorymaster.scanID) ?: arrayListOf()
+            rfidTags.addAll(tempList.filter { !it.rfidTag.isNullOrEmpty() })
+        //    rfidTags.addAll(bookDao?.getAssetNotRegistered(inventorymaster.scanID) ?: arrayListOf())
             if(rfidTags.isEmpty())
             {
                 tvSelectAll.visibility=View.GONE

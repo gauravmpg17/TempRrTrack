@@ -97,10 +97,10 @@
                 android:layout_height="32dp" />
 
             <LinearLayout
+                android:layout_marginTop="@dimen/twenty_dp"
                 android:id="@+id/llSpinnerParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/twenty_dp"
                 android:background="@drawable/rectangle_border"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -108,11 +108,82 @@
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvLocation12"
+                    android:id="@+id/tvLocation211"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
             </LinearLayout>
+            <!--            <RelativeLayout-->
+            <!--                android:id="@+id/llSpinnerParent"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/margin_20"-->
+            <!--                android:background="@drawable/rectangle_border"-->
+            <!--                android:padding="@dimen/fifteen_dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
+
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/etRfid"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_below="@id/tvRfid"-->
+            <!--                    android:layout_centerVertical="true"-->
+            <!--                    android:layout_toStartOf="@+id/ivScanBar"-->
+            <!--                    android:background="@null"-->
+            <!--                    android:fontFamily="@font/jio_type_light"-->
+            <!--                    android:hint="@string/scan_location_barcode"-->
+            <!--                    android:imeOptions="actionDone"-->
+            <!--                    android:inputType="text"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="@dimen/sixteen_sp"-->
+            <!--                    app:iconifiedByDefault="false" />-->
+
+            <!--                <androidx.appcompat.widget.AppCompatImageView-->
+            <!--                    android:id="@+id/ivScanBar"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_alignParentEnd="true"-->
+            <!--                    android:layout_centerVertical="true"-->
+            <!--                    android:layout_marginEnd="@dimen/five_dp"-->
+            <!--                    android:src="@drawable/ic_barcode" />-->
+
+            <!--            </RelativeLayout>-->
+
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/llSpinnerParent"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/twenty_dp"-->
+            <!--                android:background="@drawable/rectangle_border"-->
+            <!--                android:orientation="vertical"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
+
+            <!--&lt;!&ndash;                <androidx.appcompat.widget.AppCompatTextView&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:id="@+id/tvLocation"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:drawableRight=""&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:padding="@dimen/ten_dp" />&ndash;&gt;-->
+            <!--                <androidx.appcompat.widget.AppCompatEditText-->
+            <!--                    android:id="@+id/etRfid"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_below="@id/tvRfid"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:background="@null"-->
+            <!--                    android:fontFamily="@font/jio_type_light"-->
+            <!--                    android:hint="Book RFID"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="@dimen/sixteen_sp" />-->
+
+            <!--            </LinearLayout>-->
+
+
             <TextView
                 android:id="@+id/tvInventoryReport"
                 android:layout_width="0dp"
@@ -141,12 +212,15 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginBottom="@dimen/margin_20"
                 android:id="@+id/registeredParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ten_dp"
-                android:background="@drawable/rectangle_border_inventory_gry"
+                android:layout_marginTop="@dimen/margin_20"
+                android:paddingVertical="@dimen/margin_20"
+                android:background="@drawable/rectangle_background_border"
                 android:orientation="horizontal"
+                android:elevation="6dp"
                 app:cardCornerRadius="@dimen/fourteen_dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -164,9 +238,9 @@
                     android:text="@string/lblRegistered"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/tvRegisteredCountrr"
+                    app:layout_constraintTop_toTopOf="@id/tvRegisteredCountrr" />
 
                 <TextView
                     android:id="@+id/tvRegisteredCountrr"
@@ -174,31 +248,28 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/twenty_three_dp"
-                    android:layout_marginTop="@dimen/twenty_eight_dp"
-                    android:layout_marginBottom="27dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tvRegistered"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="@dimen/margin_20"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <View
                     android:id="@+id/view2"
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/margin_5"
-                    android:layout_marginTop="@dimen/thirty_dp"
-                    android:layout_marginEnd="@dimen/margin_5"
-                    android:layout_marginBottom="@dimen/thirty_dp"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/fourteen_dp"
+                    android:layout_marginEnd="@dimen/fourteen_dp"
                     android:background="@color/divider_color_inventory"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvRegisteredCountrr"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toTopOf="@id/uniqueTagContent"
+                    android:layout_marginVertical="@dimen/margin_10"
+                    app:layout_constraintStart_toStartOf="parent" />
 
 
                 <TextView
@@ -206,38 +277,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/twenty_dp"
                     android:fontFamily="@font/jio_type_medium"
                     android:text="@string/lblScanned"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tvScannedCount"
-                    app:layout_constraintStart_toStartOf="@+id/view2"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/uniqueTagContent"
+                    app:layout_constraintTop_toTopOf="@id/uniqueTagContent"
+                    app:layout_constraintStart_toStartOf="@id/tvRegistered" />
 
                 <TextView
                     android:id="@+id/uniqueTagContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="27dp"
                     android:layout_marginEnd="@dimen/twenty_dp"
-                    android:layout_marginBottom="@dimen/twenty_eight_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     tools:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
+                    app:layout_constraintTop_toBottomOf="@id/view2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+            <View
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_10"
+                app:layout_constraintTop_toBottomOf="@id/registeredParent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_30"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/foundLocParent"
                 android:layout_width="0dp"
@@ -278,7 +350,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/reconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/tvFoundLoc"
                     app:layout_constraintStart_toStartOf="@id/tvFoundLoc"
                     app:layout_constraintTop_toBottomOf="@+id/tvFoundLoc"
@@ -317,11 +388,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="@dimen/twenty_three_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="center"
                     android:text="0"
-                    android:layout_marginBottom="@dimen/thirteen_dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/notReconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintStart_toStartOf="@+id/tvNotFoundLoc"
@@ -416,7 +486,6 @@
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintEnd_toEndOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintTop_toBottomOf="@+id/tvDifferentLocationCount" />
@@ -440,8 +509,8 @@
         android:paddingEnd="@dimen/thirty_dp"
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
-        android:theme="@style/fabtheme"
         android:text="@string/stop"
+        android:theme="@style/fabtheme"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"
@@ -450,23 +519,22 @@
         app:layout_goneMarginBottom="@dimen/twenty_dp" />
 
 
-
     <LinearLayout
         android:id="@+id/llBottomParent2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:paddingBottom="@dimen/ten_dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnReconcile"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_marginEnd="@dimen/margin_10"
@@ -479,6 +547,7 @@
             android:textSize="@dimen/text_size_13" />
 
         <androidx.appcompat.widget.AppCompatButton
+
             android:id="@+id/btnInventoryRecord"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -489,7 +558,7 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:text="@string/mapLocation"
+            android:text="Map To Location"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_13" />

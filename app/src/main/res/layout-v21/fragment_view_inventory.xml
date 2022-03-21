@@ -113,8 +113,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivScanBar"
                     android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
                     android:fontFamily="@font/jio_type_light"
                     android:hint="@string/scan_location_barcode"
                     android:inputType="text"
