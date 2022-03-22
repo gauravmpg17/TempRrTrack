@@ -51,9 +51,9 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
              resultIntent.putExtra("type",intent.getStringExtra("type"))
              setResult(RESULT_OK, resultIntent)
              finish()*/
-            val intent=Intent()
+           /* val intent=Intent()
 
-            onNewIntent(intent)
+            onNewIntent(intent)*/
         }
 
         if (intent.getStringExtra("type") == "2") {
