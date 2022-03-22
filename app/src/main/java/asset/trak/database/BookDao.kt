@@ -79,8 +79,12 @@ interface BookDao {
 //    @Query("SELECT COUNT(id) FROM assetMain WHERE locationId IN (:locationId) AND createdOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
 //    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
 
-    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ModifiedOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
+//    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ModifiedOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
+//    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
+
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ScanID IN (SELECT ScanID FROM tblinventorymaster where scanID in (:scanId))")
     fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
+
 
 
 
@@ -222,7 +226,6 @@ interface BookDao {
 
     @Query("SELECT COUNT(*) FROM mapRFIDLocation  WHERE rfidTag IN (:rfid) AND scanId IN (:scanId)")
     fun getCountOfMapLocationAlready(rfid: String, scanId: String): Int
-
 
     @Query("SELECT * FROM assetMain  WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
     fun getAssetNotFound(locationId: Int, scanId: String): List<AssetMain>

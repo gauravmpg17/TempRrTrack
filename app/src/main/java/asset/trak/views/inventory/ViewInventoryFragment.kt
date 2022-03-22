@@ -48,7 +48,6 @@ class ViewInventoryFragment(val isFromWhat: String) :
     BaseFragment(R.layout.fragment_view_inventory), Observer {
 
     private var barCodeName: String = ""
-
     //   private var barCodeName: String = ""
     private var listOfLocations = ArrayList<LocationMaster>()
     private var currLocId = 0
