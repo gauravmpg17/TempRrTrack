@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -3556,9 +3557,17 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
 
 
-    @Override
+  /*  @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+    }*/
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (previousFragment instanceof HomeFragment){
+            previousFragment.onActivityResult(requestCode,resultCode,data);
+        }
     }
 }

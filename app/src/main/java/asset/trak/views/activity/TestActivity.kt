@@ -12,10 +12,12 @@ import asset.trak.scannercode.DWReceiver
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_ACTION
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_START_ACTIVITY
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_NAME
+import com.bumptech.glide.Glide
 import com.darryncampbell.datawedgekotlin.ObservableObject
 import com.darryncampbell.datawedgekotlin.Scan
 import com.markss.rfidtemplate.R
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.fragment_view_inventory.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,12 +34,34 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
         setContentView(R.layout.activity_test)
 
         ObservableObject.instance.addObserver(this)
-        buttonScan.setOnTouchListener(this)
+        Glide.with(this).asGif().load("file:///android_asset/bar_code1.gif").into(imageView)
 
         val intentFilter = IntentFilter()
         intentFilter.addAction(DWInterface.DATAWEDGE_RETURN_ACTION)
         intentFilter.addCategory(DWInterface.DATAWEDGE_RETURN_CATEGORY)
         registerReceiver(receiver, intentFilter)
+
+        barCodeValue.requestFocus()
+        buttonScan.setOnTouchListener(this)
+
+        imageView.setOnClickListener {
+//            onBackPressed()
+            /* val resultIntent = Intent()
+             resultIntent.putExtra("barCode", "1000024")
+             resultIntent.putExtra("type",intent.getStringExtra("type"))
+             setResult(RESULT_OK, resultIntent)
+             finish()*/
+            val intent=Intent()
+
+            onNewIntent(intent)
+        }
+
+        if (intent.getStringExtra("type") == "2") {
+            tvTitle.text = "Map RFID Location"
+            tvInventoryReport.visibility = View.INVISIBLE
+            tvILastRecord.visibility = View.INVISIBLE
+            registered.visibility = View.INVISIBLE
+        }
     }
 
     override fun update(p0: Observable?, p1: Any?) {
@@ -91,29 +115,21 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
         dwInterface.sendCommandBundle(this, DWInterface.DATAWEDGE_SEND_SET_CONFIG, profileConfig)
     }
 
-    override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
-        when (buttonScan?.id) {
-            R.id.btnScan -> {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        dwInterface.sendCommandString(
-                            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
-                            "START_SCANNING"
-                        )
-                        return true
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        dwInterface.sendCommandString(
-                            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
-                            "STOP_SCANNING"
-                        )
-                        return true
-                    }
-                }
-            }
-        }
-        return false
+    /*override fun onStart() {
+        super.onStart()
+        dwInterface.sendCommandString(
+            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+            "START_SCANNING"
+        )
     }
+
+    override fun onStop() {
+        super.onStop()
+        dwInterface.sendCommandString(
+            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+            "STOP_SCANNING"
+        )
+    }*/
 
     override fun onResume() {
         super.onResume()
@@ -139,8 +155,37 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
             var date = Calendar.getInstance().getTime()
             var df = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
             var dateTimeString = df.format(date)
-
-            editTextTextEmailAddress.setText(scanData.toString())
+            barCodeValue.setText(scanData)
+//            Toast.makeText(this, scanData.toString(), Toast.LENGTH_LONG).show()
+            val resultIntent = Intent()
+            resultIntent.putExtra("barCode", scanData)
+            resultIntent.putExtra("type", intent.getStringExtra("type"))
+            setResult(RESULT_OK, resultIntent)
+            finish()
         }
+    }
+
+    override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
+        when (buttonScan?.id) {
+            R.id.buttonScan -> {
+                when (event?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        dwInterface.sendCommandString(
+                            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+                            "START_SCANNING"
+                        )
+                        return true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        dwInterface.sendCommandString(
+                            applicationContext, DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
+                            "STOP_SCANNING"
+                        )
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 }

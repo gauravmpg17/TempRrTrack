@@ -79,7 +79,7 @@ interface BookDao {
 //    @Query("SELECT COUNT(id) FROM assetMain WHERE locationId IN (:locationId) AND createdOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
 //    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
 
-    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ModifiedOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ScanID IN (SELECT ScanID FROM tblinventorymaster where scanID in (:scanId))")
     fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
 
 

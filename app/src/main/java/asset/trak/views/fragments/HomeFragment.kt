@@ -1,5 +1,6 @@
 package asset.trak.views.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -24,7 +25,6 @@ import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
-import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -128,11 +128,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                R.id.content_frame
 //            )
 
-            /*   replaceFragment(
-                   requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
-                   R.id.content_frame
-               )*/
-            startActivity(Intent(requireActivity(), TestActivity::class.java))
+
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    TestActivity::class.java
+                ).putExtra("type", "1"), 101
+            )
         }
         configLin.setOnClickListener {
             replaceFragment(
@@ -142,9 +144,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         linearSync.setOnClickListener {
-            replaceFragment(
-                requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation"),
-                R.id.content_frame
+
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    TestActivity::class.java
+                ).putExtra("type", "2"), 101
             )
         }
 
@@ -325,6 +330,28 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
             Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
                 .show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            val type = data?.getStringExtra("type")
+
+            val returnValue: String = data?.getStringExtra("barCode").toString()
+
+            if (type == "1") {
+                replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    ViewInventoryFragment("location", returnValue),
+                    R.id.content_frame
+                )
+            } else {
+                replaceFragment(
+                    requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation",returnValue),
+                    R.id.content_frame
+                )
+            }
         }
     }
 }

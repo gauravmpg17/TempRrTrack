@@ -31,7 +31,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name="asset.trak.views.activity.TestActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" >
 
             <intent-filter>
@@ -50,33 +50,28 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.rrtrack.SCAN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".modules.login.activity.LoginActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" />
         <activity
             android:name=".home.MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="com.rrtrack.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".settings.SettingsDetailActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_settings_detail"
             android:screenOrientation="portrait" />
 
