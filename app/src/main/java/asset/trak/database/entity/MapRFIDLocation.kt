@@ -14,6 +14,7 @@ data class MapRFIDLocation (
    var scanId: String? = null,
     var locationId: Int? = null,
     var rfidTag: String? = null,
+    var barCode:String?=null,
     var isSelected: Boolean =false
 ):Parcelable
 {

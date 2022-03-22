@@ -648,24 +648,23 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
 
-                listInventoryList.add("000000000000000000001271");
-                listInventoryList.add("300833B2DDD9014000000000");
-                listInventoryList.add("10011011003");
-                listInventoryList.add("10011011005");
-                listInventoryList.add("122110110053434");
-
-                scannedList.add("000000000000000000001271");
-                scannedList.add("300833B2DDD9014000000000");
-                scannedList.add("10011011003");
-                scannedList.add("10011011005");
-                scannedList.add("122110110053434");
-
+//                listInventoryList.add("000000000000000000001271");
+//                listInventoryList.add("300833B2DDD9014000000000");
+//                listInventoryList.add("10011011003");
+//                listInventoryList.add("10011011005");
+//                listInventoryList.add("122110110053434");
+//
+//                scannedList.add("000000000000000000001271");
+//                scannedList.add("300833B2DDD9014000000000");
+//                scannedList.add("10011011003");
+//                scannedList.add("10011011005");
+//                scannedList.add("122110110053434");
 
 
                 for (String inventoryTag : listInventoryList) {
                     ScanTag scanTag = new ScanTag();
                     scanTag.setScanId(lastItem.getScanID());
-                    scanTag.setLocationId(locationData.getLocID());
+                  //  scanTag.setLocationId(locationData.getLocID());
                     scanTag.setRfidTag(inventoryTag);
 
                     Integer getCountOfTagAlready = bookDao.getCountOfTagAlready(scanTag.getRfidTag(), scanTag.getScanId());
@@ -826,7 +825,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                         progressBar.setVisibility(View.VISIBLE);
                         disableUserInteraction(getActivity());
                         List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        //                    bookAndAssetData.addAll(bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0));
+                        // bookAndAssetData.addAll(bookDao.selectAssetMainLocationNullRecords(inventoryMaster.getScanID(),0));
 
                         List<Inventorymaster>  pendingInventoryScan = bookDao.getGlobalPendingInventoryScan();
                         Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
@@ -902,7 +901,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                                 btnInventoryRecord.setClickable(true);
                                 inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
                                 bookDao.updateInventoryItem(inventoryMaster);
-                                bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
+                             //   bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
                                 //temporary commented
                                 //  bookDao.clearSyncFlagOfAssets(syncedIds);
 

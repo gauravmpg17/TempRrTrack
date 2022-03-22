@@ -88,6 +88,18 @@ class BookRepository @Inject constructor(
         return null
     }
 
+    suspend fun updateMapLocation(body:RequestBody): LiveData<Int>? {
+
+        try {
+            val response = assetTrakAPIInterface.updateMapLocation(body)
+            mAssetSync.value=response.code()
+            return mAssetSync
+        } catch (error: Throwable) {
+            retrofitExceptionHandling(error)
+        }
+        return null
+    }
+
 
 
     fun retrofitExceptionHandling(error: Throwable) {

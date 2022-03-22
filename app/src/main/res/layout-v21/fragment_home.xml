@@ -355,7 +355,7 @@
                 android:layout_height="150dp"
                 android:layout_weight="1"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/dark_orange"
+                app:cardBackgroundColor="#F48E8E"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout

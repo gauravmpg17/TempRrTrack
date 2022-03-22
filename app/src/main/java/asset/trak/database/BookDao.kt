@@ -157,7 +157,7 @@ interface BookDao {
     fun getGlobalPendingInventoryScan(): List<Inventorymaster>
 
 
-    @Query("SELECT  * FROM tblInventorymaster WHERE locationId IN (:id) AND Status ='Completed' ORDER BY ScanOn Desc LIMIT 1")
+    @Query("SELECT * FROM tblInventorymaster WHERE locationId IN (:id) AND Status ='Completed' ORDER BY ScanOn Desc LIMIT 1")
     fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
 
     @Query("SELECT  COUNT(ScanID) FROM assetMain WHERE locationId IN (:locationId) AND ScanID =(:scanId)")
@@ -171,6 +171,9 @@ interface BookDao {
 
     @Query("DELETE FROM mapRFIDLocation")
     fun deletemapRFIDLocationAll()
+
+    @Query("SELECT * FROM mapRFIDLocation")
+    fun getMapRFIDLocationAll():List<MapRFIDLocation>
 
     @Query("SELECT * FROM tblScanTag  WHERE locationId IN (:locationId) AND scanId IN (:scanId)")
     fun getScanTag(locationId: Int, scanId: String): List<ScanTag>
@@ -300,8 +303,6 @@ interface BookDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMapRFIDLocation(mapRFIDLocation: MapRFIDLocation)
-
-
 
     /*Update*/
     @Update(onConflict = OnConflictStrategy.REPLACE)

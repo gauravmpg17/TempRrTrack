@@ -49,4 +49,16 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         }
         return mAssetSyncData
     }
+
+
+
+    fun updateMapLocation(body: RequestBody): LiveData<Int> {
+        viewModelScope.launch {
+            val data = bookRepository.updateMapLocation(body)
+            data?.apply {
+                mAssetSyncData.value = this.value
+            }
+        }
+        return mAssetSyncData
+    }
 }

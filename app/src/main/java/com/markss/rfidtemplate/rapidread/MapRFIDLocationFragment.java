@@ -60,6 +60,7 @@ import asset.trak.database.entity.Inventorymaster;
 import asset.trak.database.entity.MapRFIDLocation;
 import asset.trak.database.entity.ScanTag;
 import asset.trak.model.AssetSyncRequestDataModel;
+import asset.trak.model.MapToLocationApiRequest;
 import asset.trak.modelsrrtrack.AssetData;
 import asset.trak.modelsrrtrack.AssetMain;
 import asset.trak.modelsrrtrack.MasterLocation;
@@ -177,7 +178,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         llBottomParent = getActivity().findViewById(R.id.llBottomParent2);
         progressBar = getActivity().findViewById(R.id.progressBar3);
         tvRegisteredCount = getActivity().findViewById(R.id.tvRegisteredCountrr);
-        tvLocation = getActivity().findViewById(R.id.tvLocation12);
+        tvLocation = getActivity().findViewById(R.id.tvLocation211);
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
         locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
@@ -186,7 +187,6 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
             AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
             builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
             builder1.setCancelable(false);
-
             builder1.setPositiveButton(
                     "Yes",
                     new DialogInterface.OnClickListener() {
@@ -376,7 +376,6 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                 llBottomParent.setVisibility(View.GONE);
                 btnScan.setImageResource(android.R.drawable.ic_media_pause);
                 listInventoryList = new HashSet<>();
-
                 //new requirement
                 foundLocParent.setVisibility(View.GONE);
                 foundForDifferentParent.setVisibility(View.GONE);
@@ -579,8 +578,8 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     public void handleTagResponse(InventoryListItem inventoryListItem, boolean isAddedToList) {
         updateTexts();
 
-        listInventoryList.add(inventoryListItem.getMemoryBankData());
-        scannedList.add(inventoryListItem.getMemoryBankData());
+        listInventoryList.add(inventoryListItem.getTagID());
+        scannedList.add(inventoryListItem.getTagID());
         uniqueTags.setText(Integer.toString(scannedList.size()));
         //  String memoryBankData=inventoryListItem.getMemoryBankData();
         if (tagReadRate != null) {
@@ -634,6 +633,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                     MapRFIDLocation mapRFIDLocation = new MapRFIDLocation();
                     mapRFIDLocation.setScanId(lastItem.getScanID());
                     mapRFIDLocation.setLocationId(locationData.getLocID());
+                    mapRFIDLocation.setBarCode(locationData.getLocBarcode());
                     mapRFIDLocation.setRfidTag(inventoryTag);
 
                     Integer getCountOfTagAlready = bookDao.getCountOfMapLocationAlready(mapRFIDLocation.getRfidTag(), mapRFIDLocation.getScanId());
@@ -645,21 +645,11 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     }
 
     private void updateCountInDb() {
-        Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
-        inventoryMaster.setFoundOnLocation(countFoundCurrentLocation);
-        inventoryMaster.setNotFound(countNotFoundCurrentLocation);
-        inventoryMaster.setFoundOfDiffLocation(countFoundDifferentLoc);
-        inventoryMaster.setNotRegistered(countNotRegistered);
-        inventoryMaster.setRegistered(bookDao.getCountLocationId(locationData.getLocID()));
-        //inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
-        Calendar cal = Calendar.getInstance();
-        String dateFormat = sdf.format(cal.getTime());
-        inventoryMaster.setScanOn(dateFormat);
-        bookDao.updateInventoryItem(inventoryMaster);
 
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+            Calendar cal = Calendar.getInstance();
+            String dateFormat = sdf.format(cal.getTime());
             Date latestDate = sdf.parse(dateFormat);
             SimpleDateFormat changedFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
             tvILastRecordDate.setText(getString(R.string.last_recorded_02_02_2022_10_43_am) + " " + changedFormat.format(latestDate));
@@ -704,82 +694,48 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         isReconsiled = false;
                         dialog.cancel();
                         disableUserInteraction(getActivity());
-                        List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        List<Inventorymaster> pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
-                        Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
-                        bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
-                        // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getId()));
+                        //   List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
+                        //      List<Inventorymaster> pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
+                        //    Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
+                        // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
+
+                        MapToLocationApiRequest mapToLocationApiRequest = new MapToLocationApiRequest();
 
                         //new logic
-                        List<ScanTag> listScan = bookDao.getScanTag(locationData.getLocID(), inventoryMaster.getScanID());
-                        List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
-                        pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
-                        AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
-                        SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                        String scanEndTime = "";
-                        try {
-                            //   String currentDate = changedFormat.format(new Date());
-                            scanEndTime = changedFormat.format(new Date());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        List<MapRFIDLocation> listScan = bookDao.getMapRFIDLocationAll();
+
+                        Inventorymaster lastItem = pendingInventoryScan.get(0);
+                        bookDao.deleteInventorySingle(lastItem.getScanID());
+                        List<AssetData> listAssetData = new ArrayList<>();
+                        //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
                         if (String.valueOf(locationData.getLocID()) == null) {
                             locationData.setLocID(0);
                         }
 
-                        //                        assetSyncRequestDataModel.inventoryData.deviceID = inventoryMaster.getDeviceId();
-//                        assetSyncRequestDataModel.inventoryData.foundForLoc = inventoryMaster.getFoundOnLocation();
-//                        assetSyncRequestDataModel.inventoryData.foundForOtherLoc = inventoryMaster.getFoundOfDiffLocation();
-//                        assetSyncRequestDataModel.inventoryData.noofAssetsScanned = scannedList.size();
-//                        assetSyncRequestDataModel.inventoryData.scanDate = inventoryMaster.getScanStartDatetime();
-//                        assetSyncRequestDataModel.inventoryData.locID = inventoryMaster.getLocationId();
-//                        assetSyncRequestDataModel.inventoryData.locType = "Z";
-//                        assetSyncRequestDataModel.inventoryData.scanStartDatetime = inventoryMaster.getScanOn();
-//                        assetSyncRequestDataModel.inventoryData.scanEndDatetime = scanEndTime;
-//                        assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvRegisteredCount.getText().toString());
-//                        assetSyncRequestDataModel.inventoryData.scanID = inventoryMaster.getScanID();
-//                        assetSyncRequestDataModel.inventoryData.scannedBy = "ABC";
-
-               //         Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
-                        // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
-                 //       Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
-                        for (AssetMain n : bookAndAssetData) {
+                        for (MapRFIDLocation n : listScan) {
                             AssetData scanTag = new AssetData();
                             // sending ID in rfidTag field, need to update attribute name accordingly in API
-                            scanTag.assetRFID = n.getAssetRFID();
-                            if (n.getScanID() == null) {
-                                n.setScanID("0");
-                            }
-                            scanTag.assetID = n.getAssetID();
+                            if (n.getRfidTag() == null) n.setRfidTag("");
+                            scanTag.assetRFID = n.getRfidTag();
                             scanTag.locID = n.getLocationId();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
+                            //   listAssetData.add(scanTag);
+                            mapToLocationApiRequest.getAssetData().add(scanTag);
                         }
 
-                        // assets which location was changed
-                        for (AssetMain n : pendingSyncAssetdata) {
-                            AssetData scanTag = new AssetData();
-                            scanTag.assetRFID = n.getAssetRFID();
-                            scanTag.locID = n.getLocationId();
-                            scanTag.assetID = n.getAssetID();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
-                        }
 
-                        RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel), MediaType.parse("application/json"));
+                        RequestBody body = RequestBody.create(new Gson().toJson(mapToLocationApiRequest), MediaType.parse("application/json"));
 
 
-                        Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
-                        inventoryViewModel.postAssetSync(body).observe(getViewLifecycleOwner(), response -> {
+                        Log.e("data", "" + new Gson().toJson(mapToLocationApiRequest));
+                        inventoryViewModel.updateMapLocation(body).observe(getViewLifecycleOwner(), response -> {
                             if (response == SUCCESS) {
                                 enableUserInteraction(getActivity());
                                 Log.d("final", "postAssetSync: ");
-
-
                                 progressBar.setVisibility(View.GONE);
                                 btnInventoryRecord.setEnabled(true);
                                 btnInventoryRecord.setClickable(true);
-                                inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
-                                bookDao.updateInventoryItem(inventoryMaster);
+
                                 bookDao.deletemapRFIDLocationAll();
                                 //temporary commented
                                 //  bookDao.clearSyncFlagOfAssets(syncedIds);
