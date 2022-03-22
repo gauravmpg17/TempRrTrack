@@ -431,7 +431,7 @@ class ViewInventoryFragment(val isFromWhat: String) :
                             var lastRecodedDate = ""
                             var registeredAsPerLastScan = 0
                             var newlyRegistered = 0
-                            if (currLocId != null) {
+                            if (currLocId != 0) {
                                 val invData = roomDatabaseBuilder.getBookDao()
                                     .getLastRecordedInventoryOfLocation(currLocId)
                                 if (invData.count() > 0) {

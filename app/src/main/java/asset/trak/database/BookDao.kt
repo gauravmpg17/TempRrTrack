@@ -76,11 +76,15 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND inventoryScanId IN (:scanId)")
     fun getCountLastScanRegistered(locationId: Int,scanId: String): Int
 
-    @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND createdOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
+//    @Query("SELECT COUNT(id) FROM assetMain WHERE locationId IN (:locationId) AND createdOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
+//    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
+
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ModifiedOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
     fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
 
 
- //  @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND (createdOn >(:scanOn) OR (:scanOn) is null)  AND inventoryScanId IS NULL")
+
+    //  @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND (createdOn >(:scanOn) OR (:scanOn) is null)  AND inventoryScanId IS NULL")
  //
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND inventoryScanId IS NULL")
     fun getCountNewlyScan(locationId: Int): Int
@@ -239,7 +243,7 @@ interface BookDao {
     fun getFoundAtLocationGlobal(scanId: String): List<AssetMain>
 
 
-    @Query("UPDATE tblAssetCatalogue  SET inventoryScanId=(:scanId) WHERE locationId  IN (:locationId) AND rfidTag  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
+    @Query("UPDATE assetMain  SET ScanID=(:scanId) WHERE locationId  IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     fun updateScanIdOfReconciledAssets(scanId: String, locationId: Int)
 
     @Query("UPDATE assetMain  SET ScanID=NULL WHERE locationId  IN (:locationId)")

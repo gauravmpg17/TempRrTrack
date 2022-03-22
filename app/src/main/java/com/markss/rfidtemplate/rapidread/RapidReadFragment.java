@@ -760,7 +760,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 postAssetSync();
             } else {
                 FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
-                //   Toast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -819,7 +818,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         assetSyncRequestDataModel.inventoryData.scanEndDatetime = scanEndTime;
                         assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvRegisteredCount.getText().toString());
                         assetSyncRequestDataModel.inventoryData.scanID = inventoryMaster.getScanID();
-                        assetSyncRequestDataModel.inventoryData.scannedBy = "ABC";
+                        assetSyncRequestDataModel.inventoryData.scannedBy = "SYSTEM";
 
                         Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
                        // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
@@ -860,7 +859,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                                 bookDao.updateInventoryItem(inventoryMaster);
                                 bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
                                 //temporary commented
-                                //  bookDao.clearSyncFlagOfAssets(syncedIds);
+                              //    bookDao.clearSyncFlagOfAssets(syncedIds);
 
                                 //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
                                 FancyToast.makeText(requireActivity(), getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
