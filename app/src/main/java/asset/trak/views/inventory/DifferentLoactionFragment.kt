@@ -51,7 +51,7 @@ class DifferentLoactionFragment(val locationId: Int) :
                     tvSelectAll.text=getString(R.string.deselect_all)
                     for (i in 0 until listBook.size)  {
                         var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-                        listBook[i].Location= locationName?.locationName?:""
+                        listBook[i].Location= locationName?.Name?:""
                         listBook[i].isSelected=true
                     }
                     notFoundAdapter = DifferntLocationAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
@@ -69,7 +69,7 @@ class DifferentLoactionFragment(val locationId: Int) :
                 tvSelectAll.text=getString(R.string.select_all)
                 for (i in 0 until listBook.size)  {
                     var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-                    listBook[i].Location= locationName?.locationName?:""
+                    listBook[i].Location= locationName?.Name?:""
                     listBook[i].isSelected=false
                 }
                 notFoundAdapter = DifferntLocationAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
@@ -113,7 +113,7 @@ class DifferentLoactionFragment(val locationId: Int) :
 
         for (i in 0 until listBook.size)  {
             var locationName=roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-            listBook[i].Location= locationName?.locationName?:""
+            listBook[i].Location= locationName?.Name?:""
       //      var category=roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
 //            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
 //            var subcategory=roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)

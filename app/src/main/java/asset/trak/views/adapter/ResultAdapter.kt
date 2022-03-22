@@ -17,21 +17,24 @@ import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants.setTitleImage
+import asset.trak.utils.getFormattedDate
 import com.bumptech.glide.Glide
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import java.io.File
+import java.text.SimpleDateFormat
 
 interface OnResultClickListener {
-    fun onGoalClick(navToScreen:AssetMain)
+    fun onGoalClick(navToScreen: AssetMain)
 }
+
 //
 class ResultAdapter(
     private val context: Context,
     private val onGoalClickListener: OnResultClickListener,
     private var items: ArrayList<AssetMain>,
-    private var isFromLib:Boolean?=false
+    private var isFromLib: Boolean? = false
 ) :
     RecyclerView.Adapter<ResultAdapter.HomeGoalsHolder>(), Filterable {
     private var mFilteredList: List<AssetMain>? = null
@@ -41,9 +44,9 @@ class ResultAdapter(
         var tvAuthor: AppCompatTextView = view.findViewById(R.id.tvAuthor)
         var tvTag: AppCompatTextView = view.findViewById(R.id.tvTag)
         var tvCategory: AppCompatTextView = view.findViewById(R.id.tvCategory)
-        var ivBook:AppCompatImageView=view.findViewById(R.id.ivBook)
-        var tv: TextView =view.findViewById(R.id.tv)
-        var tvSearch: TextView =view.findViewById(R.id.tvSearch)
+        var ivBook: AppCompatImageView = view.findViewById(R.id.ivBook)
+        var tv: TextView = view.findViewById(R.id.tv)
+        var tvSearch: TextView = view.findViewById(R.id.tvSearch)
     }
 
     @NonNull
@@ -53,20 +56,30 @@ class ResultAdapter(
         return HomeGoalsHolder(itemView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
-        val  homeGoalsItem = items[position]
+        val homeGoalsItem = items[position]
         holder.tvTitle.text = homeGoalsItem.Supplier
 
-        if( homeGoalsItem.SampleType.isNullOrEmpty())
-        {
+        if (homeGoalsItem.SampleType.isNullOrEmpty()) {
             holder.tvAuthor.text = "-"
-        }
-        else
-        {
+        } else {
             holder.tvAuthor.text = homeGoalsItem.SampleType
         }
-        holder.tvCategory.text = homeGoalsItem.SampleNature+" | "+homeGoalsItem.Season
-        holder.tvTag.text = homeGoalsItem.Location+" - "+homeGoalsItem.Class
+        holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
+        holder.tvTag.text = homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
+            ""
+        } else {
+            if (homeGoalsItem.Location.isNullOrEmpty()) {
+                ""
+            } else {
+                " | "
+            } + getFormattedDate(
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString
+                    ()
+            )
+        }
 
 
         holder.itemView.setOnClickListener {
@@ -77,9 +90,6 @@ class ResultAdapter(
     override fun getItemCount(): Int {
         return items.size
     }
-
-
-
 
 
     override fun getFilter(): Filter {
@@ -94,10 +104,15 @@ class ResultAdapter(
                 if (constraint != null) {
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
-                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true
-                                || mFilterData.SampleType?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-                                mFilterData.SampleNature?.lowercase()?.contains(constraint.toString().lowercase())==true||
-                                mFilterData.Season?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.SampleType?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.SampleNature?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.Season?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                            )
 
                                 results.add(mFilterData)
                         }

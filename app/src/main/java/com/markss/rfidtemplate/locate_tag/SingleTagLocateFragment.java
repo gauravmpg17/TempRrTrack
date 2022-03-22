@@ -21,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ import com.markss.rfidtemplate.rfid.RFIDController;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zebra.rfid.api3.RFIDResults;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,7 @@ import asset.trak.database.daoModel.BookAndAssetData;
 import asset.trak.database.entity.CategoryMaster;
 import asset.trak.database.entity.LocationMaster;
 import asset.trak.modelsrrtrack.AssetMain;
+import asset.trak.utils.ExtensionKt;
 
 /**
  * <p/>
@@ -102,7 +105,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
         TextView tvTitle = getActivity().findViewById(R.id.btn_locate);
         TextView tvSearch = getActivity().findViewById(R.id.tvSearch);
         tvSearch.setVisibility(View.GONE);
-        constLay= getActivity().findViewById(R.id.lt_book_info);
+        constLay = getActivity().findViewById(R.id.lt_book_info);
 
         et_locateTag = (AutoCompleteTextView) getActivity().findViewById(R.id.lt_et_epc);
         if (RFIDController.asciiMode == true)
@@ -152,14 +155,12 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
 
 //        if(getArguments().containsKey("hide"))
-        if(Application.comefrom.contains("hide"))
-        {
+        if (Application.comefrom.contains("hide")) {
 
             et_locateTag.setVisibility(View.VISIBLE);
             et_locateTag.setText(Application.locateTag);
             constLay.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             getBookDetails();
         }
 
@@ -180,8 +181,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
 
             list.addAll(roomDatabaseBuilder.getBookDao().getBookForRFID(RFIDTag));
-            if(list.isEmpty())
-            {
+            if (list.isEmpty()) {
                 constLay.setVisibility(View.GONE);
                 FancyToast.makeText(
                         requireActivity(),
@@ -190,8 +190,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                         FancyToast.WARNING,
                         false
                 ).show();
-            }
-            else {
+            } else {
                 constLay.setVisibility(View.VISIBLE);
                 if (list.get(0).getSupplier() == null || TextUtils.isEmpty(list.get(0).getSupplier())) {
                     tvTitle.setText("-");
@@ -199,20 +198,29 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                     tvTitle.setText(list.get(0).getSupplier());
                 }
 
-                if (list.get(0).getSampleType() == null || list.get(0).getSampleType() ==  null) {
+                if (list.get(0).getSampleType() == null || list.get(0).getSampleType() == null) {
                     tvAuthor.setText("-");
                 } else {
                     tvAuthor.setText(list.get(0).getSampleType());
                 }
                 if (list.get(0).getSampleNature() != null) {
-                    tvTag.setText(list.get(0).getSampleNature()+" | "+list.get(0).getSeason());
+                    tvTag.setText(list.get(0).getSampleNature() + " | " + list.get(0).getSeason());
                 }
 
                 if (list.get(0).getSeason() != null) {
-                    tvCategory.setText(list.get(0).getLocation()+" - "+list.get(0).getClass());
+                    String dateTime = "";
+                    if (list.get(0).getScanDate().isEmpty()) {
+                        dateTime = "";
+                    } else {
+                        if (list.get(0).getLocation().isEmpty()) {
+                            dateTime += "";
+                        } else {
+                            dateTime += " | ";
+                        }
+                        dateTime += ExtensionKt.getFormattedDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), new SimpleDateFormat("dd-MM-yyyy"), list.get(0).getScanDate());
+                    }
+                    tvCategory.setText(list.get(0).getLocation() + dateTime);
                 }
-
-
 
 
                 //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());

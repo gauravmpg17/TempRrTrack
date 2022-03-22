@@ -9,39 +9,153 @@
 
     <include
         android:id="@+id/zonalView"
-        android:visibility="gone"
-        layout="@layout/fragment_view_inventory"/>
+        layout="@layout/fragment_view_inventory"
+        android:visibility="visible" />
 
     <View
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#A1131313"
-        android:layout_height="0dp"/>
-    <EditText
-        android:id="@+id/barCodeValue"
-        android:layout_marginHorizontal="@dimen/margin_20"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/margin_20"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/twenty_dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/twenty_dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/twenty_dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBackButtonTest"
+        android:layout_width="25dp"
+
+        android:layout_height="25dp"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:src="@drawable/ic_home"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitleTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/ten_dp"
+        android:fontFamily="@font/jio_type_bold"
+        android:text="@string/lblViewInventory"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_22"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/ivBackButtonTest"
+        app:layout_constraintLeft_toRightOf="@+id/ivBackButtonTest"
+        app:layout_constraintTop_toTopOf="@id/ivBackButtonTest" />
+
+    <RelativeLayout
+        android:id="@+id/rlTopParent"
         android:layout_width="0dp"
-        android:focusable="true"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+
+        app:layout_constraintLeft_toRightOf="@id/ivBackButtonTest"
+        app:layout_constraintTop_toBottomOf="@+id/ivBackButtonTest">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_home"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/llSpinnerParent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        android:background="@drawable/rectangle_border"
+        android:focusable="false"
+        android:padding="@dimen/fifteen_dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
+
+
+        <EditText
+            android:id="@+id/barCodeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/ivScanBarText"
+            android:background="@null"
+            android:cursorVisible="false"
+            android:fontFamily="@font/jio_type_light"
+            android:hint="@string/scan_location_barcode"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sixteen_sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivScanBarText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/five_dp"
+            android:src="@drawable/ic_barcode" />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageView"
-        android:background="@android:color/transparent"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="40dp"
         android:layout_marginVertical="50dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/scanBarText"
+        android:layout_marginBottom="160dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Scan Zone Barcode"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonScan"
@@ -52,7 +166,7 @@
         android:background="@drawable/button_bg"
         android:text="Scan"
         android:textColor="@color/white"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

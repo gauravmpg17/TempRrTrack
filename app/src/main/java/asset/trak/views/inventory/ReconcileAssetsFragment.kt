@@ -126,11 +126,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         if(inventoryMasterList.isEmpty() || inventoryMasterList==null)
         {
             var notFoundCount =0
-            val notFound = "Not Found ($notFoundCount)"
+            val notFound = "Not\nFound ($notFoundCount)"
             var differntLocationCount =0
-            val differentLocation = "Different Location ($differntLocationCount)"
+            val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = 0
-            val notRegistered = "Not Registered ($countofNotRegistered)"
+            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
             tablayout.addTab(tablayout.newTab().setText(notFound));
 
 
@@ -144,12 +144,12 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         {
              inventorymaster = inventoryMasterList.get(0)
             var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
-            val notFound = "Not Found ($notFoundCount)"
+            val notFound = "Not\nFound ($notFoundCount)"
             var differntLocationCount =
                 bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
-            val differentLocation = "Different Location ($differntLocationCount)"
+            val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-            val notRegistered = "Not Registered ($countofNotRegistered)"
+            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
             tablayout.addTab(tablayout.newTab().setText(notFound));
             if (!whichInventory.equals("global")) {
                 tablayout.addTab(tablayout.newTab().setText(differentLocation))
@@ -205,13 +205,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
                 if(inventorymaster==null)
                 {
-                    val differentLocation = "Different Location (0)"
+                    val differentLocation = "Different\nLocation (0)"
                     tablayout.getTabAt(1)?.text = differentLocation
                 }
                 else
                 {
                     var differntLocationCount = bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
-                    val differentLocation = "Different Location ($differntLocationCount)"
+                    val differentLocation = "Different\nLocation ($differntLocationCount)"
                     tablayout.getTabAt(1)?.text = differentLocation
                 }
             } else if (viewPager.currentItem == 2) {
@@ -322,7 +322,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 if(inventorymaster==null)
                                 {
                                     var notFoundCount =0
-                                    val notFound = "Not Found ($notFoundCount)"
+                                    val notFound = "Not\nFound ($notFoundCount)"
                                     tablayout.getTabAt(0)?.text = notFound
                                 }
                                 else
@@ -331,7 +331,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                     (adapter.getCurrentFragment() as NotFoundFragment).updateList()
                                     inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
                                     var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
-                                    val notFound = "Not Found ($notFoundCount)"
+                                    val notFound = "Not\nFound ($notFoundCount)"
                                     tablayout.getTabAt(0)?.text = notFound
                                 }
                             }
@@ -412,14 +412,14 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         if(inventorymaster==null)
                         {
                             var countofNotRegistered =0
-                            val notRegistered = "Different Location ($countofNotRegistered)"
+                            val notRegistered = "Different\nLocation ($countofNotRegistered)"
                             tablayout.getTabAt(1)?.text = notRegistered
                         }
                         else
                         {
                             var countofDiffLocation =
                                 bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID,locationId)
-                            val diffLoc = "Different Location ($countofDiffLocation)"
+                            val diffLoc = "Different\nLocation ($countofDiffLocation)"
                             tablayout.getTabAt(1)?.text = diffLoc
                         }
 
@@ -458,7 +458,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         if(inventorymaster==null)
                         {
                             var countofNotRegistered =0
-                            val notRegistered = "Not Registered ($countofNotRegistered)"
+                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
                             tablayout.getTabAt(2)?.text = notRegistered
 
                         }
@@ -466,7 +466,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         {
                             var countofNotRegistered =
                                 bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-                            val notRegistered = "Not Registered ($countofNotRegistered)"
+                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
                             tablayout.getTabAt(2)?.text = notRegistered
                         }
                     }
@@ -586,7 +586,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             (adapter.getCurrentFragment() as NotFoundFragment).updateList()
 
                         var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, scanTag.scanId!!)
-                        val notFound = "Not Found ($notFoundCount)"
+                        val notFound = "Not\nFound ($notFoundCount)"
                         tablayout.getTabAt(0)?.text = notFound
                     }
                 }

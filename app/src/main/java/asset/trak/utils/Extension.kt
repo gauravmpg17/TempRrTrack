@@ -4,14 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.compressimage.Compressor
 import asset.trak.utils.compressimage.constraint.format
 import asset.trak.utils.compressimage.constraint.quality
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun IntRange.random() =
     Random().nextInt((endInclusive + 1) - start) + start
+
 suspend fun compressImage(activity: Activity?, actualImageFile: File?): File {
     try {
         val valueOf1mb = 1048576.0
@@ -44,4 +47,22 @@ suspend fun compressImage(activity: Activity?, actualImageFile: File?): File {
     } catch (e: Exception) {
         return actualImageFile!!
     }
+}
+
+
+fun getFormattedDate(
+    originalFormat: SimpleDateFormat,
+    targetFormat: SimpleDateFormat,
+    inputDate: String
+): String {
+    return try {
+        targetFormat.format(originalFormat.parse(inputDate))
+    } catch (e: Exception) {
+        ""
+    }
+}
+
+fun isAvailableData(list: List<AssetMain>, rfid: String, assertId: String): Boolean {
+    val updateList = list.filter { it.AssetRFID == rfid && it.AssetID == assertId }
+    return updateList.isEmpty()
 }

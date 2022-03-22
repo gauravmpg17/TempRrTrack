@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.modelsrrtrack.AssetMain
+import asset.trak.utils.getFormattedDate
 import asset.trak.views.fragments.ScanFragment
 import com.bumptech.glide.Glide
 
@@ -28,10 +29,15 @@ import com.markss.rfidtemplate.locate_tag.LocateOperationsFragment
 import com.markss.rfidtemplate.locate_tag.SingleTagLocateFragment
 import com.markss.rfidtemplate.rfid.RFIDController
 import java.io.File
+import java.text.SimpleDateFormat
 
 
-class NotFoundAdapter(private val context: Context, private val fragment: FragmentManager, private var items: ArrayList<AssetMain>, ) :
-    RecyclerView.Adapter<NotFoundAdapter.NotFoundHolder>(),Filterable {
+class NotFoundAdapter(
+    private val context: Context,
+    private val fragment: FragmentManager,
+    private var items: ArrayList<AssetMain>,
+) :
+    RecyclerView.Adapter<NotFoundAdapter.NotFoundHolder>(), Filterable {
     private var mFilteredList: List<AssetMain>? = null
 
     inner class NotFoundHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,12 +46,10 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
         var tvEdition: TextView = view.findViewById(R.id.tvTag)
         var tvSearch: TextView = view.findViewById(R.id.tvSearch)
         var tvCategory: TextView = view.findViewById(R.id.tvCategory)
-        var tv: TextView =view.findViewById(R.id.tv)
-        var ivBook: AppCompatImageView =view.findViewById(R.id.ivBook)
+        var tv: TextView = view.findViewById(R.id.tv)
+        var ivBook: AppCompatImageView = view.findViewById(R.id.ivBook)
         var clMain: CardView = view.findViewById(R.id.constLay123)
         var ivCheck: ImageView = view.findViewById(R.id.ivCheck)
-
-
 
 
     }
@@ -64,16 +68,25 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 
         holder.tvTitle.text = item?.Supplier
 
-        if( item.SampleType.isNullOrEmpty())
-        {
+        if (item.SampleType.isNullOrEmpty()) {
             holder.tvAuthor.text = "-"
-        }
-        else
-        {
+        } else {
             holder.tvAuthor.text = item.SampleType
         }
-        holder.tvCategory.text = item.SampleNature+" | "+item.Season
-        holder.tvEdition.text = item.Location+" - "+item.Class
+        holder.tvCategory.text = item.SampleNature + " | " + item.Season
+        holder.tvEdition.text = item.Location + if (item.ScanDate.isNullOrEmpty()) {
+            ""
+        } else {
+            if (item.Location.isNullOrEmpty()) {
+                ""
+            } else {
+                " | "
+            } + getFormattedDate(
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                SimpleDateFormat("dd-MM-yyyy"), item.ScanDate.toString
+                    ()
+            )
+        }
 //       holder.tvAuthor.text = item.bookAttributes?.author
 //        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
 //        {
@@ -89,43 +102,39 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 //        else holder.ivCheck.visibility=View.GONE
 
 
-
-
-
-
         holder.clMain.setOnClickListener {
-            items[position].isSelected=!items[position].isSelected
+            items[position].isSelected = !items[position].isSelected
             notifyDataSetChanged()
         }
 
         holder.tvCategory.text = item.Supplier
-        holder.tvSearch.visibility=View.VISIBLE
-        holder.tvSearch.setOnClickListener{
+        holder.tvSearch.visibility = View.VISIBLE
+        holder.tvSearch.setOnClickListener {
 
-           Application.locateTag = item.AssetRFID
-           RFIDController.accessControlTag = item.AssetRFID
-           Application.PreFilterTag = item.AssetRFID
-            Application.comefrom ="show"
-       // holder.tvSearch.visibility=View.GONE
+            Application.locateTag = item.AssetRFID
+            RFIDController.accessControlTag = item.AssetRFID
+            Application.PreFilterTag = item.AssetRFID
+            Application.comefrom = "show"
+            // holder.tvSearch.visibility=View.GONE
 
-           replaceFragment(
-               fragment, LocateOperationsFragment(),
-               R.id.content_frame
-           )
+            replaceFragment(
+                fragment, LocateOperationsFragment(),
+                R.id.content_frame
+            )
 
-       }
+        }
 
 //        if(item.assetCatalogue.imagePathFile?.isNotEmpty()==true)
 //        {
-       //     holder.ivBook.visibility=View.VISIBLE
-            holder.tv.visibility=View.GONE
+        //     holder.ivBook.visibility=View.VISIBLE
+        holder.tv.visibility = View.GONE
 //            Glide.with(context)
 //                .load(File(item.imagePathFile.toString()))
 //                .placeholder(R.color.light_gray)
 //                .fitCenter()
 //                .error(R.drawable.ic_not_found_error)
 //                .into(holder.ivBook)
-     //   }
+        //   }
 //        else{
 //            holder.ivBook.visibility=View.GONE
 //            holder.tv.visibility=View.VISIBLE
@@ -134,13 +143,11 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 //        }
 
 
-
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
-
 
 
     override fun getFilter(): Filter {
@@ -158,7 +165,9 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
 
-                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                            )
 //                                || mFilterData.Location?.lowercase()?.contains(constraint.toString().lowercase())==true ||
 //                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
 //                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
@@ -189,6 +198,7 @@ class NotFoundAdapter(private val context: Context, private val fragment: Fragme
 
     fun replaceFragment(fragmentManager: FragmentManager?, fragment: Fragment, id: Int) {
         fragmentManager?.beginTransaction()
-            ?.replace(id, fragment, MainActivity.TAG_CONTENT_FRAGMENT)?.addToBackStack(null)?.commit()
+            ?.replace(id, fragment, MainActivity.TAG_CONTENT_FRAGMENT)?.addToBackStack(null)
+            ?.commit()
     }
 }

@@ -24,10 +24,15 @@ import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
+import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -164,7 +169,33 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //            )
 //        }
 
+        deleteTables.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val job = CoroutineScope(Dispatchers.IO).async {
+                    roomDatabaseBuilder.getBookDao().deleteAssetMainTable()
+                    roomDatabaseBuilder.getBookDao().deleteMasterClassTable()
+                    roomDatabaseBuilder.getBookDao().deleteInventoryScanTable()
+                    roomDatabaseBuilder.getBookDao().deleteMapRFIDLocationTable()
+                    roomDatabaseBuilder.getBookDao().deleteMasterLocationTable()
+                    roomDatabaseBuilder.getBookDao().deleteMasterVendorTable()
+                    roomDatabaseBuilder.getBookDao().deleteSamplingArticlesTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblAssetCatalogueTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblAssetClassCatMapTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblAssetClassificationTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblBookAttributesTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblCatSubCatMapTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblCategoryMasterTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblInventoryMasterTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblLocationMasterTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblScanTagTable()
+                    roomDatabaseBuilder.getBookDao().deleteTblSubCategoryMasterTable()
+                }
+                job.await()
+                Toast.makeText(requireActivity(), "Delete All Tables", Toast.LENGTH_LONG).show()
 
+            }
+
+        }
     }
 
 
@@ -348,7 +379,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 )
             } else {
                 replaceFragment(
-                    requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation",returnValue),
+                    requireActivity().supportFragmentManager,
+                    ViewInventoryFragment("rfidlocation", returnValue),
                     R.id.content_frame
                 )
             }

@@ -70,6 +70,7 @@ import asset.trak.model.InventoryMasterApi;
 import asset.trak.modelsrrtrack.AssetData;
 import asset.trak.modelsrrtrack.AssetMain;
 import asset.trak.modelsrrtrack.MasterLocation;
+import asset.trak.utils.ExtensionKt;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ReconcileAssetsFragment;
 import asset.trak.views.listener.RapidReadCallback;
@@ -194,7 +195,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
         imgIgnore.setOnClickListener(v -> {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-            builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
+            builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
             builder1.setCancelable(false);
 
             builder1.setPositiveButton(
@@ -819,6 +820,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvRegisteredCount.getText().toString());
                         assetSyncRequestDataModel.inventoryData.scanID = inventoryMaster.getScanID();
                         assetSyncRequestDataModel.inventoryData.scannedBy = "SYSTEM";
+                        assetSyncRequestDataModel.inventoryData.notRegistered = Integer.parseInt(tvNotRegisteredCount.getText().toString());
 
                         Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
                        // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
@@ -841,7 +843,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                             scanTag.assetRFID = n.getAssetRFID();
                             scanTag.locID = n.getLocationId();
                             scanTag.assetID = n.getAssetID();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
+                            if (ExtensionKt.isAvailableData(pendingSyncAssetdata,n.getAssetRFID(),n.getAssetID())) {
+                                assetSyncRequestDataModel.assetData.add(scanTag);
+                            }
                         }
 
                         RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel), MediaType.parse("application/json"));
@@ -909,7 +913,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK )
                 {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-                    builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
+                    builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
                     builder1.setCancelable(false);
 
                     builder1.setPositiveButton(

@@ -88,13 +88,13 @@
             </RelativeLayout>
 
             <ImageView
-                app:layout_constraintTop_toTopOf="@+id/rlTopParent"
+                android:id="@+id/imgIgnore"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 app:layout_constraintBottom_toBottomOf="@+id/rlTopParent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                android:id="@+id/imgIgnore"
-                app:srcCompat="@drawable/ic_delete"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
+                app:layout_constraintTop_toTopOf="@+id/rlTopParent"
+                app:srcCompat="@drawable/ic_delete" />
 
             <LinearLayout
                 android:id="@+id/llSpinnerParent"
@@ -113,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tvInventoryReport"
                 android:layout_width="0dp"
@@ -120,22 +121,24 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:fontFamily="@font/jio_type_bold"
-                tools:text="Inventory Report"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/llSpinnerParent" />
+                app:layout_constraintTop_toBottomOf="@id/llSpinnerParent"
+                tools:text="Inventory Report" />
 
             <TextView
                 android:id="@+id/tvILastRecord12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/ten_dp"
+                android:layout_marginTop="@dimen/twenty_dp"
                 android:fontFamily="@font/jio_type_medium"
                 android:text="@string/last_recorded_02_02_2022_10_43_am"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_15"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@id/tvInventoryReport" />
 
@@ -170,18 +173,20 @@
 
                 <TextView
                     android:id="@+id/tvRegisteredCountrr"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/twenty_three_dp"
+                    android:layout_marginStart="@dimen/six_dp"
                     android:layout_marginTop="@dimen/twenty_eight_dp"
+                    android:layout_marginEnd="@dimen/eight_dp"
                     android:layout_marginBottom="27dp"
                     android:fontFamily="@font/jio_type_bold"
-                    android:gravity="start"
+                    android:gravity="end"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/view2"
                     app:layout_constraintStart_toEndOf="@+id/tvRegistered"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -212,27 +217,28 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/tvScannedCount"
                     app:layout_constraintStart_toStartOf="@+id/view2"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/uniqueTagContent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/six_dp"
                     android:layout_marginTop="27dp"
                     android:layout_marginEnd="@dimen/twenty_dp"
                     android:layout_marginBottom="@dimen/twenty_eight_dp"
                     android:fontFamily="@font/jio_type_bold"
-                    android:gravity="start"
-                    tools:text="0"
+                    android:gravity="end"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/tvScanned"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="0" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -245,7 +251,7 @@
                 android:layout_marginTop="@dimen/ten_dp"
                 android:background="@drawable/rectangle_border_white"
                 android:orientation="horizontal"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/fourteen_dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -257,20 +263,21 @@
                     android:id="@+id/tvFoundLoc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/fourty_dp"
                     android:layout_marginTop="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_light"
                     android:text="Found for\n Current Location"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
+                    app:layout_constraintEnd_toStartOf="@id/firstView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvFoundLocCount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/six_dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_bold"
@@ -279,13 +286,14 @@
                     android:textColor="@color/reconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/tvFoundLoc"
-                    app:layout_constraintStart_toStartOf="@id/tvFoundLoc"
+                    app:layout_constraintEnd_toEndOf="@id/firstView"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvFoundLoc"
-                    tools:text="1234567890" />
+                    tools:text="1" />
 
 
                 <View
+                    android:id="@+id/firstView"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/margin_5"
@@ -303,29 +311,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/thirteen_dp"
-                    android:layout_marginEnd="41dp"
                     android:fontFamily="@font/jio_type_light"
                     android:text="Not Found for\nCurrent Location"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
+                    app:layout_constraintStart_toEndOf="@id/firstView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvNotFoundLocCount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/six_dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="center"
                     android:text="0"
-                    android:layout_marginBottom="@dimen/thirteen_dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/notReconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintStart_toStartOf="@+id/tvNotFoundLoc"
-                    app:layout_constraintEnd_toEndOf="@+id/tvNotFoundLoc"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/firstView"
                     app:layout_constraintTop_toBottomOf="@+id/tvNotFoundLoc" />
 
 
@@ -338,7 +347,7 @@
                 android:layout_marginTop="@dimen/ten_dp"
                 android:background="@drawable/rectangle_border_white"
                 android:orientation="horizontal"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/fourteen_dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -350,35 +359,37 @@
                     android:id="@+id/tvDiffLocation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/fourty_dp"
                     android:layout_marginTop="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_light"
                     android:text="Found for\nDifferent Location"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
+                    app:layout_constraintEnd_toStartOf="@id/secondView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvDiffLocationCount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="@dimen/six_dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_bold"
-                    android:gravity="start"
+                    android:gravity="center"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/tvDiffLocation"
-                    app:layout_constraintStart_toStartOf="@id/tvDiffLocation"
+                    app:layout_constraintEnd_toStartOf="@+id/secondView"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvDiffLocation" />
 
 
                 <View
+                    android:id="@+id/secondView"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/margin_5"
@@ -396,29 +407,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/thirteen_dp"
-                    android:layout_marginEnd="66dp"
                     android:fontFamily="@font/jio_type_light"
                     android:text="Not\nRegistered"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/secondView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvNotRegisteredCount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/six_dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_bold"
-                    android:gravity="start"
+                    android:gravity="center"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
-                    app:layout_constraintEnd_toEndOf="@+id/tvDifferentLocationCount"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/secondView"
                     app:layout_constraintTop_toBottomOf="@+id/tvDifferentLocationCount" />
 
 
@@ -440,15 +452,14 @@
         android:paddingEnd="@dimen/thirty_dp"
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
-        android:theme="@style/fabtheme"
         android:text="@string/stop"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
+        android:theme="@style/fabtheme"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_goneMarginBottom="@dimen/twenty_dp" />
-
 
 
     <LinearLayout
@@ -458,7 +469,7 @@
         android:background="@color/white"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/ten_dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton

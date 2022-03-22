@@ -558,7 +558,7 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:text="INVENTORY RECORDED"
+            android:text="RECORD INVENTORY"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_13" />

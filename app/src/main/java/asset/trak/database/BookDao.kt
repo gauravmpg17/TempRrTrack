@@ -35,10 +35,8 @@ interface BookDao {
     fun getCategoryAssetCount(catId: Int): Int
 
 
-
-
     @Query("SELECT * FROM masterLocation WHERE LocID IN (:locationId)")
-    fun getLocationName(locationId: Int): LocationMaster
+    fun getLocationName(locationId: Int): MasterLocation
 
 //    @Query("SELECT * FROM assetMain WHERE id IN (:catId)")
 //    fun getCatgeoryName(catId: Int): CategoryMaster
@@ -62,7 +60,7 @@ interface BookDao {
     fun getCountLocationIdRR(locationId: String): Int
 
     @Query("SELECT LocationId FROM assetMain WHERE Location IN (:locationName)")
-    fun getLocationIdRR(locationName:String):Int
+    fun getLocationIdRR(locationName: String): Int
 
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE inventoryScanId IS NULL")
     fun getCountNotReconciled(): Int
@@ -74,18 +72,17 @@ interface BookDao {
     fun getCountRegisteredLastScan(locationId: Int): Int
 
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND inventoryScanId IN (:scanId)")
-    fun getCountLastScanRegistered(locationId: Int,scanId: String): Int
+    fun getCountLastScanRegistered(locationId: Int, scanId: String): Int
 
 //    @Query("SELECT COUNT(id) FROM assetMain WHERE locationId IN (:locationId) AND createdOn > (SELECT ScanOn FROM tblinventorymaster where scanID in (:scanId))")
 //    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
 
     @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND ScanID IN (SELECT ScanID FROM tblinventorymaster where scanID in (:scanId))")
-    fun getCountNewlyRegisteredAfterLastScan(locationId: Int,scanId: String): Int
-
+    fun getCountNewlyRegisteredAfterLastScan(locationId: Int, scanId: String): Int
 
 
     //  @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND (createdOn >(:scanOn) OR (:scanOn) is null)  AND inventoryScanId IS NULL")
- //
+    //
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND inventoryScanId IS NULL")
     fun getCountNewlyScan(locationId: Int): Int
 
@@ -148,7 +145,7 @@ interface BookDao {
     fun getAssetsPendingToSync(): List<AssetMain>
 
     @Query("SELECT * FROM masterLocation WHERE LocBarcode=:loccode")
-    fun getLocationMasterDataRR(loccode:String): MasterLocation
+    fun getLocationMasterDataRR(loccode: String): MasterLocation
 
 //    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
 //    fun clearSyncFlagOfAssets(ids:List<String>)
@@ -177,7 +174,7 @@ interface BookDao {
     fun deletemapRFIDLocationAll()
 
     @Query("SELECT * FROM mapRFIDLocation")
-    fun getMapRFIDLocationAll():List<MapRFIDLocation>
+    fun getMapRFIDLocationAll(): List<MapRFIDLocation>
 
     @Query("SELECT * FROM tblScanTag  WHERE locationId IN (:locationId) AND scanId IN (:scanId)")
     fun getScanTag(locationId: Int, scanId: String): List<ScanTag>
@@ -195,7 +192,7 @@ interface BookDao {
       /
      */
 
-      @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
+    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
     fun getCountOfTagsFound(scanId: String, locationId: Int): Int
 
 //    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
@@ -254,7 +251,7 @@ interface BookDao {
 
 
     @Query("DELETE FROM assetMain WHERE locationId= (:locationId) AND AssetRFID= (:rfId)")
-    fun deleteFromAssetMain(locationId: Int,rfId:String)
+    fun deleteFromAssetMain(locationId: Int, rfId: String)
 
     /*Add Lists*/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -319,24 +316,31 @@ interface BookDao {
 //    fun deleteScanTag(listScanTag: ScanTag)
 
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
-    fun deleteScanTagNotFound(scanId:String,rfidTag:String)
+    fun deleteScanTagNotFound(scanId: String, rfidTag: String)
 
     @Query("UPDATE assetMain SET LocationId=(:newlocationId),ScanDate=(:scanDate),ScanID=(:scanId),inventorySyncFlag=(:flag) WHERE LocationId IN (:locationId) AND AssetRFID IN (:rfidTag)")
-    fun updateLocationAssetMain(newlocationId:Int,locationId:Int,scanDate:String,scanId: String,flag:Int,rfidTag:String)
+    fun updateLocationAssetMain(
+        newlocationId: Int,
+        locationId: Int,
+        scanDate: String,
+        scanId: String,
+        flag: Int,
+        rfidTag: String
+    )
 
     @Query("DELETE FROM tblScanTag WHERE scanId IN (:scanId) AND rfidTag IN (:rfidTag)")
-    fun deleteScanTagNotReg(scanId:String,rfidTag:String)
+    fun deleteScanTagNotReg(scanId: String, rfidTag: String)
 
     @Query("DELETE FROM tblScanTag WHERE scanId=(:scanId)")
-    fun deleteScanTagSingle(scanId:String)
+    fun deleteScanTagSingle(scanId: String)
 
     @Query("DELETE FROM tblInventorymaster WHERE scanId=(:scanId)")
-    fun deleteInventorySingle(scanId:String)
+    fun deleteInventorySingle(scanId: String)
 
-  //  @Query("SELECT * FROM assetMain WHERE ExitDate > (:exitDate) AND ScanID=(:scanId) AND LocationId=(:locationId)  ")
+    //  @Query("SELECT * FROM assetMain WHERE ExitDate > (:exitDate) AND ScanID=(:scanId) AND LocationId=(:locationId)  ")
 
     @Query("SELECT * FROM assetMain WHERE ScanID=(:scanId) AND LocationId=(:locationId)")
-    fun selectAssetMainLocationNullRecords(scanId:String,locationId:Int):List<AssetMain>
+    fun selectAssetMainLocationNullRecords(scanId: String, locationId: Int): List<AssetMain>
 
 //    @Delete
 //    fun deleteScanTagSingle(listScanTag: ScanTag)
@@ -345,6 +349,55 @@ interface BookDao {
 //void update(Float amount, Float price, int id);
 
 
+    @Query("DELETE FROM assetMain")
+    fun deleteAssetMainTable()
+
+    @Query("DELETE FROM MasterClass")
+    fun deleteMasterClassTable()
 
 
+    @Query("DELETE FROM inventoryScan")
+    fun deleteInventoryScanTable()
+
+    @Query("DELETE FROM mapRFIDLocation")
+    fun deleteMapRFIDLocationTable()
+
+    @Query("DELETE FROM masterLocation")
+    fun deleteMasterLocationTable()
+
+    @Query("DELETE FROM masterVendor")
+    fun deleteMasterVendorTable()
+
+    @Query("DELETE FROM samplingArticles")
+    fun deleteSamplingArticlesTable()
+
+    @Query("DELETE FROM tblAssetCatalogue")
+    fun deleteTblAssetCatalogueTable()
+
+    @Query("DELETE FROM tblAssetClassCatMap")
+    fun deleteTblAssetClassCatMapTable()
+
+    @Query("DELETE FROM tblAssetClassification")
+    fun deleteTblAssetClassificationTable()
+
+    @Query("DELETE FROM tblBookAttributes")
+    fun deleteTblBookAttributesTable()
+
+    @Query("DELETE FROM tblCatSubCatMap")
+    fun deleteTblCatSubCatMapTable()
+
+    @Query("DELETE FROM tblCategoryMaster")
+    fun deleteTblCategoryMasterTable()
+
+    @Query("DELETE FROM tblInventorymaster")
+    fun deleteTblInventoryMasterTable()
+
+    @Query("DELETE FROM tblLocationMaster")
+    fun deleteTblLocationMasterTable()
+
+    @Query("DELETE FROM tblScanTag")
+    fun deleteTblScanTagTable()
+
+    @Query("DELETE FROM tblSubCategoryMaster")
+    fun deleteTblSubCategoryMasterTable()
 }
