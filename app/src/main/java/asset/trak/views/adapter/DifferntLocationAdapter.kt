@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.modelsrrtrack.AssetMain
+import asset.trak.utils.getFormattedDate
 import com.bumptech.glide.Glide
 
 import com.markss.rfidtemplate.R
@@ -27,11 +28,14 @@ import com.markss.rfidtemplate.home.MainActivity
 import com.markss.rfidtemplate.locate_tag.LocateOperationsFragment
 import com.markss.rfidtemplate.rfid.RFIDController
 import java.io.File
+import java.text.SimpleDateFormat
 
 
-class DifferntLocationAdapter(private val context: Context, private val fragment: FragmentManager,
-                              private var items: ArrayList<AssetMain>) :
-    RecyclerView.Adapter<DifferntLocationAdapter.NotFoundHolder>(),Filterable {
+class DifferntLocationAdapter(
+    private val context: Context, private val fragment: FragmentManager,
+    private var items: ArrayList<AssetMain>
+) :
+    RecyclerView.Adapter<DifferntLocationAdapter.NotFoundHolder>(), Filterable {
     private var mFilteredList: List<AssetMain>? = null
 
     inner class NotFoundHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,10 +47,9 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
         var tvCategory: TextView = view.findViewById(R.id.tvCategory)
 
         var tvSearch: TextView = view.findViewById(R.id.tvSearch)
-        var tv: TextView =view.findViewById(R.id.tv)
-        var ivBook: AppCompatImageView =view.findViewById(R.id.ivBook)
-        var tvEdition: TextView =view.findViewById(R.id.tvTag)
-
+        var tv: TextView = view.findViewById(R.id.tv)
+        var ivBook: AppCompatImageView = view.findViewById(R.id.ivBook)
+        var tvEdition: TextView = view.findViewById(R.id.tvTag)
 
 
     }
@@ -63,16 +66,25 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
         holder.tvTitle.text = item.Supplier
 
 
-        if( item.SampleType.isNullOrEmpty())
-        {
+        if (item.SampleType.isNullOrEmpty()) {
             holder.tvAuthor.text = "-"
-        }
-        else
-        {
+        } else {
             holder.tvAuthor.text = item.SampleType
         }
-        holder.tvCategory.text = item.SampleNature+" | "+item.Season
-        holder.tvEdition.text = item.Location+" - "+item.Class
+        holder.tvCategory.text = item.SampleNature + " | " + item.Season
+        holder.tvEdition.text = item.Location + if (item.ScanDate.isNullOrEmpty()) {
+            ""
+        } else {
+            if (item.Location.isNullOrEmpty()) {
+                ""
+            } else {
+                " | "
+            } + getFormattedDate(
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                SimpleDateFormat("dd-MM-yyyy"), item.ScanDate.toString
+                    ()
+            )
+        }
 //        if( item.bookAttributes?.author.isNullOrEmpty())
 //        {
 //            holder.tvAuthor.text = "-"
@@ -93,13 +105,13 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
 //        }
 
-        holder.tvSearch.visibility=View.VISIBLE
-        holder.tvSearch.setOnClickListener{
+        holder.tvSearch.visibility = View.VISIBLE
+        holder.tvSearch.setOnClickListener {
 
             Application.locateTag = item.AssetRFID
             RFIDController.accessControlTag = item.AssetRFID
             Application.PreFilterTag = item.AssetRFID
-            Application.comefrom ="show"
+            Application.comefrom = "show"
 
             replaceFragment(
                 fragment, LocateOperationsFragment(),
@@ -112,7 +124,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //        if(item.assetCatalogue.imagePathFile?.isNotEmpty()==true)
 //        {
         //    holder.ivBook.visibility=View.VISIBLE
-            holder.tv.visibility=View.GONE
+        holder.tv.visibility = View.GONE
 //            Glide.with(context)
 //                .load(File(item.assetCatalogue.imagePathFile.toString()))
 //                .placeholder(R.color.light_gray)
@@ -128,9 +140,6 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 //        }
 
 
-
-
-
 //        if (item.assetCatalogue.isSelected) {
 //            holder.ivCheck.visibility = View.VISIBLE
 //
@@ -142,7 +151,7 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
 
         holder.clMain.setBackgroundResource(if (item.isSelected) R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
         holder.clMain.setOnClickListener {
-         items[position].isSelected=!items[position].isSelected
+            items[position].isSelected = !items[position].isSelected
             notifyDataSetChanged()
 
         }
@@ -152,7 +161,6 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
         return if (items == null) 0 else items.size
 
     }
-
 
 
     override fun getFilter(): Filter {
@@ -170,8 +178,11 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
                     if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
                         for (mFilterData in mFilteredList!!) {
 
-                            if (mFilterData.Supplier?.lowercase()?.contains(constraint.toString().lowercase())==true
-                                || mFilterData.Location?.lowercase()?.contains(constraint.toString().lowercase())==true)
+                            if (mFilterData.Supplier?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.Location?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                            )
 //                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
 //                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
 //                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
@@ -198,8 +209,10 @@ class DifferntLocationAdapter(private val context: Context, private val fragment
             }
         }
     }
+
     fun replaceFragment(fragmentManager: FragmentManager?, fragment: Fragment, id: Int) {
         fragmentManager?.beginTransaction()
-            ?.replace(id, fragment, MainActivity.TAG_CONTENT_FRAGMENT)?.addToBackStack(null)?.commit()
+            ?.replace(id, fragment, MainActivity.TAG_CONTENT_FRAGMENT)?.addToBackStack(null)
+            ?.commit()
     }
 }

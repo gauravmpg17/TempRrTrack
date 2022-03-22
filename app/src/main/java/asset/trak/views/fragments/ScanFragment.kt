@@ -75,7 +75,7 @@ class ScanFragment : BaseFragment(R.layout.fragment_scan),
                     {
                         val locationName = Application.roomDatabaseBuilder?.getBookDao()
                             ?.getLocationName(listOfAsset.get(0).assetCatalogue.locationId ?: 0)
-                        listOfAsset[0].assetCatalogue?.locationName = locationName?.locationName ?: ""
+                        listOfAsset[0].assetCatalogue?.locationName = locationName?.Name ?: ""
                         tvTitle.text = listOfAsset[0].assetCatalogue.assetName
                         tvAuthor.text = listOfAsset[0].bookAttributes?.author
 
@@ -88,7 +88,7 @@ class ScanFragment : BaseFragment(R.layout.fragment_scan),
                         {
                             tvCategory.text ="${listOfAsset[0].assetCatalogue.categoryName} - ${listOfAsset[0].assetCatalogue.subCategoryName}"
                         }
-                        tvTag.text = locationName?.locationName
+                        tvTag.text = locationName?.Name
                         Glide.with(requireActivity())
                             .load(File(listOfAsset[0].assetCatalogue.imagePathFile.toString()))
                             .placeholder(R.color.light_gray)

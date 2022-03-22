@@ -140,7 +140,7 @@
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         android:layout_marginTop="@dimen/margin_10"
-        app:tabMode="auto"
+        app:tabMode="fixed"
         app:tabTextAppearance="@style/MyTabTextAppearance"
         app:tabGravity="fill"
         app:tabTextColor="@color/tab_un_selected_color"
@@ -148,7 +148,9 @@
         app:tabIndicatorColor="@color/btn_color"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.tabs.TabLayout>
 
 
     <androidx.viewpager.widget.ViewPager

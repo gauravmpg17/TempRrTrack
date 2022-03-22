@@ -32,6 +32,8 @@
         <activity
             android:name="asset.trak.views.activity.TestActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" >
 
             <intent-filter>
@@ -58,7 +60,7 @@
             android:theme="@style/Theme.RFIDTemplate.NoActionBar" />
         <activity
             android:name=".home.MainActivity"
-            android:exported="false"
+            android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar"

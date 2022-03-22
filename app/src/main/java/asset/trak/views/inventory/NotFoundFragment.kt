@@ -45,7 +45,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
                     tvSelectAll.text=getString(R.string.deselect_all)
                     for (i in 0 until listBook.size)  {
                         var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-                        listBook[i].Location= locationName?.locationName?:""
+                        listBook[i].Location= locationName?.Name?:""
                         listBook[i].isSelected=true
                     }
                     notFoundAdapter = NotFoundAdapter(requireActivity(),requireActivity().supportFragmentManager ,listBook)
@@ -63,7 +63,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
                 tvSelectAll.text=getString(R.string.select_all)
                 for (i in 0 until listBook.size)  {
                     var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-                    listBook[i].Location= locationName?.locationName?:""
+                    listBook[i].Location= locationName?.Name?:""
 //                    var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).assetCatalogue.categoryId?:0)
 //                    listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
 //                    var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)
@@ -107,7 +107,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
 
             for (i in 0 until listBook.size)  {
                 var locationName= Application.roomDatabaseBuilder?.getBookDao()?.getLocationName(listBook.get(i).LocationId?:0)
-                listBook[i]?.Location= locationName?.locationName?:""
+                listBook[i]?.Location= locationName?.Name?:""
 //            var category= Application.roomDatabaseBuilder?.getBookDao()?.getCatgeoryName(listBook.get(i).Supplier?:0)
 //            listBook[i].assetCatalogue?.categoryName= category?.categoryName?:""
 //            var subcategory= Application.roomDatabaseBuilder?.getBookDao()?.getSubCatgeoryName(listBook.get(i).assetCatalogue.subCategoryId?:0)

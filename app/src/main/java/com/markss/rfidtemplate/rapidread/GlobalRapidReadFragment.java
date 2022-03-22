@@ -738,7 +738,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                 if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK )
                 {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-                    builder1.setMessage("Are you sure you want to abandon Scan.This will lost your Current Scan Data?.");
+                    builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
                     builder1.setCancelable(false);
 
                     builder1.setPositiveButton(

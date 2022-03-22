@@ -355,7 +355,7 @@
                 android:layout_height="150dp"
                 android:layout_weight="1"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#F48E8E"
+                app:cardBackgroundColor="#FA6AFDB3"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
@@ -394,13 +394,14 @@
                 android:layout_weight=".2"
                 android:layout_height="match_parent"/>
             <androidx.cardview.widget.CardView
+                android:id="@+id/deleteTables"
                 android:layout_margin="4dp"
                 app:cardElevation="2dp"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/config_btn"
-                android:visibility="invisible"
+                app:cardBackgroundColor="#FAFD3C59"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/margin_20">
 
                 <LinearLayout
@@ -415,7 +416,8 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/six_dp"
-                        android:src="@drawable/ic_configurations" />
+                        android:src="@android:drawable/ic_delete"
+                        app:tint="#FF000000" />
 
                     <TextView
                         android:id="@+id/txtTemp"
@@ -426,7 +428,7 @@
                         android:maxLines="1"
                         android:paddingTop="@dimen/ten_dp"
                         android:paddingBottom="@dimen/ten_dp"
-                        android:text="@string/configuration"
+                        android:text="Clear Data"
                         android:textColor="@color/black"
                         android:textSize="@dimen/diet_cta"
                         android:textStyle="bold" />
