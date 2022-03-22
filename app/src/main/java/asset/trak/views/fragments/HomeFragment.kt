@@ -1,6 +1,8 @@
 package asset.trak.views.fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
@@ -15,6 +17,7 @@ import asset.trak.database.entity.Inventorymaster
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
+import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.inventory.ViewInventoryFragment
 import asset.trak.views.module.InventoryViewModel
@@ -22,7 +25,6 @@ import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
-import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -68,7 +70,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             }
 
         }
-       Log.e("dhdgdhdh", "djd")
+        Log.e("dhdgdhdh", "djd")
     }
 
 
@@ -81,7 +83,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
         globalInventory.setOnClickListener {
             //global
-            val pendingInventory = Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+            val pendingInventory =
+                Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
 
             val cnt = Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
 //
@@ -93,7 +96,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             if (pendingInventory.isEmpty()) {
                 val inventoryMaster = Inventorymaster(
                     scanID = "A" + UUID.randomUUID().toString(),
-                    deviceId = sharedPreference?.getString(Constants.DeviceId,"A").toString() ,
+                    deviceId = sharedPreference?.getString(Constants.DeviceId, "A").toString(),
                     deviceIdCount = ((cnt ?: 0) + 1),
                     status = Constants.InventoryStatus.PENDING,
                     locationId = 0,
@@ -125,9 +128,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                R.id.content_frame
 //            )
 
-            replaceFragment(
-                requireActivity().supportFragmentManager, ViewInventoryFragment("location"),
-                R.id.content_frame
+
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    TestActivity::class.java
+                ).putExtra("type", "1"), 101
             )
         }
         configLin.setOnClickListener {
@@ -138,9 +144,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         linearSync.setOnClickListener {
-            replaceFragment(
-                requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation"),
-                R.id.content_frame
+
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    TestActivity::class.java
+                ).putExtra("type", "2"), 101
             )
         }
 
@@ -164,35 +173,36 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         var currSyncTime = sdf.format(Date())
-        var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+        var deviceId =
+            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
             .show()
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
-            if (it != null && it.statuscode == 200 && it.data != null)  {
-               it.data.let {
-                   if (!it.AssetMain.isNullOrEmpty()) {
-                       bookDao?.addAssetMain(it.AssetMain)
-                   }
+            if (it != null && it.statuscode == 200 && it.data != null) {
+                it.data.let {
+                    if (!it.AssetMain.isNullOrEmpty()) {
+                        bookDao?.addAssetMain(it.AssetMain)
+                    }
 
-                   if (!it.InventoryScan.isNullOrEmpty()) {
-                       bookDao?.addInventoryScan(it.InventoryScan)
-                   }
+                    if (!it.InventoryScan.isNullOrEmpty()) {
+                        bookDao?.addInventoryScan(it.InventoryScan)
+                    }
 
-                   if (!it.MasterLocation.isNullOrEmpty()) {
-                       bookDao?.addMasterLocation(it.MasterLocation)
-                   }
+                    if (!it.MasterLocation.isNullOrEmpty()) {
+                        bookDao?.addMasterLocation(it.MasterLocation)
+                    }
 
 
-                   if (!it.MasterVendor.isNullOrEmpty()) {
-                       bookDao?.addMasterVendor(it.MasterVendor)
-                   }
+                    if (!it.MasterVendor.isNullOrEmpty()) {
+                        bookDao?.addMasterVendor(it.MasterVendor)
+                    }
 
-                   if(!it.Inventorymaster.isNullOrEmpty()){
-                       bookDao?.addInventoryMaster(it.Inventorymaster)
-                   }
-               }
+                    if (!it.Inventorymaster.isNullOrEmpty()) {
+                        bookDao?.addInventoryMaster(it.Inventorymaster)
+                    }
+                }
                 Application.isFirstTime = false
 
 //
@@ -320,6 +330,28 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
             Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
                 .show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            val type = data?.getStringExtra("type")
+
+            val returnValue: String = data?.getStringExtra("barCode").toString()
+
+            if (type == "1") {
+                replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    ViewInventoryFragment("location", returnValue),
+                    R.id.content_frame
+                )
+            } else {
+                replaceFragment(
+                    requireActivity().supportFragmentManager, ViewInventoryFragment("rfidlocation",returnValue),
+                    R.id.content_frame
+                )
+            }
         }
     }
 }
