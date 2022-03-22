@@ -43,6 +43,7 @@ data class AssetMain(
     var LocationId:Int,
     var isSelected:Boolean,
     var inventorySyncFlag: Int=0,
+    val ModifiedOn: String?
 //    val CategoryID: String?,
 //    val ClassID: String?,
 //    val CreatedBy: String?,
