@@ -31,7 +31,15 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name="asset.trak.views.activity.TestActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.RFIDTemplate.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="com.rrtrack.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="asset.trak.views.activity.SplashAssetTrak"
             android:exported="true"
@@ -43,7 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.darryncampbell.datawedgekotlin.SCAN" />
+                <action android:name="com.rrtrack.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

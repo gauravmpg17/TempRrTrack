@@ -20,6 +20,8 @@ import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
+import asset.trak.scannercode.DWInterface
+import asset.trak.scannercode.DWReceiver
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.views.baseclasses.BaseFragment
