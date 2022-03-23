@@ -87,7 +87,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         globalInventory.setOnClickListener {
-            inventoryViewModel.isFirstTime=true
+           // inventoryViewModel.isFirstTime=true
+            getLastSync()
             //global
             val pendingInventory = Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
 
@@ -150,6 +151,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         linearSync.setOnClickListener {
+            inventoryViewModel.isFirstTime=true
             startActivityForResult(
                 Intent(
                     requireActivity(),
@@ -191,7 +193,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     roomDatabaseBuilder.getBookDao().deleteTblSubCategoryMasterTable()
                 }
                 job.await()
-                Toast.makeText(requireActivity(), "Delete All Tables", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(), "Data Cleared Successfully", Toast.LENGTH_LONG).show()
 
             }
 
