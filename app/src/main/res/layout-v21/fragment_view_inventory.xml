@@ -187,21 +187,20 @@
 
 
             <TextView
-                android:id="@+id/tvRegistered"
+                android:id="@+id/tvNewlyScane"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/twenty_five_dp"
                 android:fontFamily="@font/jio_type_medium"
-                android:text="Registered\nas per last scan"
-                android:textColor="@color/black"
+                android:text="Newly\nRegistered"     android:textColor="@color/black"
                 android:textSize="@dimen/text_size_13"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvRegisteredCount"
+                android:id="@+id/tvNewlyScanCount"
                 android:layout_width="0dp"
                 android:textAlignment="textEnd"
                 android:layout_height="wrap_content"
@@ -233,7 +232,7 @@
 
             <TextView
                 android:visibility="gone"
-                android:id="@+id/tvNewlyScane"
+                android:id="@+id/tvNewlyScane1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -247,7 +246,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvNewlyScanCount"
+                android:id="@+id/tvRegisteredCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

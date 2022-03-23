@@ -229,7 +229,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         }
 
 
-                        tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                       tvRegisteredCount.text = registeredAsPerLastScan.toString()
                         tvNewlyScanCount.text = newlyRegistered.toString()
 
                     }
