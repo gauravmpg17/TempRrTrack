@@ -192,6 +192,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         FancyToast.WARNING,
                         false
                     ).show()*/
+                    tvNewlyScanCount.text="0"
                 } else if (s.toString().length >= 4) {
                     barCodeName = s.toString().trim()
                     //here
@@ -200,7 +201,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         it.Name?.let {
                             tvLocation.text = it
                         }
-
                         currLocId = currMasterLocation!!.LocID
                         var lastScanId = ""
                         var lastRecodedDate = ""

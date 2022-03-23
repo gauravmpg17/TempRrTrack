@@ -146,7 +146,7 @@
                 android:id="@+id/timeValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2:30"
+                tools:text="2:30"
                 android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="@id/tvILastRecord12"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"

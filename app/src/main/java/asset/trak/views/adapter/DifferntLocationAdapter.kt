@@ -182,6 +182,13 @@ class DifferntLocationAdapter(
                                     ?.contains(constraint.toString().lowercase()) == true
                                 || mFilterData.Location?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.SampleType?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.SampleNature?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.Season?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+
                             )
 //                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
 //                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||

@@ -106,6 +106,8 @@ class ResultAdapter(
                         for (mFilterData in mFilteredList!!) {
                             if (mFilterData.Supplier?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.Location?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
                                 || mFilterData.SampleType?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true ||
                                 mFilterData.SampleNature?.lowercase()

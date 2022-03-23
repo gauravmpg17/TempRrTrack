@@ -138,11 +138,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.fragment_rr, container, false);
-        //
-
     }
 
     @Override
@@ -217,7 +213,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
             builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
             builder1.setCancelable(false);
-
             builder1.setPositiveButton(
                     "Yes",
                     new DialogInterface.OnClickListener() {
@@ -273,7 +268,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
         listInventoryList = new HashSet<>();
         scannedList = new HashSet<>();
-
         pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
         ReconcileAssetsFragment.Companion.setFragmentCallback(this);
 

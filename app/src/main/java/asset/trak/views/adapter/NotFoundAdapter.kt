@@ -107,7 +107,7 @@ class NotFoundAdapter(
             notifyDataSetChanged()
         }
 
-        holder.tvCategory.text = item.Supplier
+     //   holder.tvCategory.text = item.Supplier
         holder.tvSearch.visibility = View.VISIBLE
         holder.tvSearch.setOnClickListener {
 
@@ -167,15 +167,15 @@ class NotFoundAdapter(
 
                             if (mFilterData.Supplier?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.Location?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
+                                || mFilterData.SampleType?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.SampleNature?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                mFilterData.Season?.lowercase()
+                                    ?.contains(constraint.toString().lowercase()) == true
                             )
-//                                || mFilterData.Location?.lowercase()?.contains(constraint.toString().lowercase())==true ||
-//                                mFilterData.assetCatalogue.rfidTag?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.categoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.subCategoryName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.locationName?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.assetCatalogue.searchTags?.lowercase()?.contains(constraint.toString().lowercase())==true||
-//                                mFilterData.bookAttributes?.publisher?.lowercase()?.contains(constraint.toString().lowercase())==true)
-
                                 results.add(mFilterData)
                         }
                     }
