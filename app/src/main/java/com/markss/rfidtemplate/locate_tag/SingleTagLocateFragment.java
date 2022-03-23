@@ -209,7 +209,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
                 if (list.get(0).getSeason() != null) {
                     String dateTime = "";
-                    if (list.get(0).getScanDate().isEmpty()) {
+                    if (list.get(0).getScanDate()==null || list.get(0).getScanDate().isEmpty()) {
                         dateTime = "";
                     } else {
                         if (list.get(0).getLocation().isEmpty()) {

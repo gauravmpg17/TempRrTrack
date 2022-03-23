@@ -113,7 +113,12 @@ class ResultAdapter(
                                 mFilterData.SampleNature?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true ||
                                 mFilterData.Season?.lowercase()
-                                    ?.contains(constraint.toString().lowercase()) == true
+                                    ?.contains(constraint.toString().lowercase()) == true ||
+                                getFormattedDate(
+                                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                                    SimpleDateFormat("dd-MM-yyyy"), mFilterData.ScanDate.toString
+                                        ()
+                                ).lowercase()?.contains(constraint.toString().lowercase()) == true
                             )
 
                                 results.add(mFilterData)
