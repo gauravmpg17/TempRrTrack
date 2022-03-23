@@ -72,7 +72,6 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
 
         if (intent.getStringExtra("type") == "2") {
             tvTitle.text = "Map RFID Location"
-            scanBarText.text="Scan Location Barcode"
             tvInventoryReport.visibility = View.INVISIBLE
             tvILastRecord.visibility = View.INVISIBLE
             registered.visibility = View.INVISIBLE

@@ -24,6 +24,7 @@ import asset.trak.scannercode.DWInterface
 import asset.trak.scannercode.DWReceiver
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
+import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_ACTION
 import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_START_ACTIVITY
@@ -79,7 +80,29 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         }
 
         ivScanBar.setOnClickListener {
+//            if (etRfid.text.toString().isEmpty()) {
+//                startActivityForResult(
+//                    Intent(
+//                        requireActivity(),
+//                        TestActivity::class.java
+//                    ), 102
+//                )
+//            } else {
+//                etRfid.setText("")
+//            }
+
+            val type = if (isFromWhat.equals("rfidlocation")) {
+                "2"
+            } else {
+                "1"
+            }
             etRfid.setText("")
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    TestActivity::class.java
+                ).putExtra("type", type), 102
+            )
         }
 
 //        ObservableObject.instance.addObserver(this)
@@ -192,7 +215,9 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         FancyToast.WARNING,
                         false
                     ).show()*/
-                    tvNewlyScanCount.text="0"
+
+                    tvRegisteredCount.text = "0"
+                    tvNewlyScanCount.text = "0"
                 } else if (s.toString().length >= 4) {
                     barCodeName = s.toString().trim()
                     //here
@@ -201,6 +226,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         it.Name?.let {
                             tvLocation.text = it
                         }
+
                         currLocId = currMasterLocation!!.LocID
                         var lastScanId = ""
                         var lastRecodedDate = ""
@@ -229,7 +255,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         }
 
 
-                       tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                        tvRegisteredCount.text = registeredAsPerLastScan.toString()
                         tvNewlyScanCount.text = newlyRegistered.toString()
 
                     }
@@ -612,5 +638,13 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     override fun onDestroy() {
         super.onDestroy()
 //        requireActivity().unregisterReceiver(receiver)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 102 && resultCode == Activity.RESULT_OK) {
+            val returnValue: String = data?.getStringExtra("barCode").toString()
+            etRfid.setText(returnValue)
+        }
     }
 }
