@@ -116,6 +116,7 @@
                 android:fontFamily="@font/jio_type_light"
                 android:hint="@string/scan_location_barcode"
                 android:inputType="text"
+                android:imeOptions="actionDone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sixteen_sp" />
 
