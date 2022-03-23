@@ -209,6 +209,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             }
         });
 
+
         imgIgnore.setOnClickListener(v -> {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
             builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
@@ -918,6 +919,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     public void onResume() {
         super.onResume();
         Log.d("scantagcheck", "onResume: " + btnScan.getTag());
+        if(inventoryViewModel.isSearchClicked())
+        {
+            Log.d("tag12", " isSearchClicked");
+            btnScan.setTag("1");
+            llBottomParent.setVisibility(View.VISIBLE);
+            btnScan.setImageResource(android.R.drawable.ic_media_play);
+            addDataToScanTag();
+            showCountFound();
+        }
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
         this.getView().setOnKeyListener(new View.OnKeyListener() {
@@ -1012,5 +1022,12 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         btnScan.setImageResource(android.R.drawable.ic_media_play);
         addDataToScanTag();
         showCountFound();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("tag12", "onStop: ");
+        inventoryViewModel.setSearchClicked(false);
     }
 }

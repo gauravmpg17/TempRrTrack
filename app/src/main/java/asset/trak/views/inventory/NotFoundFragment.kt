@@ -5,10 +5,11 @@ import android.text.Html
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import asset.trak.database.daoModel.BookAndAssetData
+import androidx.fragment.app.viewModels
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.NotFoundAdapter
 import asset.trak.views.baseclasses.BaseFragment
+import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
@@ -22,6 +23,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
  {
 
     private lateinit var notFoundAdapter: NotFoundAdapter
+    private val inventoryViewModel:InventoryViewModel by viewModels()
 
      var listBook = ArrayList<AssetMain>()
      override fun onResume() {
@@ -78,6 +80,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                searchView.clearFocus()
                 return true
             }
 
@@ -85,8 +88,19 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
                 notFoundAdapter.filter.filter(newText)
                 return true
             }
-        })
+        }
+        )
+
+        searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+            if(!hasFocus)
+            {
+                inventoryViewModel.isSearchClicked=true
+            }
+
+        }
+
     }
+
 
 
     private fun setAdaptor() {
