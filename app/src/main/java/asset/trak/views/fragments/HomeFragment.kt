@@ -87,9 +87,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         globalInventory.setOnClickListener {
+            inventoryViewModel.isFirstTime=true
             //global
-            val pendingInventory =
-                Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+            val pendingInventory = Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
 
             val cnt = Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
 //
@@ -132,6 +132,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                requireActivity().supportFragmentManager, InventoryScanFragment(),
 //                R.id.content_frame
 //            )
+            inventoryViewModel.isFirstTime=true
 
 
             startActivityForResult(
@@ -149,7 +150,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
 
         linearSync.setOnClickListener {
-
             startActivityForResult(
                 Intent(
                     requireActivity(),
@@ -204,10 +204,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         var currSyncTime = sdf.format(Date())
-        var deviceId =
-            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
-        Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
-            .show()
+        var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+   //     Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 

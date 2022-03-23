@@ -19,9 +19,8 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
     private var mLastSyncData = MutableLiveData<LastSyncResponse>()
     private var mAssetSyncData = MutableLiveData<Int>()
     var listBookAttributes: ArrayList<BookAttributes> = ArrayList()
-
+    var isFirstTime:Boolean=false
     private val _barCode = MutableLiveData<String>()
-
     val barCode: LiveData<String> get() = _barCode
 
 

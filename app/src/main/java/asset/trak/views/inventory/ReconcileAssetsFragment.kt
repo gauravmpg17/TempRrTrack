@@ -280,7 +280,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         else
                         {
 
-                            val listRfids = ArrayList<ScanTag>()
+                         //   val listRfids = ArrayList<ScanTag>()
 
                        //     val scanList = bookDao.getScanTagAll()
                             val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
@@ -315,7 +315,6 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                         ).show()
                                         return@setOnClickListener
                                     }
-
                                     bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID,1,it.AssetRFID!!)
                                 }
                             }

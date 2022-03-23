@@ -825,6 +825,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         Log.d("tag111", "onClick: " + inventoryMaster.getScanID() + " " + locationData.getLocID());
                        // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
                         Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
+                        // assets which location was changed
+                        for (AssetMain n : pendingSyncAssetdata) {
+                            AssetData scanTag = new AssetData();
+                            scanTag.assetRFID = n.getAssetRFID();
+                            scanTag.locID = n.getLocationId();
+                            scanTag.assetID = n.getAssetID();
+                            assetSyncRequestDataModel.assetData.add(scanTag);
+                        }
+
                         for (AssetMain n : bookAndAssetData) {
                             AssetData scanTag = new AssetData();
                             // sending ID in rfidTag field, need to update attribute name accordingly in API
@@ -834,19 +843,12 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                             }
                             scanTag.assetID = n.getAssetID();
                             scanTag.locID = n.getLocationId();
-                            assetSyncRequestDataModel.assetData.add(scanTag);
-                        }
-
-                        // assets which location was changed
-                        for (AssetMain n : pendingSyncAssetdata) {
-                            AssetData scanTag = new AssetData();
-                            scanTag.assetRFID = n.getAssetRFID();
-                            scanTag.locID = n.getLocationId();
-                            scanTag.assetID = n.getAssetID();
                             if (ExtensionKt.isAvailableData(pendingSyncAssetdata,n.getAssetRFID(),n.getAssetID())) {
                                 assetSyncRequestDataModel.assetData.add(scanTag);
                             }
                         }
+
+
 
                         RequestBody body = RequestBody.create(new Gson().toJson(assetSyncRequestDataModel), MediaType.parse("application/json"));
 

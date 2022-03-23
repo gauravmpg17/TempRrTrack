@@ -72,7 +72,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         setAdaptor()
         listeners()
         //    Log.d("tag1212121", "onViewCreated: ${Application.isReconsiled}")
-        if (Application.isReconsiled) {
+        if (Application.isReconsiled || inventoryViewModel.isFirstTime) {
+            Log.d("ViewInventoryFragment", "onViewCreated: ")
             getLastSync()
         }
 
@@ -99,6 +100,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
     override fun onStop() {
         super.onStop()
+        inventoryViewModel.isFirstTime=false
       /*  dwInterface.sendCommandString(
             requireActivity().applicationContext,
             DWInterface.DATAWEDGE_SEND_SET_SOFT_SCAN,
@@ -108,15 +110,13 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
 
     private fun getLastSync() {
-        progressBar.visibility = View.VISIBLE
+        progressBar1.visibility = View.VISIBLE
         disableUserInteraction(requireActivity())
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         val currSyncTime = sdf.format(Date())
-        val deviceId =
-            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
-        Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT)
-            .show()
+        val deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+       // Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
 
@@ -150,7 +150,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             editor?.putString(Constants.LastSyncTs, currSyncTime)
             editor?.putString(Constants.DeviceId, deviceId)
             editor?.commit()
-            progressBar.visibility = View.INVISIBLE
+            progressBar1.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
             Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
                 .show()
