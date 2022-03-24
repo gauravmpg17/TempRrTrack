@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,10 +12,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.views.fragments.HomeFragment
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 
 @AndroidEntryPoint
 open class BaseFragment(@LayoutRes private val layout: Int) : Fragment(layout) {
@@ -68,6 +71,12 @@ open class BaseFragment(@LayoutRes private val layout: Int) : Fragment(layout) {
     }
 
     fun getBackToPreviousFragment() {
+        try {
+            decreaseRangeToThirty(300)
+        }
+        catch (e: Exception){
+            Log.d("decreaseRangeToThirty", e.message.toString())
+        }
         requireActivity().supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
         requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment())?.commit()
 

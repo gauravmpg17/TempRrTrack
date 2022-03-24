@@ -182,6 +182,7 @@ public class Application extends android.app.Application {
     private static boolean activityVisible;
     public static boolean isFirstTime=true;
     public static boolean isReconsiled=false;
+    public static  Boolean isAbandoned=false;
 
     public static boolean isActivityVisible() {
         return activityVisible;

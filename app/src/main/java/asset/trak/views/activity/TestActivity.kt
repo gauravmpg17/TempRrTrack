@@ -35,7 +35,7 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
     private var initialized = false;
     private var version65OrOver = false
 
-    private val viewModel: InventoryViewModel by viewModels()
+ //   private val viewModel: InventoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

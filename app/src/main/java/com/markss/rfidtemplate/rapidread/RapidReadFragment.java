@@ -2,6 +2,7 @@ package com.markss.rfidtemplate.rapidread;
 
 import static com.markss.rfidtemplate.application.Application.TAG_LIST_LOADED;
 import static com.markss.rfidtemplate.application.Application.bookDao;
+import static com.markss.rfidtemplate.application.Application.isAbandoned;
 import static com.markss.rfidtemplate.application.Application.isReconsiled;
 import static com.markss.rfidtemplate.application.Application.mIsMultiTagLocatingRunning;
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
@@ -218,6 +219,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                     "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            isAbandoned=true;
                             if (Application.isReconsiled) {
                                 try {
                                     if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
@@ -943,6 +945,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     try {
+                                        isAbandoned=true;
                                         if (Application.isReconsiled) {
                                             dialog.cancel();
                                             if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
@@ -953,6 +956,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                                                 //call sync api
                                             }
                                         } else {
+
                                             dialog.cancel();
                                             if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
                                                 Inventorymaster lastItem = pendingInventoryScan.get(0);

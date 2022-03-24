@@ -287,6 +287,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_goneMarginBottom="@dimen/twenty_dp" />
 
+
         <ProgressBar
             android:id="@+id/progressBar1"
             style="?android:attr/progressBarStyle"

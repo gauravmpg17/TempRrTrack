@@ -130,7 +130,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             var differntLocationCount =0
             val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = 0
-            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+            val notRegistered = "Not\nRegister ($countofNotRegistered)"
             tablayout.addTab(tablayout.newTab().setText(notFound));
 
 
@@ -149,7 +149,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
             val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+            val notRegistered = "Not\nRegister ($countofNotRegistered)"
             tablayout.addTab(tablayout.newTab().setText(notFound));
             if (!whichInventory.equals("global")) {
                 tablayout.addTab(tablayout.newTab().setText(differentLocation))
@@ -457,7 +457,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         if(inventorymaster==null)
                         {
                             var countofNotRegistered =0
-                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+                            val notRegistered = "Not\nRegister ($countofNotRegistered)"
                             tablayout.getTabAt(2)?.text = notRegistered
 
                         }
@@ -465,7 +465,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         {
                             var countofNotRegistered =
                                 bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+                            val notRegistered = "Not\nRegister ($countofNotRegistered)"
                             tablayout.getTabAt(2)?.text = notRegistered
                         }
                     }

@@ -7,6 +7,8 @@ import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
 
+import static asset.trak.utils.ExtensionKt.decreaseRangeToThirty;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -453,6 +455,17 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         super.onDetach();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            decreaseRangeToThirty(300);
+        }
+        catch (Exception e){
+            Log.d("decreaseRangeToThirty", e.getMessage());
+        }
+    }
+
     /**
      * method to reset tags info on the screen before starting inventory operation
      */
@@ -600,15 +613,15 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
 
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
-//                listInventoryList.add("000000000000000000001271");
-//                listInventoryList.add("E2801190200077BCB26B031B");
-//                listInventoryList.add("E2801190200068DDB25F0388");
-//                listInventoryList.add("E2801190200077BCB26B031A");
-//
-//                scannedList.add("000000000000000000001271");
-//                scannedList.add("E2801190200077BCB26B031B");
-//                scannedList.add("E2801190200068DDB25F0308");
-//                scannedList.add("E2801190200077BCB26B031A");
+                listInventoryList.add("000000000000000000001271");
+                listInventoryList.add("E2801190200077BCB26B031B");
+                listInventoryList.add("E2801190200068DDB25F0388");
+                listInventoryList.add("E2801190200077BCB26B031A");
+
+                scannedList.add("000000000000000000001271");
+                scannedList.add("E2801190200077BCB26B031B");
+                scannedList.add("E2801190200068DDB25F0308");
+                scannedList.add("E2801190200077BCB26B031A");
 ////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);

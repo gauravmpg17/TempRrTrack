@@ -5,23 +5,17 @@ import android.text.Html
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
-import androidx.navigation.Navigator
-import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.modelsrrtrack.AssetMain
-import asset.trak.utils.Constants
+import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.views.adapter.OnResultClickListener
 import asset.trak.views.adapter.ResultAdapter
 import asset.trak.views.baseclasses.BaseFragment
-import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.locate_tag.LocateOperationsFragment
-import com.markss.rfidtemplate.locate_tag.SingleTagLocateFragment
 import com.markss.rfidtemplate.rfid.RFIDController
 import kotlinx.android.synthetic.main.fragment_my_library_search.*
-
 
 
 class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search),
@@ -55,7 +49,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     }
 
     override fun onGoalClick(bookAttributes: AssetMain) {
-
         Application.locateTag = bookAttributes.AssetRFID
         RFIDController.accessControlTag =bookAttributes.AssetRFID
         Application.PreFilterTag =bookAttributes.AssetRFID
@@ -65,6 +58,15 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
         replaceFragment(requireActivity().supportFragmentManager, LocateOperationsFragment(), R.id.content_frame)
     }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        try {
+//          //  decreaseRangeToThirty(300)
+//        } catch (e: Exception) {
+//            Log.d("decreaseRangeToThirty", e.message!!)
+//        }
+//    }
 
     private fun setAdaptor() {
         listBook.clear()

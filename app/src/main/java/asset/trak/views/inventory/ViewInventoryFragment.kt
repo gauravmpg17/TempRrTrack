@@ -4,39 +4,28 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
-import asset.trak.scannercode.DWInterface
-import asset.trak.scannercode.DWReceiver
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
+import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
-import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_ACTION
-import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_INTENT_START_ACTIVITY
-import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_NAME
 import asset.trak.views.module.InventoryViewModel
-import cafe.adriel.kbus.KBus
-import cafe.adriel.kbus.KBus.post
-import com.darryncampbell.datawedgekotlin.ObservableObject
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
+import com.markss.rfidtemplate.application.Application.isAbandoned
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
-import com.markss.rfidtemplate.home.MainActivity
 import com.markss.rfidtemplate.rapidread.MapRFIDLocationFragment
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.shashank.sony.fancytoastlib.FancyToast
@@ -57,6 +46,12 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var deviceId = "A"
 
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +63,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         initialisation()
         setAdaptor()
         listeners()
-        if (Application.isReconsiled || inventoryViewModel.isFirstTime) {
+        if ( inventoryViewModel.isFirstTime || (Application.isReconsiled && !isAbandoned)) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
             getLastSync()
         }
@@ -148,7 +143,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         listOfLocations.clear()
         listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
         if (isFromWhat.equals("rfidlocation")) {
-            tvTitle.text = "Map RFID Location"
+            tvTitle.text = "Put Away RFID Location"
             tvInventoryReport.visibility = View.INVISIBLE
             tvILastRecord.visibility = View.INVISIBLE
             registered.visibility = View.INVISIBLE
@@ -194,16 +189,14 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                         currLocId,
                                         lastScanId
                                     )
-                                newlyRegistered = roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+                                //    newlyRegistered = roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
 
                             } else {
                                 registeredAsPerLastScan = 0
-                                newlyRegistered =
-                                    roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
                             }
+                            newlyRegistered =
+                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
                         }
-
-
                         tvRegisteredCount.text = registeredAsPerLastScan.toString()
                         tvNewlyScanCount.text = newlyRegistered.toString()
 
@@ -239,6 +232,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         }
 
         buttonscan.setOnClickListener {
+
+
             if (barCodeName.isEmpty()) {
                 tvLocation.text = ""
                 FancyToast.makeText(
@@ -250,6 +245,15 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 ).show()
             } else if (barCodeName.isNotEmpty()) {
                 //here
+                try {
+                    if (isFromWhat.equals("rfidlocation")) {
+                        decreaseRangeToThirty(30)
+                    }
+                } catch (e: Exception) {
+                    Log.d("decreaseRangeToThirty", e.message.toString())
+                }
+
+                //  connectRFIDReader()
                 currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
                 currMasterLocation?.let {
                     it.Name?.let {
@@ -363,4 +367,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             etRfid.setText(returnValue)
         }
     }
+
+
 }

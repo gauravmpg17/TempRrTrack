@@ -28,7 +28,6 @@ class BookRepository @Inject constructor(
 
     private lateinit var mbookResponse: List<BookAttributes>
     var mTakePickAction = MutableLiveData<String>()
-
     var mLastSync = MutableLiveData<LastSyncResponse>()
     var mAssetSync = MutableLiveData<Int>()
     private val mRetrofitException = MutableLiveData<Boolean>()

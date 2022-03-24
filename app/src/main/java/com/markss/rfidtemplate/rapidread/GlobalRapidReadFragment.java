@@ -6,6 +6,8 @@ import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
 
+import static asset.trak.utils.ExtensionKt.decreaseRangeToThirty;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -956,4 +958,15 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
         addDataToScanTag();
         showCountFound();
     }
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        try {
+//            decreaseRangeToThirty(300);
+//        }
+//        catch (Exception e){
+//            Log.d("decreaseRangeToThirty", e.getMessage());
+//        }
+//    }
 }
