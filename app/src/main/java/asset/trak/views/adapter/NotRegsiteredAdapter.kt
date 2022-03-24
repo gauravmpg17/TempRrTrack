@@ -87,7 +87,6 @@ class NotRegsiteredAdapter(private val context: Context,private val fragment: Fr
             Application.locateTag = item.rfidTag
 
             Application.comefrom ="hide"
-            // holder.tvSearch.visibility=View.GONE
 
             replaceFragment(
                 fragment, LocateOperationsFragment(),

@@ -87,19 +87,9 @@ class NotFoundAdapter(
                     ()
             )
         }
-//       holder.tvAuthor.text = item.bookAttributes?.author
-//        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
-//        {
-//            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
-//        }
-//        else
-//        {
-//            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
-//        }
-//
-        holder.clMain.setBackgroundResource(if (item.isSelected) /*R.color.lightt_blue*/ R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
-//        if (item.isSelected) holder.ivCheck.visibility=View.VISIBLE
-//        else holder.ivCheck.visibility=View.GONE
+
+        holder.clMain.setBackgroundResource(if (item.isSelected) R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
+
 
 
         holder.clMain.setOnClickListener {
@@ -107,7 +97,6 @@ class NotFoundAdapter(
             notifyDataSetChanged()
         }
 
-     //   holder.tvCategory.text = item.Supplier
         holder.tvSearch.visibility = View.VISIBLE
         holder.tvSearch.setOnClickListener {
 
@@ -115,7 +104,6 @@ class NotFoundAdapter(
             RFIDController.accessControlTag = item.AssetRFID
             Application.PreFilterTag = item.AssetRFID
             Application.comefrom = "show"
-            // holder.tvSearch.visibility=View.GONE
 
             replaceFragment(
                 fragment, LocateOperationsFragment(),
@@ -123,26 +111,7 @@ class NotFoundAdapter(
             )
 
         }
-
-//        if(item.assetCatalogue.imagePathFile?.isNotEmpty()==true)
-//        {
-        //     holder.ivBook.visibility=View.VISIBLE
         holder.tv.visibility = View.GONE
-//            Glide.with(context)
-//                .load(File(item.imagePathFile.toString()))
-//                .placeholder(R.color.light_gray)
-//                .fitCenter()
-//                .error(R.drawable.ic_not_found_error)
-//                .into(holder.ivBook)
-        //   }
-//        else{
-//            holder.ivBook.visibility=View.GONE
-//            holder.tv.visibility=View.VISIBLE
-//            holder.tv.text = item.assetCatalogue?.assetName?.substring(0,2)?.toUpperCase()
-//
-//        }
-
-
     }
 
     override fun getItemCount(): Int {
@@ -175,8 +144,7 @@ class NotFoundAdapter(
                                     ?.contains(constraint.toString().lowercase()) == true ||
                                 mFilterData.Season?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true
-                                ||
-                                getFormattedDate(
+                                || getFormattedDate(
                                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
                                     SimpleDateFormat("dd-MM-yyyy"), mFilterData.ScanDate.toString
                                         ()

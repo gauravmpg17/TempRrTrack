@@ -76,8 +76,7 @@ class ResultAdapter(
                 " | "
             } + getFormattedDate(
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-                SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString
-                    ()
+                SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString()
             )
         }
 

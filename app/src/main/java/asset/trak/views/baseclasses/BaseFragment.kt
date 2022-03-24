@@ -68,7 +68,6 @@ open class BaseFragment(@LayoutRes private val layout: Int) : Fragment(layout) {
     }
 
     fun getBackToPreviousFragment() {
-     //   requireActivity().supportFragmentManager.popBackStackImmediate()
         requireActivity().supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
         requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment())?.commit()
 

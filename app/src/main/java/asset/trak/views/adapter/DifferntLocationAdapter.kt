@@ -85,25 +85,6 @@ class DifferntLocationAdapter(
                     ()
             )
         }
-//        if( item.bookAttributes?.author.isNullOrEmpty())
-//        {
-//            holder.tvAuthor.text = "-"
-//        }
-//        else
-//        {
-//            holder.tvAuthor.text = item.bookAttributes?.author
-//        }
-//
-//        holder.tvCategory.text = item.assetCatalogue.categoryName
-//
-//        if(item.assetCatalogue?.locationName.equals("") || item.assetCatalogue?.locationName==null)
-//        {
-//            holder.tvEdition.text = "${context.getString(R.string.edition)}: -"
-//        }
-//        else
-//        {
-//            holder.tvEdition.text = "${context.getString(R.string.edition)} ${item.assetCatalogue.locationName}"
-//        }
 
         holder.tvSearch.visibility = View.VISIBLE
         holder.tvSearch.setOnClickListener {
@@ -119,35 +100,7 @@ class DifferntLocationAdapter(
             )
 
         }
-
-
-//        if(item.assetCatalogue.imagePathFile?.isNotEmpty()==true)
-//        {
-        //    holder.ivBook.visibility=View.VISIBLE
         holder.tv.visibility = View.GONE
-//            Glide.with(context)
-//                .load(File(item.assetCatalogue.imagePathFile.toString()))
-//                .placeholder(R.color.light_gray)
-//                .fitCenter()
-//                .error(R.drawable.ic_not_found_error)
-//                .into(holder.ivBook)
-//        }
-//        else{
-//            holder.ivBook.visibility=View.GONE
-//            holder.tv.visibility=View.VISIBLE
-//            holder.tv.text = item.assetCatalogue?.assetName?.substring(0,2)?.toUpperCase()
-//
-//        }
-
-
-//        if (item.assetCatalogue.isSelected) {
-//            holder.ivCheck.visibility = View.VISIBLE
-//
-//        }
-//        else {
-//            holder.ivCheck.visibility = View.GONE
-//
-//        }
 
         holder.clMain.setBackgroundResource(if (item.isSelected) R.drawable.rectangle_background_light_blue else R.drawable.rectangle_background_border)
         holder.clMain.setOnClickListener {
@@ -158,7 +111,7 @@ class DifferntLocationAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (items == null) 0 else items.size
+        return items.size
 
     }
 

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import asset.trak.scannercode.DWInterface
@@ -17,7 +16,6 @@ import asset.trak.views.fragments.InventoryScanFragment.Companion.PROFILE_NAME
 import asset.trak.views.module.InventoryViewModel
 import com.bumptech.glide.Glide
 import com.darryncampbell.datawedgekotlin.ObservableObject
-import com.darryncampbell.datawedgekotlin.Scan
 import com.markss.rfidtemplate.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_test.*
@@ -26,7 +24,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -56,15 +53,8 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
             delay(1000)
             barCodeValue.requestFocus()
         }
-//        buttonScan.setOnTouchListener(this)
 
         imageView.setOnClickListener {
-//            onBackPressed()
-            /* val resultIntent = Intent()
-             resultIntent.putExtra("barCode", "1000024")
-             resultIntent.putExtra("type",intent.getStringExtra("type"))
-             setResult(RESULT_OK, resultIntent)
-             finish()*/
 //            val intent = Intent()
 //            intent.putExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING, "1000024")
 //            onNewIntent(intent)
@@ -76,12 +66,6 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
             tvILastRecord.visibility = View.INVISIBLE
             registered.visibility = View.INVISIBLE
         }
-
-        /*viewModel.barCode.observe(this) {
-            if (!it.isNullOrEmpty()) {
-
-            }
-        }*/
 
         barCodeValue.doOnTextChanged { text, start, before, count ->
             if (text.toString().isNotEmpty()) {
@@ -177,17 +161,9 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        //  DataWedge intents received here
         if (intent.hasExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)) {
-            //  Handle scan intent received from DataWedge, add it to the list of scans
             var scanData = intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING)
-//            var symbology = intent.getStringExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_LABEL_TYPE)
-//            var date = Calendar.getInstance().getTime()
-//            var df = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-//            var dateTimeString = df.format(date)
             barCodeValue.setText(scanData)
-//            viewModel.updateBarCode(scanData.toString())
-//            Toast.makeText(this, scanData.toString(), Toast.LENGTH_LONG).show()
         }
     }
 
