@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.AssetCatalogue
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.DifferntLocationAdapter
+import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
@@ -18,11 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_different_loaction.*
 import kotlinx.android.synthetic.main.fragment_different_loaction.rvNotFound
 import kotlinx.android.synthetic.main.fragment_different_loaction.searchView
+import kotlinx.android.synthetic.main.fragment_different_loaction.tvSelectAll
+import kotlinx.android.synthetic.main.fragment_not_found.*
 
 @AndroidEntryPoint
 class DifferentLoactionFragment(val locationId: Int) :
     Fragment(R.layout.fragment_different_loaction) {
     private lateinit var notFoundAdapter: DifferntLocationAdapter
+    private val inventoryViewModel: InventoryViewModel by activityViewModels()
 
     var listBook = ArrayList<AssetMain>()
     override fun onResume() {
@@ -89,6 +94,14 @@ class DifferentLoactionFragment(val locationId: Int) :
                 return true
             }
         })
+
+        searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+            if(!hasFocus)
+            {
+                inventoryViewModel.isSearchClicked=true
+            }
+
+        }
     }
 
     private fun setAdaptor() {

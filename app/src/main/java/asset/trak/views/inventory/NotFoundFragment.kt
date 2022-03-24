@@ -5,6 +5,7 @@ import android.text.Html
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.views.adapter.NotFoundAdapter
@@ -23,7 +24,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
  {
 
     private lateinit var notFoundAdapter: NotFoundAdapter
-    private val inventoryViewModel:InventoryViewModel by viewModels()
+    private val inventoryViewModel:InventoryViewModel by activityViewModels()
 
      var listBook = ArrayList<AssetMain>()
      override fun onResume() {

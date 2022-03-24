@@ -3,6 +3,7 @@ package asset.trak.views.inventory
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.activityViewModels
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.ScanTag
@@ -10,6 +11,7 @@ import asset.trak.database.entity.Selection
 import asset.trak.views.adapter.NotFoundAdapter
 import asset.trak.views.adapter.NotRegsiteredAdapter
 import asset.trak.views.baseclasses.BaseFragment
+import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
@@ -18,12 +20,17 @@ import com.markss.rfidtemplate.common.ResponseHandlerInterfaces
 import com.markss.rfidtemplate.inventory.InventoryListItem
 import com.zebra.rfid.api3.RFIDResults
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_different_loaction.*
 import kotlinx.android.synthetic.main.fragment_not_registered.*
+import kotlinx.android.synthetic.main.fragment_not_registered.searchView
+import kotlinx.android.synthetic.main.fragment_not_registered.tvSelectAll
 
 @AndroidEntryPoint
 class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragment_not_registered) {
     private lateinit var notFoundAdapter: NotRegsiteredAdapter
      var rfidTags = ArrayList<ScanTag>()
+    private val inventoryViewModel: InventoryViewModel by activityViewModels()
+
     override fun onResume() {
         super.onResume()
         setAdaptor()
@@ -76,6 +83,13 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
                 return true
             }
         })
+        searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+            if(!hasFocus)
+            {
+                inventoryViewModel.isSearchClicked=true
+            }
+
+        }
     }
 
     private fun setAdaptor() {
