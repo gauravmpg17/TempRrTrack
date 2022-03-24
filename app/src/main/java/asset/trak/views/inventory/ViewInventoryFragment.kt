@@ -194,8 +194,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                         currLocId,
                                         lastScanId
                                     )
-                                newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                    .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+                                newlyRegistered = roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
 
                             } else {
                                 registeredAsPerLastScan = 0
