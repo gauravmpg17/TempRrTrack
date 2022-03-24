@@ -203,11 +203,28 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                 } else {
                     tvAuthor.setText(list.get(0).getSampleType());
                 }
-                if (list.get(0).getSampleNature() != null) {
-                    tvTag.setText(list.get(0).getSampleNature() + " | " + list.get(0).getSeason());
+                String sampleNature="";
+                String season="";
+
+                if(list.get(0).getSampleNature()==null && list.get(0).getSeason()==null)
+                {
+                    tvCategory.setText("-");
+                }
+                else{
+                    if(list.get(0).getSampleNature() == null){
+                        sampleNature="";
+                    }
+                    if (list.get(0).getSampleNature() != null) {
+                        sampleNature=list.get(0).getSampleNature() + " | ";
+                    }
+                    if(list.get(0).getSeason()!=null)
+                    {
+                        season=list.get(0).getSeason();
+                    }
+                    tvCategory.setText(sampleNature+""+season);
                 }
 
-                if (list.get(0).getSeason() != null) {
+
                     String dateTime = "";
                     if (list.get(0).getScanDate()==null || list.get(0).getScanDate().isEmpty()) {
                         dateTime = "";
@@ -218,9 +235,10 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                             dateTime += " | ";
                         }
                         dateTime += ExtensionKt.getFormattedDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), new SimpleDateFormat("dd-MM-yyyy"), list.get(0).getScanDate());
+
                     }
-                    tvCategory.setText(list.get(0).getLocation() + dateTime);
-                }
+                    tvTag.setText(list.get(0).getLocation() + dateTime);
+
 
 
                 //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
