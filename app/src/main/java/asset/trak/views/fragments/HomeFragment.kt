@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         globalInventory.setOnClickListener {
-
+            getLastSync()
 //            try {
 //              //  decreaseRangeToThirty(30)
 //            } catch (e: Exception) {
@@ -101,7 +101,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //            }
             // connectRFIDReader()
             // inventoryViewModel.isFirstTime=true
-            getLastSync()
             //global
             val pendingInventory =
                 Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
@@ -138,8 +137,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                R.id.content_frame
 //            )
             inventoryViewModel.isFirstTime = true
-
-
             startActivityForResult(
                 Intent(
                     requireActivity(),

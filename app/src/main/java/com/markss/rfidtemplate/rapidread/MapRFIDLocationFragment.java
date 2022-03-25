@@ -2,6 +2,7 @@ package com.markss.rfidtemplate.rapidread;
 
 import static com.markss.rfidtemplate.application.Application.TAG_LIST_LOADED;
 import static com.markss.rfidtemplate.application.Application.bookDao;
+import static com.markss.rfidtemplate.application.Application.isAbandoned;
 import static com.markss.rfidtemplate.application.Application.isReconsiled;
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
@@ -204,6 +205,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                     "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            isAbandoned=true;
                             if (Application.isReconsiled) {
                                 try {
                                     if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {

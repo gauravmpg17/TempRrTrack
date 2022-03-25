@@ -11,7 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
@@ -36,9 +36,7 @@ import java.util.*
 
 class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = null) :
     BaseFragment(R.layout.fragment_view_inventory) {
-
     private var barCodeName: String = ""
-
     private var listOfLocations = ArrayList<LocationMaster>()
     private var currLocId = 0
     private var currMasterLocation: MasterLocation? = null
@@ -225,8 +223,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         }
 
         buttonscan.setOnClickListener {
-
-
             if (barCodeName.isEmpty()) {
                 tvLocation.text = ""
                 FancyToast.makeText(
@@ -336,14 +332,30 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                 R.id.content_frame
                             )
                         } else if (isFromWhat.equals("rfidlocation")) {
-                            tvTitle.text = "Put Away Inventory"
-                            tvInventoryReport.visibility = View.INVISIBLE
-                            tvILastRecord.visibility = View.INVISIBLE
-                            registered.visibility = View.INVISIBLE
-                            replaceFragment(
-                                requireActivity().supportFragmentManager, mapRFIDLocationFragment,
-                                R.id.content_frame
-                            )
+                            if(inventoryViewModel.isFirstTime)
+                            {
+                                val builder1 = AlertDialog.Builder(requireActivity())
+                                builder1.setMessage("RFID Reader Scan Range changed to 30m.Please Scan Closely")
+                                builder1.setCancelable(false)
+                                builder1.setPositiveButton(
+                                    "Ok"
+                                ) { dialog, id ->
+                                    dialog.cancel()
+                                    replaceFragment(
+                                        requireActivity().supportFragmentManager, mapRFIDLocationFragment,
+                                        R.id.content_frame
+                                    )
+                                }
+                                val alert11 = builder1.create()
+                                alert11.show()
+                            }
+                            else
+                            {
+                                replaceFragment(
+                                    requireActivity().supportFragmentManager, mapRFIDLocationFragment,
+                                    R.id.content_frame
+                                )
+                            }
                         }
                     }
                 }
