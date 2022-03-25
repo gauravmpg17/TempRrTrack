@@ -245,40 +245,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 //  connectRFIDReader()
                 currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
                 currMasterLocation?.let {
-                    it.Name?.let {
-                        tvLocation.text = it
-                    }
-
-                    currLocId = currMasterLocation!!.LocID
-                    var lastScanId = ""
-                    var lastRecodedDate = ""
-                    var registeredAsPerLastScan = 0
-                    var newlyRegistered = 0
-                    if (currLocId != 0) {
-                        val invData = roomDatabaseBuilder.getBookDao()
-                            .getLastRecordedInventoryOfLocation(currLocId)
-                        if (invData.count() > 0) {
-                            lastRecodedDate = invData.get(0).scanOn.toString()
-                            lastScanId = invData.get(0).scanID
-                            registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                    currLocId,
-                                    lastScanId
-                                )
-                            newlyRegistered = roomDatabaseBuilder.getBookDao()
-                                .getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
-
-                        } else {
-                            registeredAsPerLastScan = 0
-                            newlyRegistered =
-                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                        }
-                    }
-
-
-                    tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                    tvNewlyScanCount.text = newlyRegistered.toString()
-
                     //  requireActivity().hideKeyboard(it)
                     if (currMasterLocation == null) {
                         FancyToast.makeText(
@@ -292,9 +258,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         currLocId = currMasterLocation!!.LocID
                         val pendingInventory =
                             roomDatabaseBuilder.getBookDao().getPendingInventoryScan(currLocId)
-
                         val cnt = roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
-
                         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
                         val cal = Calendar.getInstance()
                         val dateFormat = sdf.format(cal.time)
