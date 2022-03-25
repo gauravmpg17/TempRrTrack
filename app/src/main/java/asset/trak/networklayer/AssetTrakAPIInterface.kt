@@ -19,6 +19,6 @@ interface AssetTrakAPIInterface {
     suspend fun posAssetSync(@Body body:RequestBody): Response<ResponseBody>
 
     //https://resqqa.ril.com/RFIDService/AssetTracker/api/assetsync/rfidUpdate
-    @PUT("api/assetsync/rfidUpdate")
+    @PATCH("api/assetsync/rfidUpdate")
     suspend fun updateMapLocation(@Body body:RequestBody): Response<ResponseBody>
 }
