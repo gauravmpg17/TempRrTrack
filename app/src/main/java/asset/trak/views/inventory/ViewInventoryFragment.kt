@@ -81,6 +81,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     override fun onStop() {
         super.onStop()
         inventoryViewModel.isFirstTime = false
+        isAbandoned=false
     }
 
 
@@ -359,6 +360,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             etRfid.setText(returnValue)
         }
     }
+
+
 
 
 }
