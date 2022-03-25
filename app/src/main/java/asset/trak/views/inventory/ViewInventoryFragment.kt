@@ -46,12 +46,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var deviceId = "A"
 
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,7 +57,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         initialisation()
         setAdaptor()
         listeners()
-        if ( inventoryViewModel.isFirstTime || (Application.isReconsiled && !isAbandoned)) {
+        if (inventoryViewModel.isFirstTime || (Application.isReconsiled && !isAbandoned)) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
             getLastSync()
         }
@@ -101,7 +95,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         // Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
 
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
-
             if (it != null && it.statuscode == 200 && it.data != null) {
                 it.data.let {
                     if (!it.AssetMain.isNullOrEmpty()) {
@@ -134,8 +127,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             editor?.commit()
             progressBar1.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
-            Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
-                .show()
+           // Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -203,7 +195,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     }
                 } else {
                     tvLocation.text = ""
-                  //  Log.d("tag1111", "afterTextChanged: Length ${s.length}")
+                    //  Log.d("tag1111", "afterTextChanged: Length ${s.length}")
                 }
             }
 
