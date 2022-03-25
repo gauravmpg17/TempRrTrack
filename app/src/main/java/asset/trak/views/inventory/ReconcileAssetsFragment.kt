@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
@@ -40,25 +41,30 @@ import kotlinx.android.synthetic.main.fragment_reconcile_assets.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets),  UpdateItemInterface,
+
+
+class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets),
+    UpdateItemInterface,
     ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler,
     ResponseHandlerInterfaces.ResponseStatusHandler {
-    private var whichInventory: String=""
+    private var whichInventory: String = ""
     private var inventoryMasterList: List<Inventorymaster> = ArrayList()
-    private var loginErrorDialog: Dialog?=null
-    private var inventorymaster: Inventorymaster?=null
+    private var loginErrorDialog: Dialog? = null
+    private var inventorymaster: Inventorymaster? = null
     private lateinit var updateLocationAdapter: UpdateLocationAdapter
     var listBook = ArrayList<BookAndAssetData>()
     private lateinit var adapter: ReconcileAssetsPagerAdapter
     var locationId = 0
     private var listOfLocations = ArrayList<LocationMaster>()
-    companion object{
-        var selectedPosition12:Int=0
+
+    companion object {
+        var selectedPosition12: Int = 0
         lateinit var fragmentCallback1: RapidReadCallback
         fun setFragmentCallback(callback1: RapidReadCallback) {
             fragmentCallback1 = callback1
         }
     }
+
     val listInventoryList = HashSet<String>()
     override fun handleTagResponse(inventoryListItem: InventoryListItem?, isAddedToList: Boolean) {
         listInventoryList.clear()
@@ -107,6 +113,42 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
     }
 
+    private fun notFoundTab(textValue: String) {
+        val tabOne = LayoutInflater.from(requireActivity())
+            .inflate(R.layout.custom_tab, null) as TextView
+        tabOne.text = textValue
+        if (tablayout.getTabAt(0)?.customView==null) {
+            tablayout.getTabAt(0)?.customView = tabOne
+        }else{
+            tablayout.getTabAt(0)?.customView = null
+            tablayout.getTabAt(0)?.customView = tabOne
+        }
+    }
+
+    private fun differentLocationTab(textValue: String) {
+        val tabOne = LayoutInflater.from(requireActivity())
+            .inflate(R.layout.custom_tab, null) as TextView
+        tabOne.text = textValue
+        if (tablayout.getTabAt(1)?.customView==null) {
+            tablayout.getTabAt(1)?.customView = tabOne
+        }else{
+            tablayout.getTabAt(1)?.customView = null
+            tablayout.getTabAt(1)?.customView = tabOne
+        }
+    }
+
+    private fun notRegisterTab(textValue: String) {
+        val tabOne = LayoutInflater.from(requireActivity())
+            .inflate(R.layout.custom_tab, null) as TextView
+        tabOne.text = textValue
+        if (tablayout.getTabAt(2)?.customView==null) {
+            tablayout.getTabAt(2)?.customView = tabOne
+        }else{
+            tablayout.getTabAt(2)?.customView = null
+            tablayout.getTabAt(2)?.customView = tabOne
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -115,46 +157,49 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             getBackToPreviousFragment()
         }
         locationId = arguments?.getInt("locationId") ?: 0
-        whichInventory=arguments?.getString("INVENTORY_NAME") ?: ""
+        whichInventory = arguments?.getString("INVENTORY_NAME") ?: ""
         val locationData = arguments?.getParcelable<MasterLocation>("LocationData")
 
         tvFloorTitle.text = locationData?.Name
         var locationRegsiterCount = bookDao.getCountLocationId(locationId)
         val totalcount = "Total Registered Assets : $locationRegsiterCount"
         tvTotalRegisteredAssets.text = totalcount
-         inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
-        if(inventoryMasterList.isEmpty() || inventoryMasterList==null)
-        {
-            var notFoundCount =0
+        inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
+        if (inventoryMasterList.isEmpty() || inventoryMasterList == null) {
+            var notFoundCount = 0
             val notFound = "Not\nFound ($notFoundCount)"
-            var differntLocationCount =0
+            var differntLocationCount = 0
             val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = 0
-            val notRegistered = "Not\nRegister ($countofNotRegistered)"
-            tablayout.addTab(tablayout.newTab().setText(notFound));
+            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 
+//            tablayout.addTab(tablayout.newTab().setText(notFound));
+            notFoundTab(notFound)
 
             // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
             if (!whichInventory.equals("global")) {
-                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+//                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+                differentLocationTab(differentLocation)
             }
-            tablayout.addTab(tablayout.newTab().setText(notRegistered))
-        }
-        else
-        {
-             inventorymaster = inventoryMasterList.get(0)
-            var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
+//            tablayout.addTab(tablayout.newTab().setText(notRegistered))
+            notRegisterTab(notRegistered)
+        } else {
+            inventorymaster = inventoryMasterList.get(0)
+            var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, inventorymaster!!.scanID)
             val notFound = "Not\nFound ($notFoundCount)"
             var differntLocationCount =
                 bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
             val differentLocation = "Different\nLocation ($differntLocationCount)"
             var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-            val notRegistered = "Not\nRegister ($countofNotRegistered)"
-            tablayout.addTab(tablayout.newTab().setText(notFound));
+            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+//            tablayout.addTab(tablayout.newTab().setText(notFound));
+            notFoundTab(notFound)
             if (!whichInventory.equals("global")) {
-                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+//                tablayout.addTab(tablayout.newTab().setText(differentLocation))
+                differentLocationTab(differentLocation)
             }
-            tablayout.addTab(tablayout.newTab().setText(notRegistered))
+//            tablayout.addTab(tablayout.newTab().setText(notRegistered))
+            notRegisterTab(notRegistered)
         }
         tablayout.tabGravity = TabLayout.GRAVITY_FILL
         viewPager.offscreenPageLimit = 3
@@ -203,16 +248,16 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                    ).show()
 //                }
 
-                if(inventorymaster==null)
-                {
+                if (inventorymaster == null) {
                     val differentLocation = "Different\nLocation (0)"
-                    tablayout.getTabAt(1)?.text = differentLocation
-                }
-                else
-                {
-                    var differntLocationCount = bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+//                    tablayout.getTabAt(1)?.text = differentLocation
+                    differentLocationTab(differentLocation)
+                } else {
+                    var differntLocationCount =
+                        bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
                     val differentLocation = "Different\nLocation ($differntLocationCount)"
-                    tablayout.getTabAt(1)?.text = differentLocation
+//                    tablayout.getTabAt(1)?.text = differentLocation
+                    differentLocationTab(differentLocation)
                 }
             } else if (viewPager.currentItem == 2) {
 //                Application.locateTag = inventorymaster.rfidTag
@@ -226,7 +271,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         }
                     }
                     if (listRfids.isNotEmpty()) {
-                        Application.comefrom ="hide"
+                        Application.comefrom = "hide"
                         replaceFragment(
                             requireActivity().supportFragmentManager, LocateOperationsFragment(),
                             R.id.content_frame
@@ -247,24 +292,23 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         tvUpdate.setOnClickListener {
             when (viewPager.currentItem) {
                 0 -> {//faizan ne mana kiya
-                    if(adapter.getCurrentFragment() is NotFoundFragment){
-                        Application.isReconsiled=true
+                    if (adapter.getCurrentFragment() is NotFoundFragment) {
+                        Application.isReconsiled = true
                         Log.d("UpdateLocation", "onViewCreated: ")
                         val inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
 
-                        var totalItemCount=0
-                     //   val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
+                        var totalItemCount = 0
+                        //   val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
-                                assetCatalog.inventorySyncFlag=1
-                               // listBook.add(assetCatalog)
-                                totalItemCount+=1
+                                assetCatalog.inventorySyncFlag = 1
+                                // listBook.add(assetCatalog)
+                                totalItemCount += 1
                             }
                         }
-                        if(totalItemCount==0)
-                        {
+                        if (totalItemCount == 0) {
 //                            Toast.makeText(
 //                                requireContext(), "No Item Selected",
 //                                Toast.LENGTH_LONG
@@ -276,14 +320,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 FancyToast.WARNING,
                                 false
                             ).show()
-                        }
-                        else
-                        {
+                        } else {
 
-                         //   val listRfids = ArrayList<ScanTag>()
+                            //   val listRfids = ArrayList<ScanTag>()
 
-                       //     val scanList = bookDao.getScanTagAll()
-                            val listBook = (adapter.getCurrentFragment() as NotFoundFragment).listBook
+                            //     val scanList = bookDao.getScanTagAll()
+                            val listBook =
+                                (adapter.getCurrentFragment() as NotFoundFragment).listBook
                             val pendingInventoryScan = bookDao.getPendingInventoryScan(
                                 locationData!!.LocID
                             )
@@ -315,37 +358,46 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                         ).show()
                                         return@setOnClickListener
                                     }
-                                    bookDao.updateLocationAssetMain(0,it.LocationId,scanEndTime!!,lastItem.scanID,1,it.AssetRFID!!)
+                                    bookDao.updateLocationAssetMain(
+                                        0,
+                                        it.LocationId,
+                                        scanEndTime!!,
+                                        lastItem.scanID,
+                                        1,
+                                        it.AssetRFID!!
+                                    )
                                 }
                             }
-                                if(inventorymaster==null)
-                                {
-                                    var notFoundCount =0
-                                    val notFound = "Not\nFound ($notFoundCount)"
-                                    tablayout.getTabAt(0)?.text = notFound
-                                }
-                                else
-                                {
-                                    refreshRegisteredAssetCount()
-                                    (adapter.getCurrentFragment() as NotFoundFragment).updateList()
-                                    inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
-                                    var notFoundCount = bookDao.getCountOfTagsNotFound(locationId,inventorymaster!!.scanID)
-                                    val notFound = "Not\nFound ($notFoundCount)"
-                                    tablayout.getTabAt(0)?.text = notFound
-                                }
+                            if (inventorymaster == null) {
+                                var notFoundCount = 0
+                                val notFound = "Not\nFound ($notFoundCount)"
+//                                tablayout.getTabAt(0)?.text = notFound
+                                notFoundTab(notFound)
+                            } else {
+                                refreshRegisteredAssetCount()
+                                (adapter.getCurrentFragment() as NotFoundFragment).updateList()
+                                inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
+                                var notFoundCount = bookDao.getCountOfTagsNotFound(
+                                    locationId,
+                                    inventorymaster!!.scanID
+                                )
+                                val notFound = "Not\nFound ($notFoundCount)"
+//                                tablayout.getTabAt(0)?.text = notFound
+                                notFoundTab(notFound)
                             }
+                        }
 
                     }
                 }
                 1 -> {
                     if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
-                        Application.isReconsiled=true
+                        Application.isReconsiled = true
                         val listBook = ArrayList<AssetMain>()
                         (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
                             if (it.isSelected) {
                                 val assetCatalog = it
                                 assetCatalog.LocationId = locationId
-                                assetCatalog.inventorySyncFlag=1
+                                assetCatalog.inventorySyncFlag = 1
                                 listBook.add(assetCatalog)
                             }
                         }
@@ -408,22 +460,21 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                                Toast.LENGTH_LONG
 //                            ).show()
 
-                        if(inventorymaster==null)
-                        {
-                            var countofNotRegistered =0
-                            val notRegistered = "Different\nLocation ($countofNotRegistered)"
-                            tablayout.getTabAt(1)?.text = notRegistered
-                        }
-                        else
-                        {
-                            var countofDiffLocation =
-                                bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID,locationId)
-                            val diffLoc = "Different\nLocation ($countofDiffLocation)"
-                            tablayout.getTabAt(1)?.text = diffLoc
-                        }
-
-
+                    if (inventorymaster == null) {
+                        var countofNotRegistered = 0
+                        val notRegistered = "Different\nLocation ($countofNotRegistered)"
+//                        tablayout.getTabAt(1)?.text = notRegistered
+                        differentLocationTab(notRegistered)
+                    } else {
+                        var countofDiffLocation =
+                            bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+                        val diffLoc = "Different\nLocation ($countofDiffLocation)"
+//                        tablayout.getTabAt(1)?.text = diffLoc
+                        differentLocationTab(diffLoc)
                     }
+
+
+                }
 
                 2 -> {
                     if (adapter.getCurrentFragment() is NotRegisteredFragment) {
@@ -435,7 +486,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         }
                         if (listRfids.isNotEmpty()) {
                             listRfids.forEach {
-                                bookDao.deleteScanTagNotReg(it.scanId!!,it!!.rfidTag!!)
+                                bookDao.deleteScanTagNotReg(it.scanId!!, it!!.rfidTag!!)
                             }
 
                             (adapter.getCurrentFragment() as NotRegisteredFragment).updateList()
@@ -454,19 +505,18 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                                Toast.LENGTH_LONG
 //                            ).show()
 
-                        if(inventorymaster==null)
-                        {
-                            var countofNotRegistered =0
-                            val notRegistered = "Not\nRegister ($countofNotRegistered)"
-                            tablayout.getTabAt(2)?.text = notRegistered
+                        if (inventorymaster == null) {
+                            var countofNotRegistered = 0
+                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+//                            tablayout.getTabAt(2)?.text = notRegistered
+                            notRegisterTab(notRegistered)
 
-                        }
-                        else
-                        {
+                        } else {
                             var countofNotRegistered =
                                 bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-                            val notRegistered = "Not\nRegister ($countofNotRegistered)"
-                            tablayout.getTabAt(2)?.text = notRegistered
+                            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+//                            tablayout.getTabAt(2)?.text = notRegistered
+                            notRegisterTab(notRegistered)
                         }
                     }
                 }
@@ -476,7 +526,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
         tablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                selectedPosition12=tab.position
+                selectedPosition12 = tab.position
                 Log.d("test", "onTabSelected:${selectedPosition12} ")
                 viewPager.currentItem = selectedPosition12
                 adapter.notifyDataSetChanged()
@@ -485,20 +535,18 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                )
 
 
-
-
                 if (viewPager.currentItem == 0) {
                     //buttonScan.visibility=View.VISIBLE
                     //buttonScan.text = "Scan"
                     tvUpdate.text = "Ignore"
 
                 } else if (viewPager.currentItem == 1) {
-                   // buttonScan.visibility=View.VISIBLE
-                   // buttonScan.text = "Update to Current Location"
+                    // buttonScan.visibility=View.VISIBLE
+                    // buttonScan.text = "Update to Current Location"
                     tvUpdate.text = "Update to Current Location"
 
                 } else if (viewPager.currentItem == 2) {
-                   // buttonScan.visibility=View.GONE
+                    // buttonScan.visibility=View.GONE
                     tvUpdate.text = "Ignore"
 
                 }
@@ -508,18 +556,15 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 Log.d("location", "onTabUnselected: ${tab.position}")
-                if(adapter.getCurrentFragment() is DifferentLoactionFragment)
-                {
-                        if( !(adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.isNullOrEmpty())
-                        {
-                            (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
-                                it.isSelected=false
-                            }
-                            adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
-                            viewPager.adapter = adapter
+                if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
+                    if (!(adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.isNullOrEmpty()) {
+                        (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
+                            it.isSelected = false
                         }
-                }
-                else if(adapter.getCurrentFragment() is NotFoundFragment) {
+                        adapter = ReconcileAssetsPagerAdapter(this@ReconcileAssetsFragment)
+                        viewPager.adapter = adapter
+                    }
+                } else if (adapter.getCurrentFragment() is NotFoundFragment) {
                     if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
 
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
@@ -534,8 +579,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
             override fun onTabReselected(tab: TabLayout.Tab) {
                 Log.d("location", "onTabReselected: ")
 
-                if(adapter.getCurrentFragment() is NotFoundFragment)
-                {
+                if (adapter.getCurrentFragment() is NotFoundFragment) {
                     if (!(adapter.getCurrentFragment() as NotFoundFragment).listBook.isNullOrEmpty()) {
 
                         (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
@@ -550,27 +594,24 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
     }
 
-    fun refreshRegisteredAssetCount(){
+    fun refreshRegisteredAssetCount() {
         var count = bookDao.getCountLocationId(locationId)
         val totalcount = "Total Registered Assets : $count"
         tvTotalRegisteredAssets.text = totalcount
     }
+
     fun addScan() {
-        val inventoryMasterList:List<Inventorymaster>? = bookDao.getPendingInventoryScan(locationId)
+        val inventoryMasterList: List<Inventorymaster>? =
+            bookDao.getPendingInventoryScan(locationId)
 
-        if(inventoryMasterList==null || inventoryMasterList.isEmpty())
-        {
+        if (inventoryMasterList == null || inventoryMasterList.isEmpty()) {
 
-        }
-        else
-        {
-            val inventorymaster:Inventorymaster? = inventoryMasterList[inventoryMasterList.size - 1]
-            if(inventorymaster==null)
-            {
+        } else {
+            val inventorymaster: Inventorymaster? =
+                inventoryMasterList[inventoryMasterList.size - 1]
+            if (inventorymaster == null) {
 
-            }
-            else
-            {
+            } else {
                 for (inventoryTag in listInventoryList) {
                     val scanTag = ScanTag()
                     scanTag.scanId = inventorymaster.scanID
@@ -584,9 +625,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         if (adapter.getCurrentFragment() is NotFoundFragment)
                             (adapter.getCurrentFragment() as NotFoundFragment).updateList()
 
-                        var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, scanTag.scanId!!)
+                        var notFoundCount =
+                            bookDao.getCountOfTagsNotFound(locationId, scanTag.scanId!!)
                         val notFound = "Not\nFound ($notFoundCount)"
-                        tablayout.getTabAt(0)?.text = notFound
+//                        tablayout.getTabAt(0)?.text = notFound
+                        notFoundTab(notFound)
                     }
                 }
             }
@@ -595,8 +638,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
     override fun onResume() {
         super.onResume()
-        if(viewPager!=null)
-        {
+        if (viewPager != null) {
 
             Handler().postDelayed(
                 { tablayout.getTabAt(selectedPosition12)?.select() }, 100
@@ -606,9 +648,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 adapter = ReconcileAssetsPagerAdapter(this)
                 viewPager.adapter = adapter
                 viewPager.setCurrentItem(selectedPosition12)
-            }
-            catch (e:Exception)
-            {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
@@ -621,25 +661,25 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 return if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     Log.d("backpress", "onKey:Back ")
                     fragmentCallback1.onDataSent(true)
-                  //  requireActivity().supportFragmentManager.popBackStackImmediate()
+                    //  requireActivity().supportFragmentManager.popBackStackImmediate()
                     requireActivity().onBackPressed()
                     true
                 } else false
             }
         })
 
-     //   viewPager.adapter?.notifyDataSetChanged()
+        //   viewPager.adapter?.notifyDataSetChanged()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        selectedPosition12=0
+        selectedPosition12 = 0
     }
 
     private fun showUpdateLocationDialog() {
-        progressBar2.visibility=View.VISIBLE
+        progressBar2.visibility = View.VISIBLE
         initialisation()
-         loginErrorDialog = Dialog(requireContext())
+        loginErrorDialog = Dialog(requireContext())
         if (loginErrorDialog?.window != null) loginErrorDialog?.window!!
             .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loginErrorDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -662,11 +702,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
         val reCycleview: RecyclerView =
             loginErrorDialog!!.findViewById(R.id.rvUpdateLocation)
-        setAdaptor(reCycleview,loginErrorDialog!!)
+        setAdaptor(reCycleview, loginErrorDialog!!)
         val proceed_btn: AppCompatButton =
             loginErrorDialog!!.findViewById(R.id.proceed_btn)
 
-    //    setAdaptor(reCycleview,loginErrorDialog!!)
+        //    setAdaptor(reCycleview,loginErrorDialog!!)
         //setAdaptor(reCycleview)
 
 
@@ -687,26 +727,33 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     }
 
 
-    private fun setAdaptor(reCycleview: RecyclerView,loginErrorDialog:Dialog) {
+    private fun setAdaptor(reCycleview: RecyclerView, loginErrorDialog: Dialog) {
         val listOfItems = ArrayList<LocationUpdate>()
 
         listOfLocations.forEach {
-        if (!it.locationName.equals(tvFloorTitle.text.toString()))
-          //  listOfItems.add(LocationUpdate(it.locationName))
-            listOfItems.add(LocationUpdate(it.locationName,false,it.id))
+            if (!it.locationName.equals(tvFloorTitle.text.toString()))
+            //  listOfItems.add(LocationUpdate(it.locationName))
+                listOfItems.add(LocationUpdate(it.locationName, false, it.id))
         }
 
-        updateLocationAdapter = UpdateLocationAdapter(requireContext(), requireActivity().supportFragmentManager,listOfItems,this,loginErrorDialog)
+        updateLocationAdapter = UpdateLocationAdapter(
+            requireContext(),
+            requireActivity().supportFragmentManager,
+            listOfItems,
+            this,
+            loginErrorDialog
+        )
         reCycleview.adapter = updateLocationAdapter
 
     }
+
     private fun initialisation() {
         listOfLocations.clear()
         listOfLocations.addAll(Application.roomDatabaseBuilder.getBookDao().getLocationMasterList())
     }
 
     override fun onUpdateItemCallback(locationData: LocationUpdate) {
-Log.d("locationData",locationData.title.toString());
+        Log.d("locationData", locationData.title.toString());
 //        val listBook = ArrayList<AssetMain>()
 //        (adapter.getCurrentFragment() as NotFoundFragment).listBook.forEach {
 //            if (it.isSelected) {

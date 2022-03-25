@@ -150,6 +150,19 @@
         app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.tabs.TabItem
+            android:text="No Found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.tabs.TabItem
+            android:text="Different Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:text="Not Registered"
+            android:layout_height="wrap_content"/>
+
     </com.google.android.material.tabs.TabLayout>
 
 
