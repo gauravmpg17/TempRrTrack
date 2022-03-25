@@ -336,7 +336,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                 R.id.content_frame
                             )
                         } else if (isFromWhat.equals("rfidlocation")) {
-                            tvTitle.text = "Map RFID Location"
+                            tvTitle.text = "Put Away Inventory"
                             tvInventoryReport.visibility = View.INVISIBLE
                             tvILastRecord.visibility = View.INVISIBLE
                             registered.visibility = View.INVISIBLE
