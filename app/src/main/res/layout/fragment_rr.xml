@@ -7,6 +7,16 @@
     android:animateLayoutChanges="true"
     android:background="@color/white">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/rr_inventoryButton"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_background"
+        android:onClick="inventoryStartOrStop"
+        android:text="@string/lblScan" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -726,15 +736,15 @@
         </LinearLayout>
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/rr_inventoryButton"
+                android:id="@+id/rr_inventoryButton11"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:visibility="gone"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button_background"
                 android:onClick="inventoryStartOrStop"

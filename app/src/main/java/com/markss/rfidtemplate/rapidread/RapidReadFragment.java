@@ -110,7 +110,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private ProgressBar progressBar;
     private HashSet<String> listInventoryList = new HashSet<>();
     private HashSet<String> scannedList = new HashSet<>();
-
     private List<Inventorymaster> pendingInventoryScan;
     private InventoryViewModel inventoryViewModel;
     private int totalRegisteredCount = 0;
@@ -137,8 +136,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_rr, container, false);
     }
 
@@ -174,7 +172,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         batchModeRR = getActivity().findViewById(R.id.batchModeRR);
         invtoryData = getActivity().findViewById(R.id.inventoryDataLayout);
         btnScan = getActivity().findViewById(R.id.btnScan123);
-
         foundLocParent = getActivity().findViewById(R.id.foundLocParent);
         foundForDifferentParent = getActivity().findViewById(R.id.foundForDifferentParent);
         tvFoundLocCount = getActivity().findViewById(R.id.tvFoundLocCount);

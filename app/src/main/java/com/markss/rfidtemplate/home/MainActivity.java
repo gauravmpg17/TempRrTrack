@@ -1047,6 +1047,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             if (!mIsInventoryRunning) {
                 clearInventoryData();
                 //button.setText("STOP");
+              //  Toast.makeText(this,"STOP",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
                     inventoryBT.setImageResource(R.drawable.ic_play_stop);
                 }
@@ -1176,6 +1177,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     ((Spinner) findViewById(R.id.inventoryOptions)).setEnabled(true);
                 }
                 //button.setText("START");
+            //   Toast.makeText(this,"START",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
                     inventoryBT.setImageResource(android.R.drawable.ic_media_play);
                 }
