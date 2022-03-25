@@ -203,7 +203,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     }
                 } else {
                     tvLocation.text = ""
-                    Log.d("tag1111", "afterTextChanged: Length ${s.length}")
+                  //  Log.d("tag1111", "afterTextChanged: Length ${s.length}")
                 }
             }
 
