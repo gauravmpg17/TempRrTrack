@@ -1039,7 +1039,8 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         if (fragment != null && fragment instanceof InventoryFragment) {
             inventoryBT = findViewById(R.id.inventoryButton);
         } else if (fragment != null && fragment instanceof RapidReadFragment) {
-            // inventoryBT = findViewById(R.id.rr_inventoryButton);
+            //temoprary uncommented
+             inventoryBT = findViewById(R.id.rr_inventoryButton);
         }
 
         //tagListMatchNotice = false;
@@ -1047,9 +1048,12 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             if (!mIsInventoryRunning) {
                 clearInventoryData();
                 //button.setText("STOP");
-              //  Toast.makeText(this,"STOP",Toast.LENGTH_LONG).show();
+            //   Toast.makeText(this,"STOP",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
-                    inventoryBT.setImageResource(R.drawable.ic_play_stop);
+                    Intent intent=new Intent("INVENTORYSTART");
+                    intent.putExtra("istart",false);
+                    sendBroadcast(intent);
+                    inventoryBT.setImageResource(android.R.drawable.ic_media_pause);
                 }
                 //Here we send the inventory command to start reading the tags
                 if (fragment != null && fragment instanceof InventoryFragment) {
@@ -1177,9 +1181,13 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     ((Spinner) findViewById(R.id.inventoryOptions)).setEnabled(true);
                 }
                 //button.setText("START");
-            //   Toast.makeText(this,"START",Toast.LENGTH_LONG).show();
+             //  Toast.makeText(this,"START",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
                     inventoryBT.setImageResource(android.R.drawable.ic_media_play);
+                    Intent intent=new Intent("INVENTORYSTART");
+                    intent.putExtra("istart",true);
+                    sendBroadcast(intent);
+                    inventoryBT.setImageResource(R.drawable.ic_play_stop);
                 }
 
                 isInventoryAborted = true;

@@ -8,9 +8,14 @@ import static com.markss.rfidtemplate.application.Application.mIsMultiTagLocatin
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
+import static com.markss.rfidtemplate.rfid.RFIDController.mIsInventoryRunning;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -36,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -154,6 +160,63 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    /*  if (btnScan.getTag().equals("1")) {
+                btnScan.setTag("0");
+                llBottomParent.setVisibility(View.GONE);
+                btnScan.setImageResource(android.R.drawable.ic_media_pause);
+                listInventoryList = new HashSet<>();
+
+                //new requirement
+                foundLocParent.setVisibility(View.GONE);
+                foundForDifferentParent.setVisibility(View.GONE);
+                inventoryViewModel.updateTime();
+
+            } else {
+                inventoryViewModel.stopTime();
+                btnScan.setTag("1");
+                llBottomParent.setVisibility(View.VISIBLE);
+                btnScan.setImageResource(android.R.drawable.ic_media_play);
+                addDataToScanTag();
+                showCountFound();
+                updateCountInDb();
+
+//                btnScan.setTag("1");
+//                llBottomParent.setVisibility(View.GONE);
+//                btnScan.setImageResource(android.R.drawable.ic_media_play);
+//                listInventoryList = new HashSet<>();
+            }*/
+
+    BroadcastReceiver receiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+       boolean isInventoryStartStop=  intent.getBooleanExtra("istart",false);
+       if(!isInventoryStartStop)
+       {
+           inventoryButton.setTag("0");
+           llBottomParent.setVisibility(View.GONE);
+           inventoryButton.setImageResource(android.R.drawable.ic_media_pause);
+           listInventoryList = new HashSet<>();
+
+           //new requirement
+           foundLocParent.setVisibility(View.GONE);
+           foundForDifferentParent.setVisibility(View.GONE);
+           inventoryViewModel.updateTime();
+       }
+       else
+       {
+           inventoryViewModel.stopTime();
+           inventoryButton.setTag("1");
+           llBottomParent.setVisibility(View.VISIBLE);
+           inventoryButton.setImageResource(android.R.drawable.ic_media_play);
+           addDataToScanTag();
+           showCountFound();
+           updateCountInDb();
+       }
+
+    //   btnScan.performClick();
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -301,7 +364,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         }
 
 
-        if (RFIDController.mIsInventoryRunning) {
+        if (mIsInventoryRunning) {
             inventoryButton.setBackgroundResource(R.drawable.ic_play_stop);
         } else {
             inventoryButton.setBackgroundResource(android.R.drawable.ic_media_play);
@@ -350,7 +413,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         bt_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (RFIDController.mIsInventoryRunning) {
+                if (mIsInventoryRunning) {
                     //   Toast.makeText(getContext(), "Inventory is running", Toast.LENGTH_SHORT).show();
                     FancyToast.makeText(requireActivity(), "Inventory is running", FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
 
@@ -395,31 +458,31 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
         btnScan.setOnClickListener(v -> {
-            if (btnScan.getTag().equals("1")) {
-                btnScan.setTag("0");
-                llBottomParent.setVisibility(View.GONE);
-                btnScan.setImageResource(android.R.drawable.ic_media_pause);
-                listInventoryList = new HashSet<>();
-
-                //new requirement
-                foundLocParent.setVisibility(View.GONE);
-                foundForDifferentParent.setVisibility(View.GONE);
-                inventoryViewModel.updateTime();
-
-            } else {
-                inventoryViewModel.stopTime();
-                btnScan.setTag("1");
-                llBottomParent.setVisibility(View.VISIBLE);
-                btnScan.setImageResource(android.R.drawable.ic_media_play);
-                addDataToScanTag();
-                showCountFound();
-                updateCountInDb();
-
-//                btnScan.setTag("1");
+//            if (btnScan.getTag().equals("1")) {
+//                btnScan.setTag("0");
 //                llBottomParent.setVisibility(View.GONE);
-//                btnScan.setImageResource(android.R.drawable.ic_media_play);
+//                btnScan.setImageResource(android.R.drawable.ic_media_pause);
 //                listInventoryList = new HashSet<>();
-            }
+//
+//                //new requirement
+//                foundLocParent.setVisibility(View.GONE);
+//                foundForDifferentParent.setVisibility(View.GONE);
+//                inventoryViewModel.updateTime();
+//
+//            } else {
+//                inventoryViewModel.stopTime();
+//                btnScan.setTag("1");
+//                llBottomParent.setVisibility(View.VISIBLE);
+//                btnScan.setImageResource(android.R.drawable.ic_media_play);
+//                addDataToScanTag();
+//                showCountFound();
+//                updateCountInDb();
+//
+////                btnScan.setTag("1");
+////                llBottomParent.setVisibility(View.GONE);
+////                btnScan.setImageResource(android.R.drawable.ic_media_play);
+////                listInventoryList = new HashSet<>();
+//            }
         });
 
         btnReconcile.setOnClickListener(v -> {
@@ -446,13 +509,19 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //        }
 
         if (isFromReconsile) {
-            btnScan.setTag("1");
+            inventoryButton.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
-            btnScan.setImageResource(android.R.drawable.ic_media_play);
+            inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
         }
+        else{
+            inventoryButton.performClick();
+        }
+
+
     }
+
 
     public void updateTexts() {
         if (Application.TAG_LIST_MATCH_MODE) {
@@ -480,7 +549,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     private void updateProgressView() {
         if (Application.missedTags != 0) {
             progressView.mSweepAngle = 360 * Application.matchingTags / (Application.missedTags + Application.matchingTags);
-        } else if (Application.matchingTags != 0 && Application.missedTags == 0 && RFIDController.mIsInventoryRunning) {
+        } else if (Application.matchingTags != 0 && Application.missedTags == 0 && mIsInventoryRunning) {
             progressView.bCompleted = true;
         } else {
             progressView.mSweepAngle = 0;
@@ -503,6 +572,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     public void onDetach() {
         super.onDetach();
         inventoryViewModel.resetTimer();
+        if (mIsInventoryRunning) {
+            inventoryButton.performClick();
+        }
     }
 
     /**
@@ -521,7 +593,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
      * method to start inventory operation on trigger press event received
      */
     public void triggerPressEventRecieved() {
-        if (!RFIDController.mIsInventoryRunning && getActivity() != null) {
+        if (!mIsInventoryRunning && getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -538,7 +610,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
      * method to stop inventory operation on trigger release event received
      */
     public void triggerReleaseEventRecieved() {
-        if ((RFIDController.mIsInventoryRunning == true) && getActivity() != null) {
+        if ((mIsInventoryRunning == true) && getActivity() != null) {
             //RFIDController.mInventoryStartPending = false;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -562,7 +634,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         batchModeRR.setVisibility(View.VISIBLE);
                     }
                 } else if (!results.equals(RFIDResults.RFID_API_SUCCESS)) {
-                    RFIDController.mIsInventoryRunning = false;
+                    mIsInventoryRunning = false;
                     if (inventoryButton != null) {
                         inventoryButton.setBackgroundResource(android.R.drawable.ic_media_play);
                     }
@@ -590,7 +662,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 @Override
                 public void run() {
                     if (!ActiveProfile.id.equals("1")) {
-                        if (inventoryButton != null && !RFIDController.mIsInventoryRunning &&
+                        if (inventoryButton != null && !mIsInventoryRunning &&
                                 (RFIDController.isBatchModeInventoryRunning == null || !RFIDController.isBatchModeInventoryRunning)) {
                             inventoryButton.setBackgroundResource(android.R.drawable.ic_media_play);
                         }
@@ -917,13 +989,14 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     @Override
     public void onResume() {
         super.onResume();
+        requireActivity().registerReceiver(receiver,new IntentFilter("INVENTORYSTART"));
         Log.d("scantagcheck", "onResume: " + btnScan.getTag());
         if(inventoryViewModel.isSearchClicked())
         {
             Log.d("tag12", " isSearchClicked");
-            btnScan.setTag("1");
+            inventoryButton.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
-            btnScan.setImageResource(android.R.drawable.ic_media_play);
+            inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
         }
@@ -1018,9 +1091,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     public void onDataSent(boolean isBack) {
         Log.d("tag12", "onDataSent: " + isBack);
         isFromReconsile = isBack;
-        btnScan.setTag("1");
+        inventoryButton.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
-        btnScan.setImageResource(android.R.drawable.ic_media_play);
+        inventoryButton.setImageResource(android.R.drawable.ic_media_play);
         addDataToScanTag();
         showCountFound();
     }
@@ -1030,5 +1103,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         super.onStop();
         Log.d("tag12", "onStop: ");
         inventoryViewModel.setSearchClicked(false);
+        requireActivity().unregisterReceiver(receiver);
+
     }
 }

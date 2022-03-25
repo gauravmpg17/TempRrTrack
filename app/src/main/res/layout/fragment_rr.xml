@@ -7,15 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/white">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/rr_inventoryButton"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:background="@drawable/button_background"
-        android:onClick="inventoryStartOrStop"
-        android:text="@string/lblScan" />
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -458,7 +450,31 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/rr_inventoryButton"
+        android:layout_centerInParent="true"
+        android:onClick="inventoryStartOrStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/lightt_blue"
+        android:fontFamily="@font/jio_type_bold"
+        android:letterSpacing="0.1"
+        android:paddingStart="@dimen/thirty_dp"
+        android:paddingEnd="@dimen/thirty_dp"
+        android:src="@android:drawable/ic_media_pause"
+        android:tag="0"
+        android:text="@string/stop"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_13"
+        android:theme="@style/fabtheme"
+        app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_goneMarginBottom="@dimen/twenty_dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnScan123"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
