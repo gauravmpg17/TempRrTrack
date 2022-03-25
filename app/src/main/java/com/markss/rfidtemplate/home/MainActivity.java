@@ -79,6 +79,8 @@ import com.markss.rfidtemplate.locate_tag.RangeGraph;
 import com.markss.rfidtemplate.locate_tag.SingleTagLocateFragment;
 import com.markss.rfidtemplate.locate_tag.multitag_locate.MultiTagLocateResponseHandlerTask;
 import com.markss.rfidtemplate.notifications.NotificationUtil;
+import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment;
+import com.markss.rfidtemplate.rapidread.MapRFIDLocationFragment;
 import com.markss.rfidtemplate.rapidread.RapidReadFragment;
 import com.markss.rfidtemplate.reader_connection.BluetoothHandler;
 import com.markss.rfidtemplate.reader_connection.ReadersListFragment;
@@ -1038,7 +1040,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT);
         if (fragment != null && fragment instanceof InventoryFragment) {
             inventoryBT = findViewById(R.id.inventoryButton);
-        } else if (fragment != null && fragment instanceof RapidReadFragment) {
+        } else if (fragment != null && (fragment instanceof RapidReadFragment || fragment instanceof MapRFIDLocationFragment || fragment instanceof GlobalRapidReadFragment)) {
             //temoprary uncommented
              inventoryBT = findViewById(R.id.rr_inventoryButton);
         }
@@ -1093,9 +1095,15 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     tagsReadForSearch.addAll(((InventoryFragment) fragment).getAdapter().searchItemsList);
                 }
                 // UI update for RR fragment
-                if (fragment != null && fragment instanceof RapidReadFragment) {
+                if (fragment != null && (fragment instanceof RapidReadFragment || fragment instanceof MapRFIDLocationFragment || fragment instanceof GlobalRapidReadFragment)) {
                     memoryBankId = -1;
-                    ((RapidReadFragment) fragment).resetTagsInfo();
+                    if (fragment instanceof RapidReadFragment) {
+                        ((RapidReadFragment) fragment).resetTagsInfo();
+                    }else if (fragment instanceof MapRFIDLocationFragment){
+                        ((MapRFIDLocationFragment)fragment).resetTagsInfo();
+                    }else if (fragment instanceof GlobalRapidReadFragment){
+                        ((GlobalRapidReadFragment)fragment).resetTagsInfo();
+                    }
                     if (TAG_LIST_MATCH_MODE) {
                         if (missedTags > 9999) {
                             TextView uniqueTags = (TextView) findViewById(R.id.uniqueTagContent);
@@ -1103,7 +1111,13 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             uniqueTags.setTextSize(45);
                         }
                     }
-                    ((RapidReadFragment) fragment).updateTexts();
+                    if (fragment instanceof RapidReadFragment) {
+                        ((RapidReadFragment) fragment).updateTexts();
+                    }else if (fragment instanceof MapRFIDLocationFragment){
+                        ((MapRFIDLocationFragment)fragment).updateTexts();
+                    }else if (fragment instanceof GlobalRapidReadFragment){
+                        ((GlobalRapidReadFragment)fragment).updateTexts();
+                    }
                 }
                 // perform read or inventory
                 if (fragment != null && fragment instanceof InventoryFragment && !RFIDController.regionNotSet && !((InventoryFragment) fragment).getMemoryBankID().equalsIgnoreCase("none") && !TAG_LIST_MATCH_MODE) {
@@ -2084,8 +2098,13 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             Inventorytimer.getInstance().stopTimer();
                         if (fragment instanceof InventoryFragment)
                             ((InventoryFragment) fragment).resetInventoryDetail();
-                        else if (fragment instanceof RapidReadFragment)
+                        else if (fragment instanceof RapidReadFragment) {
                             ((RapidReadFragment) fragment).resetInventoryDetail();
+                        }else if (fragment instanceof MapRFIDLocationFragment){
+                            ((MapRFIDLocationFragment)fragment).resetInventoryDetail();
+                        }else if (fragment instanceof GlobalRapidReadFragment){
+                            ((GlobalRapidReadFragment)fragment).resetInventoryDetail();
+                        }
                         //export Data to the file
                         if (EXPORT_DATA)
                             if (tagsReadInventory != null && !tagsReadInventory.isEmpty()) {
@@ -2507,6 +2526,22 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                     new DataExportTask(getApplicationContext(), tagsReadInventory, mConnectedDevice.getName(), TOTAL_TAGS, UNIQUE_TAGS, mRRStartedTime).execute();
                                 }
                             });
+                        }else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof MapRFIDLocationFragment && UNIQUE_TAGS != 0) {
+                            currentFragment = "MapRFIDLocationFragment";
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new DataExportTask(getApplicationContext(), tagsReadInventory, mConnectedDevice.getName(), TOTAL_TAGS, UNIQUE_TAGS, mRRStartedTime).execute();
+                                }
+                            });
+                        }else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof GlobalRapidReadFragment && UNIQUE_TAGS != 0) {
+                            currentFragment = "GlobalRapidReadFragment";
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new DataExportTask(getApplicationContext(), tagsReadInventory, mConnectedDevice.getName(), TOTAL_TAGS, UNIQUE_TAGS, mRRStartedTime).execute();
+                                }
+                            });
                         }
                     } else if (tagsReadInventory != null && !tagsReadInventory.isEmpty()) {
                         runOnUiThread(new Runnable() {
@@ -2537,13 +2572,28 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 operationHasAborted();
             }
         } else if (rfidStatusEvents.StatusEventData.getStatusEventType() == STATUS_EVENT_TYPE.OPERATION_END_SUMMARY_EVENT) {
-            if (fragment instanceof RapidReadFragment)
+            if (fragment instanceof RapidReadFragment) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         ((RapidReadFragment) fragment).updateInventoryDetails();
                     }
                 });
+            }else  if (fragment instanceof MapRFIDLocationFragment) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MapRFIDLocationFragment) fragment).updateInventoryDetails();
+                    }
+                });
+            }else  if (fragment instanceof GlobalRapidReadFragment) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((GlobalRapidReadFragment) fragment).updateInventoryDetails();
+                    }
+                });
+            }
         } else if (rfidStatusEvents.StatusEventData.getStatusEventType() == STATUS_EVENT_TYPE.HANDHELD_TRIGGER_EVENT && isActivityVisible()) {
             Boolean triggerPressed = false;
             if (rfidStatusEvents.StatusEventData.HandheldTriggerEventData.getHandheldEvent() == HANDHELD_TRIGGER_EVENT_TYPE.HANDHELD_TRIGGER_PRESSED)

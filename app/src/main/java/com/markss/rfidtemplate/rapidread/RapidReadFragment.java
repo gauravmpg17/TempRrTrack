@@ -514,8 +514,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
-        }
-        else{
+        } else{
             inventoryButton.performClick();
         }
 

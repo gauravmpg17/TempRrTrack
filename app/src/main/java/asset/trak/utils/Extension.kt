@@ -103,13 +103,13 @@ fun decreaseRangeToThirty(value:Int){
                 //                    antennaRfConfig.setrfModeTableIndex(LinkProfileUtil.getInstance().getSimpleProfileModeIndex(item.LinkProfileIndex));
                 mConnectedReader.Config.Antennas.setAntennaRfConfig(1, antennaRfConfig)
                 Application.antennaRfConfig = antennaRfConfig
-                Toast.makeText(
+              /*  Toast.makeText(
                     Application.context,
                     "RFID Reader Connected Range set to ${value}",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
             } catch (e: InvalidUsageException) {
-                Log.d(
+               /* Log.d(
                     "decreaseRangeToThirty",
                     " Antenna configuration failed invalid usage EX " + e.vendorMessage
                 )
@@ -117,9 +117,9 @@ fun decreaseRangeToThirty(value:Int){
                     Application.context,
                     "decreaseRangeToThirty Error1: ${e.message}",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
             } catch (e: OperationFailureException) {
-                Log.d(
+              /*  Log.d(
                     "decreaseRangeToThirty",
                     " Antenna configuration failed operation failure EX " + e.vendorMessage
                 )
@@ -127,7 +127,7 @@ fun decreaseRangeToThirty(value:Int){
                     Application.context,
                     "decreaseRangeToThirty Error2: ${e.message}",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show()*/
             }
         } else Toast.makeText(
             Application.context,

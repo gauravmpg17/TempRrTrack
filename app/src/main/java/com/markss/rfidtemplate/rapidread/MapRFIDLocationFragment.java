@@ -413,6 +413,8 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
             inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
+        }else{
+            inventoryButton.performClick();
         }
     }
 

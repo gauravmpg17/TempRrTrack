@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/white">
 
     <androidx.core.widget.NestedScrollView
@@ -88,21 +89,21 @@
             </RelativeLayout>
 
             <ImageView
-                app:layout_constraintTop_toTopOf="@+id/rlTopParent"
+                android:id="@+id/imgIgnore"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 app:layout_constraintBottom_toBottomOf="@+id/rlTopParent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                android:id="@+id/imgIgnore"
-                app:srcCompat="@drawable/ic_delete"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
+                app:layout_constraintTop_toTopOf="@+id/rlTopParent"
+                app:srcCompat="@drawable/ic_delete" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/llSpinnerParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle_border"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/rlTopParent">
@@ -114,75 +115,75 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/ten_dp" />
             </LinearLayout>
-<!--            <RelativeLayout-->
-<!--                android:id="@+id/llSpinnerParent"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/margin_20"-->
-<!--                android:background="@drawable/rectangle_border"-->
-<!--                android:padding="@dimen/fifteen_dp"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
-<!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
+            <!--            <RelativeLayout-->
+            <!--                android:id="@+id/llSpinnerParent"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/margin_20"-->
+            <!--                android:background="@drawable/rectangle_border"-->
+            <!--                android:padding="@dimen/fifteen_dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
 
 
-<!--                <TextView-->
-<!--                    android:id="@+id/etRfid"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/tvRfid"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:layout_toStartOf="@+id/ivScanBar"-->
-<!--                    android:background="@null"-->
-<!--                    android:fontFamily="@font/jio_type_light"-->
-<!--                    android:hint="@string/scan_location_barcode"-->
-<!--                    android:imeOptions="actionDone"-->
-<!--                    android:inputType="text"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="@dimen/sixteen_sp"-->
-<!--                    app:iconifiedByDefault="false" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/etRfid"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_below="@id/tvRfid"-->
+            <!--                    android:layout_centerVertical="true"-->
+            <!--                    android:layout_toStartOf="@+id/ivScanBar"-->
+            <!--                    android:background="@null"-->
+            <!--                    android:fontFamily="@font/jio_type_light"-->
+            <!--                    android:hint="@string/scan_location_barcode"-->
+            <!--                    android:imeOptions="actionDone"-->
+            <!--                    android:inputType="text"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="@dimen/sixteen_sp"-->
+            <!--                    app:iconifiedByDefault="false" />-->
 
-<!--                <androidx.appcompat.widget.AppCompatImageView-->
-<!--                    android:id="@+id/ivScanBar"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:layout_marginEnd="@dimen/five_dp"-->
-<!--                    android:src="@drawable/ic_barcode" />-->
+            <!--                <androidx.appcompat.widget.AppCompatImageView-->
+            <!--                    android:id="@+id/ivScanBar"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_alignParentEnd="true"-->
+            <!--                    android:layout_centerVertical="true"-->
+            <!--                    android:layout_marginEnd="@dimen/five_dp"-->
+            <!--                    android:src="@drawable/ic_barcode" />-->
 
-<!--            </RelativeLayout>-->
+            <!--            </RelativeLayout>-->
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/llSpinnerParent"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/twenty_dp"-->
-<!--                android:background="@drawable/rectangle_border"-->
-<!--                android:orientation="vertical"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
-<!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/llSpinnerParent"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/twenty_dp"-->
+            <!--                android:background="@drawable/rectangle_border"-->
+            <!--                android:orientation="vertical"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/guideline_end"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/guideline_start"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/rlTopParent">-->
 
-<!--&lt;!&ndash;                <androidx.appcompat.widget.AppCompatTextView&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:id="@+id/tvLocation"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:drawableRight=""&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:padding="@dimen/ten_dp" />&ndash;&gt;-->
-<!--                <androidx.appcompat.widget.AppCompatEditText-->
-<!--                    android:id="@+id/etRfid"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/tvRfid"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:background="@null"-->
-<!--                    android:fontFamily="@font/jio_type_light"-->
-<!--                    android:hint="Book RFID"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="@dimen/sixteen_sp" />-->
+            <!--&lt;!&ndash;                <androidx.appcompat.widget.AppCompatTextView&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:id="@+id/tvLocation"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:drawableRight=""&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;                    android:padding="@dimen/ten_dp" />&ndash;&gt;-->
+            <!--                <androidx.appcompat.widget.AppCompatEditText-->
+            <!--                    android:id="@+id/etRfid"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_below="@id/tvRfid"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:background="@null"-->
+            <!--                    android:fontFamily="@font/jio_type_light"-->
+            <!--                    android:hint="Book RFID"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="@dimen/sixteen_sp" />-->
 
-<!--            </LinearLayout>-->
+            <!--            </LinearLayout>-->
 
 
             <TextView
@@ -192,11 +193,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/fourty_dp"
                 android:fontFamily="@font/jio_type_bold"
-                tools:text="Inventory Report"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/rlTopParent" />
+                app:layout_constraintTop_toBottomOf="@id/rlTopParent"
+                tools:text="Inventory Report" />
 
             <TextView
                 android:id="@+id/tvILastRecord12"
@@ -213,15 +214,15 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_marginBottom="@dimen/margin_20"
                 android:id="@+id/registeredParent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20"
-                android:paddingVertical="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_20"
                 android:background="@drawable/rectangle_background_border"
-                android:orientation="horizontal"
                 android:elevation="6dp"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/margin_20"
                 app:cardCornerRadius="@dimen/fourteen_dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -239,8 +240,8 @@
                     android:text="@string/lblRegistered"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/tvRegisteredCountrr"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvRegisteredCountrr" />
 
                 <TextView
@@ -249,13 +250,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/twenty_three_dp"
+                    android:layout_marginEnd="@dimen/margin_20"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="@dimen/margin_20"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -263,14 +264,14 @@
                     android:id="@+id/view2"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/margin_10"
                     android:layout_marginStart="@dimen/fourteen_dp"
                     android:layout_marginEnd="@dimen/fourteen_dp"
                     android:background="@color/divider_color_inventory"
-                    app:layout_constraintTop_toBottomOf="@id/tvRegisteredCountrr"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/uniqueTagContent"
-                    android:layout_marginVertical="@dimen/margin_10"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvRegisteredCountrr" />
 
 
                 <TextView
@@ -283,8 +284,8 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
                     app:layout_constraintBottom_toBottomOf="@id/uniqueTagContent"
-                    app:layout_constraintTop_toTopOf="@id/uniqueTagContent"
-                    app:layout_constraintStart_toStartOf="@id/tvRegistered" />
+                    app:layout_constraintStart_toStartOf="@id/tvRegistered"
+                    app:layout_constraintTop_toTopOf="@id/uniqueTagContent" />
 
                 <TextView
                     android:id="@+id/uniqueTagContent"
@@ -294,23 +295,24 @@
                     android:layout_marginEnd="@dimen/twenty_dp"
                     android:fontFamily="@font/jio_type_bold"
                     android:gravity="start"
-                    tools:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintTop_toBottomOf="@id/view2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view2"
+                    tools:text="0" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_30"
+                android:layout_marginTop="@dimen/margin_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="@dimen/margin_10"
-                app:layout_constraintTop_toBottomOf="@id/registeredParent"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_30"/>
+                app:layout_constraintTop_toBottomOf="@id/registeredParent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/foundLocParent"
                 android:layout_width="0dp"
@@ -395,8 +397,8 @@
                     android:text="0"
                     android:textColor="@color/notReconciledTxtCountColor"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintStart_toStartOf="@+id/tvNotFoundLoc"
                     app:layout_constraintEnd_toEndOf="@+id/tvNotFoundLoc"
+                    app:layout_constraintStart_toStartOf="@+id/tvNotFoundLoc"
                     app:layout_constraintTop_toBottomOf="@+id/tvNotFoundLoc" />
 
 
@@ -487,8 +489,8 @@
                     android:text="0"
                     android:textColor="@color/btn_color"
                     android:textSize="@dimen/text_size_30"
-                    app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintEnd_toEndOf="@+id/tvDifferentLocationCount"
+                    app:layout_constraintStart_toStartOf="@+id/tvDifferentLocationCount"
                     app:layout_constraintTop_toBottomOf="@+id/tvDifferentLocationCount" />
 
 
@@ -506,20 +508,21 @@
         android:background="@color/lightt_blue"
         android:fontFamily="@font/jio_type_bold"
         android:letterSpacing="0.1"
+        android:onClick="inventoryStartOrStop"
         android:paddingStart="@dimen/thirty_dp"
         android:paddingEnd="@dimen/thirty_dp"
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
         android:text="@string/stop"
-        android:theme="@style/fabtheme"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
+        android:theme="@style/fabtheme"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_goneMarginBottom="@dimen/twenty_dp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
         android:id="@+id/btnScan123"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -532,9 +535,10 @@
         android:src="@android:drawable/ic_media_pause"
         android:tag="0"
         android:text="@string/stop"
-        android:theme="@style/fabtheme"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_13"
+        android:theme="@style/fabtheme"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/llBottomParent2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
