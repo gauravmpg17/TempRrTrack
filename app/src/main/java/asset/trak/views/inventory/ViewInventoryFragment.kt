@@ -136,7 +136,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         listOfLocations.clear()
         listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
         if (isFromWhat.equals("rfidlocation")) {
-            tvTitle.text = "Put Away RFID Location"
+            tvTitle.text = "Put Away Inventory"
             tvInventoryReport.visibility = View.INVISIBLE
             tvILastRecord.visibility = View.INVISIBLE
             registered.visibility = View.INVISIBLE

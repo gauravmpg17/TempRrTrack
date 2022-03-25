@@ -6,11 +6,16 @@ import static com.markss.rfidtemplate.application.Application.isReconsiled;
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
+import static com.markss.rfidtemplate.rfid.RFIDController.mIsInventoryRunning;
 
 import static asset.trak.utils.ExtensionKt.decreaseRangeToThirty;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -134,6 +139,12 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         return inflater.inflate(R.layout.fragment_maplocation, container, false);
         //
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().unregisterReceiver(receiver);
     }
 
     @Override
@@ -372,34 +383,34 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         });
 
 
-        btnScan.setOnClickListener(v -> {
-            if (btnScan.getTag().equals("1")) {
-                btnScan.setTag("0");
-                llBottomParent.setVisibility(View.GONE);
-                btnScan.setImageResource(android.R.drawable.ic_media_pause);
-                listInventoryList = new HashSet<>();
-                //new requirement
-                foundLocParent.setVisibility(View.GONE);
-                foundForDifferentParent.setVisibility(View.GONE);
-
-            } else {
-                btnScan.setTag("1");
-                llBottomParent.setVisibility(View.VISIBLE);
-                btnScan.setImageResource(android.R.drawable.ic_media_play);
-                addDataToScanTag();
-                showCountFound();
-                updateCountInDb();
-
-//                btnScan.setTag("1");
+//        btnScan.setOnClickListener(v -> {
+//            if (btnScan.getTag().equals("1")) {
+//                btnScan.setTag("0");
 //                llBottomParent.setVisibility(View.GONE);
-//                btnScan.setImageResource(android.R.drawable.ic_media_play);
+//                btnScan.setImageResource(android.R.drawable.ic_media_pause);
 //                listInventoryList = new HashSet<>();
-            }
-        });
+//                //new requirement
+//                foundLocParent.setVisibility(View.GONE);
+//                foundForDifferentParent.setVisibility(View.GONE);
+//
+//            } else {
+//                btnScan.setTag("1");
+//                llBottomParent.setVisibility(View.VISIBLE);
+//                btnScan.setImageResource(android.R.drawable.ic_media_play);
+//                addDataToScanTag();
+//                showCountFound();
+//                updateCountInDb();
+//
+////                btnScan.setTag("1");
+////                llBottomParent.setVisibility(View.GONE);
+////                btnScan.setImageResource(android.R.drawable.ic_media_play);
+////                listInventoryList = new HashSet<>();
+//            }
+//        });
         if (isFromReconsile) {
-            btnScan.setTag("1");
+            inventoryButton.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
-            btnScan.setImageResource(android.R.drawable.ic_media_play);
+            inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
         }
@@ -453,6 +464,9 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mIsInventoryRunning) {
+            inventoryButton.performClick();
+        }
     }
 
     @Override
@@ -786,10 +800,43 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         alert11.show();
     }
 
+    BroadcastReceiver receiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isInventoryStartStop=  intent.getBooleanExtra("istart",false);
+            if(!isInventoryStartStop)
+            {
+                inventoryButton.setTag("0");
+                llBottomParent.setVisibility(View.GONE);
+                inventoryButton.setImageResource(android.R.drawable.ic_media_pause);
+                listInventoryList = new HashSet<>();
+
+                //new requirement
+                foundLocParent.setVisibility(View.GONE);
+                foundForDifferentParent.setVisibility(View.GONE);
+                //inventoryViewModel.updateTime();
+            }
+            else
+            {
+                //inventoryViewModel.stopTime();
+                inventoryButton.setTag("1");
+                llBottomParent.setVisibility(View.VISIBLE);
+                inventoryButton.setImageResource(android.R.drawable.ic_media_play);
+                addDataToScanTag();
+                showCountFound();
+                updateCountInDb();
+            }
+
+            //   btnScan.performClick();
+        }
+    };
+
+
 
     @Override
     public void onResume() {
         super.onResume();
+        requireActivity().registerReceiver(receiver,new IntentFilter("INVENTORYSTART"));
         Log.d("scantagcheck", "onResume: " + btnScan.getTag());
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
@@ -879,9 +926,9 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     public void onDataSent(boolean isBack) {
         Log.d("tag12", "onDataSent: " + isBack);
         isFromReconsile = isBack;
-        btnScan.setTag("1");
+        inventoryButton.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
-        btnScan.setImageResource(android.R.drawable.ic_media_play);
+        inventoryButton.setImageResource(android.R.drawable.ic_media_play);
         addDataToScanTag();
         showCountFound();
     }
