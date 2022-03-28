@@ -35,7 +35,7 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
     private var initialized = false;
     private var version65OrOver = false
 
- //   private val viewModel: InventoryViewModel by viewModels()
+    //   private val viewModel: InventoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +59,8 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
 //            intent.putExtra(DWInterface.DATAWEDGE_SCAN_EXTRA_DATA_STRING, "1000024")
 //            onNewIntent(intent)
         }
+
+        seekBar.visibility = View.GONE
 
         if (intent.getStringExtra("type") == "2") {
             tvTitle.text = "Put Away Inventory"

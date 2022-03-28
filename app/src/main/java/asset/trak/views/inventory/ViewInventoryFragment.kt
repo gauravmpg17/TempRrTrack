@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
@@ -19,6 +20,8 @@ import asset.trak.modelsrrtrack.MasterLocation
 import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.decreaseRangeToThirty
+import asset.trak.utils.getThumb
+import asset.trak.utils.getThumbView
 import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.module.InventoryViewModel
@@ -74,12 +77,30 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 ).putExtra("type", type), 102
             )
         }
+
+        seekBar.progress = 30
+        seekBar.thumb = getThumb(30, requireActivity().resources, requireActivity().getThumbView())
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                seekBar.thumb = getThumb(
+                    p1, requireActivity().resources, requireActivity().getThumbView()
+                )
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+
+            }
+        })
     }
 
     override fun onStop() {
         super.onStop()
         inventoryViewModel.isFirstTime = false
-        isAbandoned=false
+        isAbandoned = false
     }
 
 
@@ -126,7 +147,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             editor?.commit()
             progressBar1.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
-           // Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -135,7 +156,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
         if (isFromWhat.equals("rfidlocation")) {
             tvTitle.text = "Put Away Inventory"
-         //   range_seekbar1.visibility=View.VISIBLE
+            //   range_seekbar1.visibility=View.VISIBLE
             tvInventoryReport.visibility = View.INVISIBLE
             tvILastRecord.visibility = View.INVISIBLE
             registered.visibility = View.INVISIBLE
@@ -238,8 +259,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 //here
                 try {
                     if (isFromWhat.equals("rfidlocation")) {
-                        Log.d("range", "listeners:${range_seekbar1.currentValue} ")
-                        decreaseRangeToThirty(range_seekbar1.currentValue)
+                        Log.d("range", "listeners:${seekBar.progress} ")
+                        decreaseRangeToThirty(seekBar.progress)
                     }
                 } catch (e: Exception) {
                     Log.d("decreaseRangeToThirty", e.message.toString())
@@ -295,55 +316,52 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         mapRFIDLocationFragment.arguments = bundle
                         if (isFromWhat.equals("location")) {
 
-                            if(inventoryViewModel.isFirstTime)
-                            {
+                            if (inventoryViewModel.isFirstTime) {
                                 val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar1.currentValue}m. Please Scan Closely")
+                                builder1.setMessage("RFID Reader Scan Range changed to ${seekBar.progress}m. Please Scan Closely")
                                 builder1.setCancelable(false)
                                 builder1.setPositiveButton(
                                     "Ok"
                                 ) { dialog, id ->
                                     dialog.cancel()
                                     replaceFragment(
-                                        requireActivity().supportFragmentManager, fragmentRapidReadFragment,
+                                        requireActivity().supportFragmentManager,
+                                        fragmentRapidReadFragment,
                                         R.id.content_frame
                                     )
                                 }
                                 val alert11 = builder1.create()
                                 alert11.show()
-                            }
-                            else
-                            {
+                            } else {
                                 replaceFragment(
-                                    requireActivity().supportFragmentManager, fragmentRapidReadFragment,
+                                    requireActivity().supportFragmentManager,
+                                    fragmentRapidReadFragment,
                                     R.id.content_frame
                                 )
                             }
 
 
-
                         } else if (isFromWhat.equals("rfidlocation")) {
-                            if(inventoryViewModel.isFirstTime)
-                            {
+                            if (inventoryViewModel.isFirstTime) {
                                 val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar1.currentValue}m. Please Scan Closely")
+                                builder1.setMessage("RFID Reader Scan Range changed to ${seekBar.progress}m. Please Scan Closely")
                                 builder1.setCancelable(false)
                                 builder1.setPositiveButton(
                                     "Ok"
                                 ) { dialog, id ->
                                     dialog.cancel()
                                     replaceFragment(
-                                        requireActivity().supportFragmentManager, mapRFIDLocationFragment,
+                                        requireActivity().supportFragmentManager,
+                                        mapRFIDLocationFragment,
                                         R.id.content_frame
                                     )
                                 }
                                 val alert11 = builder1.create()
                                 alert11.show()
-                            }
-                            else
-                            {
+                            } else {
                                 replaceFragment(
-                                    requireActivity().supportFragmentManager, mapRFIDLocationFragment,
+                                    requireActivity().supportFragmentManager,
+                                    mapRFIDLocationFragment,
                                     R.id.content_frame
                                 )
                             }
@@ -363,8 +381,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             etRfid.setText(returnValue)
         }
     }
-
-
 
 
 }

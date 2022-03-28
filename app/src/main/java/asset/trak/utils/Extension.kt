@@ -3,8 +3,15 @@ package asset.trak.utils
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.compressimage.Compressor
@@ -92,7 +99,7 @@ fun isAvailableData(list: List<AssetMain>, rfid: String, assertId: String): Bool
 //
 //}
 
-fun decreaseRangeToThirty(value:Int){
+fun decreaseRangeToThirty(value: Int) {
     if (mConnectedReader != null && mConnectedReader.isConnected()) {
         if (!(Application.mIsInventoryRunning || Application.isLocatingTag) && mConnectedReader.Config.Antennas != null) {
             try {
@@ -103,31 +110,31 @@ fun decreaseRangeToThirty(value:Int){
                 //                    antennaRfConfig.setrfModeTableIndex(LinkProfileUtil.getInstance().getSimpleProfileModeIndex(item.LinkProfileIndex));
                 mConnectedReader.Config.Antennas.setAntennaRfConfig(1, antennaRfConfig)
                 Application.antennaRfConfig = antennaRfConfig
-              /*  Toast.makeText(
-                    Application.context,
-                    "RFID Reader Connected Range set to ${value}",
-                    Toast.LENGTH_SHORT
-                ).show()*/
+                /*  Toast.makeText(
+                      Application.context,
+                      "RFID Reader Connected Range set to ${value}",
+                      Toast.LENGTH_SHORT
+                  ).show()*/
             } catch (e: InvalidUsageException) {
-               /* Log.d(
-                    "decreaseRangeToThirty",
-                    " Antenna configuration failed invalid usage EX " + e.vendorMessage
-                )
-                Toast.makeText(
-                    Application.context,
-                    "decreaseRangeToThirty Error1: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()*/
+                /* Log.d(
+                     "decreaseRangeToThirty",
+                     " Antenna configuration failed invalid usage EX " + e.vendorMessage
+                 )
+                 Toast.makeText(
+                     Application.context,
+                     "decreaseRangeToThirty Error1: ${e.message}",
+                     Toast.LENGTH_SHORT
+                 ).show()*/
             } catch (e: OperationFailureException) {
-              /*  Log.d(
-                    "decreaseRangeToThirty",
-                    " Antenna configuration failed operation failure EX " + e.vendorMessage
-                )
-                Toast.makeText(
-                    Application.context,
-                    "decreaseRangeToThirty Error2: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()*/
+                /*  Log.d(
+                      "decreaseRangeToThirty",
+                      " Antenna configuration failed operation failure EX " + e.vendorMessage
+                  )
+                  Toast.makeText(
+                      Application.context,
+                      "decreaseRangeToThirty Error2: ${e.message}",
+                      Toast.LENGTH_SHORT
+                  ).show()*/
             }
         } else Toast.makeText(
             Application.context,
@@ -174,4 +181,34 @@ fun decreaseRangeToThirty(value:Int){
 //        e.printStackTrace()
 //    }
 //}
+
+fun getThumb(progress: Int, resources: Resources, thumbView: View): Drawable? {
+    (thumbView.findViewById(R.id.tvProgress) as TextView).text = when (progress) {
+        in 18..24 -> {
+            "L"
+        }
+        in 25..29 -> {
+            "M"
+        }
+        else -> {
+            "H"
+        }
+    }
+    (thumbView.findViewById(R.id.tvProgresstv) as TextView).text = (progress).toString() + ""
+    thumbView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    val bitmap = Bitmap.createBitmap(
+        thumbView.measuredWidth,
+        thumbView.measuredHeight,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    thumbView.layout(0, 0, thumbView.measuredWidth, thumbView.measuredHeight)
+    thumbView.draw(canvas)
+    return BitmapDrawable(resources, bitmap)
+}
+
+fun Context.getThumbView(): View {
+    return LayoutInflater.from(this).inflate(R.layout.layout_seekbar_thumb, null, false)
+
+}
 

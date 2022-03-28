@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="true"
         android:background="@color/white">
 
         <androidx.constraintlayout.widget.Guideline
@@ -265,12 +266,28 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBar"
+            android:max="30"
+            android:min="18"
+            android:splitTrack="false"
+            android:progressDrawable="@drawable/custom_seekbar"
+            android:indeterminate="false"
+            android:layout_width="0dp"
+            android:layout_marginBottom="4dp"
+            android:thumbOffset="-0dp"
+            app:layout_constraintBottom_toTopOf="@id/range_seekbar1"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            android:layout_height="wrap_content"/>
+
         <com.mohammedalaa.seekbar.RangeSeekBarView
             android:id="@+id/range_seekbar1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             app:barHeight="17dp"
+            android:visibility="gone"
             app:baseColor="@color/lightt_blue"
             app:circleFillColor="@color/blue_"
             app:circleRadius="15dp"

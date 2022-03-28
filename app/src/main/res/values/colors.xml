@@ -11,6 +11,7 @@
     <color name="colorPrimary">#78909c</color>
     <color name="colorPrimaryDark">#4b636e</color>
     <color name="colorAccent">#ff7043</color>
+    <color name="seekBarTrack">#B6B2B3</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
