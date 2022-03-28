@@ -265,6 +265,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBar"
+            android:max="30"
+            android:min="18"
+            android:splitTrack="false"
+            android:progressDrawable="@drawable/custom_seekbar"
+            android:indeterminate="false"
+            android:layout_width="0dp"
+            android:layout_marginBottom="4dp"
+            android:thumbOffset="-0dp"
+            app:layout_constraintBottom_toTopOf="@id/range_seekbar1"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            android:layout_height="wrap_content"/>
+
 
         <com.google.android.material.slider.Slider
 

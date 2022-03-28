@@ -4,7 +4,6 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Mobile Programming/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_dropdown_item_1line.xml" value="0.375" />
-        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/drawable/rectangle_border_inventory_gry.xml" value="0.17" />
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout-v21/fragment_different_loaction.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout-v21/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout-v21/fragment_my_library_search.xml" value="0.1125" />
@@ -22,8 +21,11 @@
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/fragment_rr_global.xml" value="0.29583333333333334" />
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/fragment_single_tag_locate.xml" value="0.33194444444444443" />
         <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/itme_result_bottom.xml" value="0.375" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/custom_seekbar.xml" value="0.1595" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/custom_thumb.xml" value="0.124" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/ic_configurations.xml" value="0.1595" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/ic_sync_small.xml" value="0.1595" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/switch_thumb.xml" value="0.1595" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_home.xml" value="0.37251908396946565" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_my_library_search.xml" value="0.37251908396946565" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_reconcile_assets.xml" value="0.536" />
@@ -38,6 +40,7 @@
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_rr_global.xml" value="0.16953125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_single_tag_locate.xml" value="0.37251908396946565" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/itme_result_bottom.xml" value="0.56875" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/layout_seekbar_thumb.xml" value="0.61" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/menu/menu_locate_tag.xml" value="0.38125" />
       </map>
     </option>
