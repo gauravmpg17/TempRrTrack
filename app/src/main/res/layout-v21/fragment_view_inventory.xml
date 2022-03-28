@@ -367,7 +367,7 @@
             app:layout_constraintEnd_toStartOf="@+id/txMedium"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/range_seekbar1"
-            android:text="Low"
+            android:text="@string/low"
             app:layout_constraintStart_toStartOf="@id/range_seekbar2"
            />
 
@@ -379,7 +379,7 @@
             app:layout_constraintStart_toEndOf="@+id/txtLow"
             app:layout_constraintEnd_toStartOf="@+id/txtHigh"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
-            android:text="Medium" />
+            android:text="@string/medium" />
 
         <TextView
             android:id="@+id/txtHigh"
@@ -389,7 +389,7 @@
             android:layout_marginEnd="@dimen/ten_dp"
             app:layout_constraintStart_toEndOf="@+id/txMedium"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
-            android:text="High"
+            android:text="@string/high"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

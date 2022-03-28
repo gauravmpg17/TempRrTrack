@@ -699,5 +699,8 @@
     <string name="scan_barcode">Scan BarCode</string>
     <string name="settings_error_progress">RFID Settings Error</string>
     <string name="reader_not_conneted">Reader not Connected</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
 
 </resources>
