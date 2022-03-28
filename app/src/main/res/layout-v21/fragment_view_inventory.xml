@@ -275,28 +275,26 @@
             android:layout_width="0dp"
             android:layout_marginBottom="4dp"
             android:thumbOffset="-0dp"
-            app:layout_constraintBottom_toTopOf="@id/range_seekbar1"
+            app:layout_constraintBottom_toTopOf="@id/range_seekbar2"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             android:layout_height="wrap_content"/>
 
 
         <com.google.android.material.slider.Slider
-
+            app:labelStyle="@style/Widget.App.Tooltip"
             android:id="@+id/range_seekbar2"
             app:trackHeight="@dimen/margin_15"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:circularflow_radiusInDP="15dp"
 
-            app:haloColor="@color/green"
-            app:thumbColor="#48DD92"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:circularflow_radiusInDP="15dp"
             app:thumbRadius="@dimen/margin_15"
             app:haloRadius="@dimen/margin_15"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_constraintBottom_toTopOf="@id/txtLow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
             app:labelBehavior="floating"
             android:value="30"
             android:valueFrom="18"
@@ -370,7 +368,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/range_seekbar1"
             android:text="Low"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintStart_toStartOf="@id/range_seekbar2"
            />
 
         <TextView
@@ -391,6 +389,6 @@
             app:layout_constraintStart_toEndOf="@+id/txMedium"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
             android:text="High"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+            app:layout_constraintEnd_toEndOf="@id/range_seekbar2"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -52,7 +52,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         range_seekbar1.setAnimated(true, 3000L)
-
+        range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.green))
         range_seekbar2.setLabelFormatter { value: Float ->
         return@setLabelFormatter value.toInt().toString()
         }
