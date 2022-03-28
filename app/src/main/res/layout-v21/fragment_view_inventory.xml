@@ -265,11 +265,36 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.mohammedalaa.seekbar.RangeSeekBarView
-            android:id="@+id/range_seekbar1"
+
+        <com.google.android.material.slider.Slider
+
+            android:id="@+id/range_seekbar2"
+            app:trackHeight="@dimen/margin_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:circularflow_radiusInDP="15dp"
+
+            app:haloColor="@color/green"
+            app:thumbColor="#48DD92"
+            app:thumbRadius="@dimen/margin_15"
+            app:haloRadius="@dimen/margin_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txtLow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:labelBehavior="floating"
+            android:value="30"
+            android:valueFrom="18"
+            android:valueTo="30"/>
+
+
+        <com.mohammedalaa.seekbar.RangeSeekBarView
+            android:id="@+id/range_seekbar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:layout_marginStart="@dimen/margin_15"
+            android:layout_marginEnd="@dimen/margin_15"
             app:barHeight="17dp"
             app:baseColor="@color/lightt_blue"
             app:circleFillColor="@color/blue_"
@@ -278,8 +303,8 @@
             app:circleTextSize="@dimen/value_bar_circleTextSize"
             app:currentValue="30"
             app:fillColor="@color/blue_"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/buttonscan"
             app:maxValue="30"
             app:minValue="18"
@@ -320,5 +345,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtLow"
+            android:textColor="@color/red"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:layout_width="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/txMedium"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/range_seekbar1"
+            android:text="Low"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+           />
+
+        <TextView
+            android:id="@+id/txMedium"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/txtLow"
+            app:layout_constraintEnd_toStartOf="@+id/txtHigh"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
+            android:text="Medium" />
+
+        <TextView
+            android:id="@+id/txtHigh"
+            android:textColor="@color/green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/txMedium"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
+            android:text="High"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

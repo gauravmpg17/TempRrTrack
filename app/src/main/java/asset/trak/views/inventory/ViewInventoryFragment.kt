@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
@@ -47,6 +48,27 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        range_seekbar1.setAnimated(true, 3000L)
+
+        range_seekbar2.setLabelFormatter { value: Float ->
+        return@setLabelFormatter value.toInt().toString()
+        }
+        range_seekbar2.addOnChangeListener { rangeSlider, value, fromUser ->
+            // Responds to when slider's value is changed
+            if(value.toInt() ==18 || value < 24)
+            {
+                range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.red))
+            }
+            else if(value.toInt() ==24 || value < 30)
+            {
+                range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+            }
+            else
+            {
+                range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.green))
+            }
+        }
+
         sharedPreference = requireActivity().getSharedPreferences(
             Constants.PrefenceFileName,
             Context.MODE_PRIVATE
