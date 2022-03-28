@@ -61,7 +61,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             if(value.toInt() ==18 || value < 24)
             {
                 range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.red))
-            }
+           }
             else if(value.toInt() ==24 || value < 30)
             {
                 range_seekbar2.thumbTintList= ColorStateList.valueOf(resources.getColor(R.color.colorAccent))

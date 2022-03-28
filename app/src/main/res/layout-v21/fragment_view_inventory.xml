@@ -285,7 +285,6 @@
             app:labelStyle="@style/Widget.App.Tooltip"
             android:id="@+id/range_seekbar2"
             app:trackHeight="@dimen/margin_15"
-
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:circularflow_radiusInDP="15dp"
             app:thumbRadius="@dimen/margin_15"
@@ -294,7 +293,7 @@
             app:layout_constraintBottom_toTopOf="@id/txtLow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
+            android:layout_gravity="center"
             app:labelBehavior="floating"
             android:value="30"
             android:valueFrom="18"
@@ -362,6 +361,7 @@
         <TextView
             android:id="@+id/txtLow"
             android:textColor="@color/red"
+            android:layout_marginStart="@dimen/fifteen_dp"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:layout_width="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/txMedium"
@@ -386,9 +386,10 @@
             android:textColor="@color/green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ten_dp"
             app:layout_constraintStart_toEndOf="@+id/txMedium"
             app:layout_constraintBaseline_toBaselineOf="@+id/txtLow"
             android:text="High"
-            app:layout_constraintEnd_toEndOf="@id/range_seekbar2"/>
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
