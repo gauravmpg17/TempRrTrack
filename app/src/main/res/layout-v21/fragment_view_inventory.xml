@@ -193,7 +193,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/twenty_five_dp"
                 android:fontFamily="@font/jio_type_medium"
-                android:text="Newly\nRegistered"     android:textColor="@color/black"
+                android:text="Newly\nRegistered"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_13"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -202,15 +203,15 @@
             <TextView
                 android:id="@+id/tvNewlyScanCount"
                 android:layout_width="0dp"
-                android:textAlignment="textEnd"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/six_dp"
+                android:layout_marginStart="@dimen/four_dp"
                 android:layout_marginEnd="@dimen/twenty_five_dp"
                 android:fontFamily="@font/jio_type_bold"
                 android:text="0"
+                android:textAlignment="textEnd"
                 android:textColor="@color/btn_color"
                 android:textSize="@dimen/text_size_30"
-                android:layout_marginVertical="@dimen/six_dp"
-                android:layout_marginStart="@dimen/four_dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/view4"
@@ -231,7 +232,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/tvNewlyScane1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -242,6 +242,7 @@
                 android:text="Newly\nRegistered"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_13"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -255,14 +256,35 @@
                 android:fontFamily="@font/jio_type_bold"
                 android:gravity="center"
                 android:text="0"
-                android:visibility="gone"
                 android:textColor="@color/btn_color"
                 android:textSize="@dimen/text_size_30"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/tvNewlyScane"
                 app:layout_constraintTop_toBottomOf="@+id/tvNewlyScane" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.mohammedalaa.seekbar.RangeSeekBarView
+            android:id="@+id/range_seekbar1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:barHeight="17dp"
+            app:baseColor="@color/lightt_blue"
+            app:circleFillColor="@color/blue_"
+            app:circleRadius="15dp"
+            app:circleTextColor="@color/white"
+            app:circleTextSize="@dimen/value_bar_circleTextSize"
+            app:currentValue="30"
+            app:fillColor="@color/blue_"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintBottom_toTopOf="@id/buttonscan"
+            app:maxValue="30"
+            app:minValue="18"
+            app:orientation="LEFT_TO_RIGHT"
+            app:stepValue="1" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

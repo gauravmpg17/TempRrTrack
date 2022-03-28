@@ -4,7 +4,11 @@
         <attr name="minimum" format="integer"/>
         <attr name="maximum" format="integer"/>
         <!-- Provide an Orientation parameter as an enum ** Not implemented yet! -->
-        <attr name="orientation" format="enum">
+<!--        <attr name="orientation" format="enum">-->
+<!--            <enum name="vertical" value="0"/>-->
+<!--            <enum name="horizontal" value="1"/>-->
+<!--        </attr>-->
+        <attr name="orientation1" format="enum">
             <enum name="vertical" value="0"/>
             <enum name="horizontal" value="1"/>
         </attr>
@@ -13,4 +17,6 @@
         <attr name="colorInRange" format="color" />
         <attr name="colorOutOfRange" format="color" />
     </declare-styleable>
+
+
 </resources>
