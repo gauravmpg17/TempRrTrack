@@ -39,7 +39,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
     private lateinit var resultAdapter: ResultAdapter
     private var listBook = ArrayList<AssetMain>()
-    private lateinit var navController: NavController
     var sharedPreference: SharedPreferences? = null
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
 

@@ -831,7 +831,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             } else {
                 FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
             }
-
         });
 
 
