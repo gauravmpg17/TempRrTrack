@@ -25,6 +25,10 @@ import com.markss.rfidtemplate.rfid.RFIDController
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_my_library_search.*
 import kotlinx.android.synthetic.main.fragment_my_library_search.progressBar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,15 +43,21 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     var sharedPreference: SharedPreferences? = null
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getLastSync()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference =
-            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
-
+        progressBar.visibility = View.VISIBLE
         ivBack.setOnClickListener {
             getBackToPreviousFragment()
         }
+        resultAdapter = ResultAdapter(requireContext(), this, listBook,true)
+        rvResult.adapter = resultAdapter
         setAdaptor()
+
         searchView.queryHint = Html.fromHtml("<font color = #D3D3D3>" + getResources().getString(R.string.search) + "</font>");
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
@@ -58,7 +68,19 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                resultAdapter.filter.filter(newText)
+                if(!newText.isNullOrEmpty())
+                {
+                    resultAdapter.filter.filter(newText)
+                }
+                else
+                {
+                    listBook.clear()
+                    listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+                    resultAdapter = ResultAdapter(requireContext(), this@MyLibrarySearchFragment, listBook,true)
+                    rvResult.adapter = resultAdapter
+                    Log.d("tag1212121", "setAdaptor: ${listBook.size} ")
+                }
+
                 return true
             }
         })
@@ -86,22 +108,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 //    }
 
     private fun setAdaptor() {
-        listBook.clear()
-        listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
-        if(listBook.isEmpty())
-        {
-            getLastSync()
-        }
-
-
-//        Log.e("ss",""+listBook[0].assetCatalogue.imagePathFile)
-
-        resultAdapter = ResultAdapter(requireContext(), this, listBook,true)
-        rvResult.adapter = resultAdapter
-    }
-
-    private fun getLastSync() {
-        progressBar.visibility = View.VISIBLE
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         var currSyncTime = sdf.format(Date())
@@ -109,13 +115,16 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         //     Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
 
-        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
+        inventoryViewModel.mLastSyncData.observe(viewLifecycleOwner) {
 
             if (it != null && it.statuscode == 200 && it.data != null) {
                 it.data.let {
                     if (!it.AssetMain.isNullOrEmpty()) {
+                        listBook.clear()
                         Application.bookDao?.addAssetMain(it.AssetMain)
                         listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+                        resultAdapter.notifyDataSetChanged()
+                        Log.d("tag1212121", "setAdaptor: ${listBook.size} ")
                     }
                 }
             }
@@ -127,6 +136,14 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             progressBar.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
         }
+    }
+
+    private fun getLastSync() {
+        sharedPreference =
+            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
+        inventoryViewModel.getLastSync(syncTime)
     }
 }
 

@@ -22,8 +22,7 @@ import kotlinx.android.synthetic.main.fragment_not_found.searchView
 @AndroidEntryPoint
 class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.fragment_not_found)
  {
-
-    private lateinit var notFoundAdapter: NotFoundAdapter
+     private lateinit var notFoundAdapter: NotFoundAdapter
     private val inventoryViewModel:InventoryViewModel by activityViewModels()
 
      var listBook = ArrayList<AssetMain>()
@@ -31,7 +30,6 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
          super.onResume()
          setAdaptor()
      }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

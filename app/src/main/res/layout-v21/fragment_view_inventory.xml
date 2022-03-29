@@ -193,7 +193,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/twenty_five_dp"
                 android:fontFamily="@font/jio_type_medium"
-                android:text="Newly\nRegistered"
+                android:text="Registered"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_13"
                 app:layout_constraintBottom_toBottomOf="parent"

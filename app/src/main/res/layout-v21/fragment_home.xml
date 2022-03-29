@@ -428,7 +428,7 @@
                         android:maxLines="1"
                         android:paddingTop="@dimen/ten_dp"
                         android:paddingBottom="@dimen/ten_dp"
-                        android:text="Clear Data"
+                        android:text="Refresh Data"
                         android:textColor="@color/black"
                         android:textSize="@dimen/diet_cta"
                         android:textStyle="bold" />

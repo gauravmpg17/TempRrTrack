@@ -94,7 +94,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         initialisation()
         setAdaptor()
         listeners()
-        if (inventoryViewModel.isFirstTime || (Application.isReconsiled && !isAbandoned)) {
+        if (inventoryViewModel.isFirstTime || (Application.isReconsiled && isAbandoned)) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
             getLastSync()
         }
@@ -211,11 +211,16 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 if (s.toString().trim().isEmpty()) {
                     tvLocation.text = ""
                     tvRegisteredCount.text = "0"
-                    tvNewlyScanCount.text = "0"
+                   tvNewlyScanCount.text = "0"
                 } else if (s.toString().length >= 4) {
+                    tvLocation.text=""
                     barCodeName = s.toString().trim()
                     //here
                     currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
+                   if(currMasterLocation==null)
+                   {
+                       tvLocation.text = ""
+                   }
                     currMasterLocation?.let {
                         it.Name?.let {
                             tvLocation.text = it
@@ -294,14 +299,14 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 ).show()
             } else if (barCodeName.isNotEmpty()) {
                 //here
-                try {
-                    // if (isFromWhat.equals("rfidlocation")) {
-                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
-                    decreaseRangeToThirty(range_seekbar2.value.toInt())
-                    //}
-                } catch (e: Exception) {
-                    Log.d("decreaseRangeToThirty", e.message.toString())
-                }
+//                try {
+//                    // if (isFromWhat.equals("rfidlocation")) {
+//                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
+//                    decreaseRangeToThirty(range_seekbar2.value.toInt())
+//                    //}
+//                } catch (e: Exception) {
+//                    Log.d("decreaseRangeToThirty", e.message.toString())
+//                }
 
                 //  connectRFIDReader()
                 currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
@@ -353,10 +358,11 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         mapRFIDLocationFragment.arguments = bundle
                         if (isFromWhat.equals("location")) {
 
+                            /*RFID Reader Power changed to 50dbm. Please Scan closely*/
                             if (inventoryViewModel.isFirstTime) {
                                 CommonAlertDialog(
                                     requireActivity(),
-                                    "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                    "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
                                     "OK",
                                     "",
                                     object : CommonAlertDialog.OnButtonClickListener {
@@ -377,7 +383,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                 if (range_seekbar2.value.toInt() != 100) {
                                     CommonAlertDialog(
                                         requireActivity(),
-                                        "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                        "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
                                         "OK",
                                         "",
                                         object : CommonAlertDialog.OnButtonClickListener {
@@ -407,7 +413,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                             if (inventoryViewModel.isFirstTime) {
                                 CommonAlertDialog(
                                     requireActivity(),
-                                    "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                    "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
                                     "OK",
                                     "",
                                     object : CommonAlertDialog.OnButtonClickListener {
@@ -428,7 +434,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
                                     CommonAlertDialog(
                                         requireActivity(),
-                                        "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                        "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
                                         "OK",
                                         "",
                                         object : CommonAlertDialog.OnButtonClickListener {

@@ -2,6 +2,7 @@ package asset.trak.views.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.ScanTag
 import asset.trak.database.entity.Selection
+import asset.trak.utils.decreaseRangeToThirty
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.home.MainActivity
@@ -84,6 +86,12 @@ class NotRegsiteredAdapter(private val context: Context,private val fragment: Fr
 
         holder.tvSearch.setOnClickListener{
 
+            try {
+                decreaseRangeToThirty(300)
+            }
+            catch (e: Exception){
+                Log.d("decreaseRangeToThirty", e.message.toString())
+            }
             Application.locateTag = item.rfidTag
 
             Application.comefrom ="hide"

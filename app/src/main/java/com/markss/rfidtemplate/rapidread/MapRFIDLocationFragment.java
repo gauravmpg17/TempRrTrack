@@ -10,6 +10,7 @@ import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
 import static com.markss.rfidtemplate.rfid.RFIDController.mIsInventoryRunning;
 
 import static asset.trak.utils.ExtensionKt.decreaseRangeToThirty;
+import static asset.trak.utils.ExtensionKt.getRFIDDistinct;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -733,7 +734,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                     //   listAssetData.add(scanTag);
                     mapToLocationApiRequest.getAssetData().add(scanTag);
                 }
-
+                mapToLocationApiRequest.setAssetData(getRFIDDistinct(mapToLocationApiRequest.getAssetData()));
 
                 RequestBody body = RequestBody.create(new Gson().toJson(mapToLocationApiRequest), MediaType.parse("application/json"));
 

@@ -2,6 +2,7 @@ package asset.trak.views.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.modelsrrtrack.AssetMain
+import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.utils.getFormattedDate
 import asset.trak.views.fragments.ScanFragment
 import com.bumptech.glide.Glide
@@ -99,6 +101,12 @@ class NotFoundAdapter(
 
         holder.tvSearch.visibility = View.VISIBLE
         holder.tvSearch.setOnClickListener {
+            try {
+                decreaseRangeToThirty(300)
+            }
+            catch (e: Exception){
+                Log.d("decreaseRangeToThirty", e.message.toString())
+            }
 
             Application.locateTag = item.AssetRFID
             RFIDController.accessControlTag = item.AssetRFID

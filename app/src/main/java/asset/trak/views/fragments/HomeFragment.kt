@@ -43,12 +43,6 @@ private const val TAG = "HomeFragment"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
-    private var isSyncClicked: Boolean = false
-    private var badgeBitmap: Bitmap? = null
-    private var badgeURI: Uri? = null
-    private var isImagedownloaded: Boolean = false
-    private var badgeImage: File? = null
-    private var listBookAttributes: ArrayList<BookAttributes> = ArrayList()
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var sharedPreference: SharedPreferences? = null
 
@@ -121,7 +115,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     locationId = 0,
                     scanStartDatetime = dateFormat
                 )
-                Application.roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+                roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
             }
             replaceFragment(
                 requireActivity().supportFragmentManager,
@@ -193,8 +187,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     roomDatabaseBuilder.getBookDao().deleteTblSubCategoryMasterTable()
                 }
                 job.await()
-                Toast.makeText(requireActivity(), "Data Cleared Successfully", Toast.LENGTH_LONG)
-                    .show()
+                getLastSync(true)
+
 
             }
 
@@ -202,7 +196,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     }
 
 
-    private fun getLastSync() {
+    private fun getLastSync(isFromDelete:Boolean=false) {
         progressBar.visibility = View.VISIBLE
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
@@ -245,9 +239,21 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             progressBar.visibility = View.INVISIBLE
             enableUserInteraction(requireActivity())
 
-            Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
-                .show()
+            if(isFromDelete)
+            {
+
+                Toast.makeText(requireActivity(), "Data Refreshed successfully", Toast.LENGTH_LONG)
+                    .show()
+            }
+            else
+            {
+                Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

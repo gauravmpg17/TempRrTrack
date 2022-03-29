@@ -24,7 +24,7 @@ import kotlin.collections.ArrayList
 @HiltViewModel
 class InventoryViewModel @Inject constructor(private val bookRepository: BookRepository) :
     ViewModel() {
-    private var mLastSyncData = MutableLiveData<LastSyncResponse>()
+     var mLastSyncData = MutableLiveData<LastSyncResponse>()
     private var mAssetSyncData = MutableLiveData<Int>()
     var listBookAttributes: ArrayList<BookAttributes> = ArrayList()
     var isFirstTime: Boolean = false

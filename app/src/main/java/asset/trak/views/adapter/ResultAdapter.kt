@@ -17,6 +17,7 @@ import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants.setTitleImage
+import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.utils.getFormattedDate
 import com.bumptech.glide.Glide
 import com.markss.rfidtemplate.R
@@ -82,6 +83,12 @@ class ResultAdapter(
 
 
         holder.itemView.setOnClickListener {
+            try {
+                decreaseRangeToThirty(300)
+            }
+            catch (e: Exception){
+                Log.d("decreaseRangeToThirty", e.message.toString())
+            }
             onGoalClickListener.onGoalClick(homeGoalsItem)
         }
     }
@@ -134,7 +141,7 @@ class ResultAdapter(
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = (results.values as ArrayList<AssetMain>)
+                items = results.values as ArrayList<AssetMain>
                 notifyDataSetChanged()
             }
         }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import asset.trak.modelsrrtrack.AssetData
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.compressimage.Compressor
 import asset.trak.utils.compressimage.constraint.format
@@ -218,5 +219,9 @@ fun showYesNoAlert(
     listener: CommonAlertDialog.OnButtonClickListener
 ) {
     CommonAlertDialog(context, message, "Yes", "No", listener).show()
+}
+
+fun getRFIDDistinct(list: List<AssetData>): List<AssetData> {
+    return list.distinctBy { it.assetRFID }
 }
 
