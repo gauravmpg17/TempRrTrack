@@ -704,7 +704,7 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         ExtensionKt.showYesNoAlert(requireActivity(), "Are you sure you want to complete Scan?.", new CommonAlertDialog.OnButtonClickListener() {
             @Override
             public void onPositiveButtonClicked() {
-                isReconsiled = false;
+           //     isReconsiled = false;
                 disableUserInteraction(getActivity());
                 //   List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
                 //      List<Inventorymaster> pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
@@ -747,6 +747,8 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
                         progressBar.setVisibility(View.GONE);
                         btnInventoryRecord.setEnabled(true);
                         btnInventoryRecord.setClickable(true);
+                        isReconsiled=true;
+                        isAbandoned=true;
 
                         bookDao.deletemapRFIDLocationAll();
                         //temporary commented
