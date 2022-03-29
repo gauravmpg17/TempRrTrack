@@ -3,6 +3,7 @@ package asset.trak.views.adapter
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import asset.trak.database.BookDao
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.AssetMain
@@ -142,7 +144,11 @@ class ResultAdapter(
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
                 items = results.values as ArrayList<AssetMain>
+                Log.d("tag1212121", "setAdaptor: ${items.size} ")
                 notifyDataSetChanged()
+                val intent=Intent("COUNT_UPDATE_SEARCH")
+                intent.putExtra("searchCount",items.size)
+                com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
             }
         }
     }

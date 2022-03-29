@@ -1,7 +1,6 @@
 package asset.trak.views.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Html
@@ -47,8 +46,16 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
         getLastSync()
     }
 
+    val receiver=object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            tvResult.text="${getString(R.string.lblResults)} (${intent?.getIntExtra("searchCount",0)})"
+        }
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().registerReceiver(receiver, IntentFilter("COUNT_UPDATE_SEARCH"))
         progressBar.visibility = View.VISIBLE
         ivBack.setOnClickListener {
             getBackToPreviousFragment()
@@ -70,27 +77,21 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                 if(!newText.isNullOrEmpty())
                 {
                     resultAdapter.filter.filter(newText)
-                    tvResult.text="${getString(R.string.lblResults)} (${resultAdapter.itemCount})"
+
                 }
                 else
                 {
                     listBook.clear()
                     listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
-                    tvResult.text="${getString(R.string.lblResults)} (${listBook.size})"
                     resultAdapter = ResultAdapter(requireContext(), this@MyLibrarySearchFragment, listBook,true)
                     rvResult.adapter = resultAdapter
-                    Log.d("tag1212121", "setAdaptor: ${listBook.size} ")
+                    tvResult.text="${getString(R.string.lblResults)} (${resultAdapter.itemCount})"
                 }
 
                 return true
             }
         })
 
-    }
-
-    fun displayCount(count:Int)
-    {
-        tvResult.text="${getString(R.string.lblResults)} (${count})"
     }
 
     override fun onGoalClick(bookAttributes: AssetMain) {
@@ -151,6 +152,11 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
         inventoryViewModel.getLastSync(syncTime)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().unregisterReceiver(receiver)
     }
 }
 
