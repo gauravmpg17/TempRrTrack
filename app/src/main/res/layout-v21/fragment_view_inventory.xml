@@ -266,6 +266,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatSeekBar
+            android:visibility="gone"
             android:id="@+id/seekBar"
             android:max="30"
             android:min="18"
@@ -302,6 +303,7 @@
 
         <com.mohammedalaa.seekbar.RangeSeekBarView
             android:id="@+id/range_seekbar1"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -360,6 +362,7 @@
 
         <TextView
             android:id="@+id/txtLow"
+            android:layout_marginBottom="@dimen/twelve_dp"
             android:textColor="@color/red"
             android:layout_marginStart="@dimen/fifteen_dp"
             app:layout_constraintHorizontal_chainStyle="spread_inside"

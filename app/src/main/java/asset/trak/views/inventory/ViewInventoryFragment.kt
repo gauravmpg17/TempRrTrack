@@ -267,7 +267,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
         buttonscan.setOnClickListener {
             if (barCodeName.isEmpty()) {
-                tvLocation.text = ""
+                tvLocation.text =
+                    ""
                 FancyToast.makeText(
                     requireActivity(),
                     "Please Enter Barcode.",
@@ -278,10 +279,10 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             } else if (barCodeName.isNotEmpty()) {
                 //here
                 try {
-                    if (isFromWhat.equals("rfidlocation")) {
-                        Log.d("range", "listeners:${seekBar.progress} ")
-                        decreaseRangeToThirty(seekBar.progress)
-                    }
+                   // if (isFromWhat.equals("rfidlocation")) {
+                        Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
+                        decreaseRangeToThirty(range_seekbar2.value.toInt())
+                    //}
                 } catch (e: Exception) {
                     Log.d("decreaseRangeToThirty", e.message.toString())
                 }
@@ -338,7 +339,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
                             if (inventoryViewModel.isFirstTime) {
                                 val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${seekBar.progress}m. Please Scan Closely")
+                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
                                 builder1.setCancelable(false)
                                 builder1.setPositiveButton(
                                     "Ok"
@@ -353,18 +354,38 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                 val alert11 = builder1.create()
                                 alert11.show()
                             } else {
-                                replaceFragment(
-                                    requireActivity().supportFragmentManager,
-                                    fragmentRapidReadFragment,
-                                    R.id.content_frame
-                                )
+                                if (range_seekbar2.value.toInt() != 30) {
+                                    val builder1 = AlertDialog.Builder(requireActivity())
+                                    builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
+                                    builder1.setCancelable(false)
+                                    builder1.setPositiveButton(
+                                        "Ok"
+                                    ) { dialog, id ->
+                                        dialog.cancel()
+                                        replaceFragment(
+                                            requireActivity().supportFragmentManager,
+                                            fragmentRapidReadFragment,
+                                            R.id.content_frame
+                                        )
+                                    }
+                                    val alert11 = builder1.create()
+                                    alert11.show()
+                                }
+                                else
+                                {
+                                    replaceFragment(
+                                        requireActivity().supportFragmentManager,
+                                        fragmentRapidReadFragment,
+                                        R.id.content_frame
+                                    )
+                                }
                             }
 
 
                         } else if (isFromWhat.equals("rfidlocation")) {
                             if (inventoryViewModel.isFirstTime) {
                                 val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${seekBar.progress}m. Please Scan Closely")
+                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
                                 builder1.setCancelable(false)
                                 builder1.setPositiveButton(
                                     "Ok"
@@ -379,11 +400,32 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                 val alert11 = builder1.create()
                                 alert11.show()
                             } else {
-                                replaceFragment(
-                                    requireActivity().supportFragmentManager,
-                                    mapRFIDLocationFragment,
-                                    R.id.content_frame
-                                )
+
+                                if (range_seekbar2.value.toInt() != 30) {
+                                    val builder1 = AlertDialog.Builder(requireActivity())
+                                    builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
+                                    builder1.setCancelable(false)
+                                    builder1.setPositiveButton(
+                                        "Ok"
+                                    ) { dialog, id ->
+                                        dialog.cancel()
+                                        replaceFragment(
+                                            requireActivity().supportFragmentManager,
+                                            mapRFIDLocationFragment,
+                                            R.id.content_frame
+                                        )
+                                    }
+                                    val alert11 = builder1.create()
+                                    alert11.show()
+                                }
+                                else
+                                {
+                                    replaceFragment(
+                                        requireActivity().supportFragmentManager,
+                                        mapRFIDLocationFragment,
+                                        R.id.content_frame
+                                    )
+                                }
                             }
                         }
                     }
