@@ -13,16 +13,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
 import asset.trak.modelsrrtrack.MasterLocation
-import asset.trak.utils.Constants
+import asset.trak.utils.*
 import asset.trak.utils.Constants.disableUserInteraction
-import asset.trak.utils.decreaseRangeToThirty
-import asset.trak.utils.getThumb
-import asset.trak.utils.getThumbView
 import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.module.InventoryViewModel
@@ -56,17 +52,37 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         range_seekbar2.setLabelFormatter { value: Float ->
             return@setLabelFormatter value.toInt().toString()
         }
+
+        if (isFromWhat.equals("location")) {
+            range_seekbar2.valueFrom = 0f
+            range_seekbar2.valueTo = 100f
+            range_seekbar2.value = 100f
+        }
+
         range_seekbar2.addOnChangeListener { rangeSlider, value, fromUser ->
             // Responds to when slider's value is changed
-            if (value.toInt() == 18 || value < 24) {
-                range_seekbar2.thumbTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.red))
-            } else if (value.toInt() == 24 || value < 30) {
-                range_seekbar2.thumbTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+            if (isFromWhat.equals("location")) {
+                if (value.toInt() == 0 || value < 50) {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.red))
+                } else if (value.toInt() == 50 || value < 100) {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+                } else {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.green))
+                }
             } else {
-                range_seekbar2.thumbTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.green))
+                if (value.toInt() == 18 || value < 24) {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.red))
+                } else if (value.toInt() == 24 || value < 30) {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+                } else {
+                    range_seekbar2.thumbTintList =
+                        ColorStateList.valueOf(resources.getColor(R.color.green))
+                }
             }
         }
 
@@ -279,9 +295,9 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
             } else if (barCodeName.isNotEmpty()) {
                 //here
                 try {
-                   // if (isFromWhat.equals("rfidlocation")) {
-                        Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
-                        decreaseRangeToThirty(range_seekbar2.value.toInt())
+                    // if (isFromWhat.equals("rfidlocation")) {
+                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
+                    decreaseRangeToThirty(range_seekbar2.value.toInt())
                     //}
                 } catch (e: Exception) {
                     Log.d("decreaseRangeToThirty", e.message.toString())
@@ -338,41 +354,46 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         if (isFromWhat.equals("location")) {
 
                             if (inventoryViewModel.isFirstTime) {
-                                val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
-                                builder1.setCancelable(false)
-                                builder1.setPositiveButton(
-                                    "Ok"
-                                ) { dialog, id ->
-                                    dialog.cancel()
-                                    replaceFragment(
-                                        requireActivity().supportFragmentManager,
-                                        fragmentRapidReadFragment,
-                                        R.id.content_frame
-                                    )
-                                }
-                                val alert11 = builder1.create()
-                                alert11.show()
+                                CommonAlertDialog(
+                                    requireActivity(),
+                                    "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                    "OK",
+                                    "",
+                                    object : CommonAlertDialog.OnButtonClickListener {
+                                        override fun onPositiveButtonClicked() {
+                                            replaceFragment(
+                                                requireActivity().supportFragmentManager,
+                                                fragmentRapidReadFragment,
+                                                R.id.content_frame
+                                            )
+                                        }
+
+                                        override fun onNegativeButtonClicked() {
+
+                                        }
+                                    }).show()
+
                             } else {
-                                if (range_seekbar2.value.toInt() != 30) {
-                                    val builder1 = AlertDialog.Builder(requireActivity())
-                                    builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
-                                    builder1.setCancelable(false)
-                                    builder1.setPositiveButton(
-                                        "Ok"
-                                    ) { dialog, id ->
-                                        dialog.cancel()
-                                        replaceFragment(
-                                            requireActivity().supportFragmentManager,
-                                            fragmentRapidReadFragment,
-                                            R.id.content_frame
-                                        )
-                                    }
-                                    val alert11 = builder1.create()
-                                    alert11.show()
-                                }
-                                else
-                                {
+                                if (range_seekbar2.value.toInt() != 100) {
+                                    CommonAlertDialog(
+                                        requireActivity(),
+                                        "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                        "OK",
+                                        "",
+                                        object : CommonAlertDialog.OnButtonClickListener {
+                                            override fun onPositiveButtonClicked() {
+                                                replaceFragment(
+                                                    requireActivity().supportFragmentManager,
+                                                    fragmentRapidReadFragment,
+                                                    R.id.content_frame
+                                                )
+                                            }
+
+                                            override fun onNegativeButtonClicked() {
+
+                                            }
+                                        }).show()
+                                } else {
                                     replaceFragment(
                                         requireActivity().supportFragmentManager,
                                         fragmentRapidReadFragment,
@@ -384,42 +405,46 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
                         } else if (isFromWhat.equals("rfidlocation")) {
                             if (inventoryViewModel.isFirstTime) {
-                                val builder1 = AlertDialog.Builder(requireActivity())
-                                builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
-                                builder1.setCancelable(false)
-                                builder1.setPositiveButton(
-                                    "Ok"
-                                ) { dialog, id ->
-                                    dialog.cancel()
-                                    replaceFragment(
-                                        requireActivity().supportFragmentManager,
-                                        mapRFIDLocationFragment,
-                                        R.id.content_frame
-                                    )
-                                }
-                                val alert11 = builder1.create()
-                                alert11.show()
-                            } else {
+                                CommonAlertDialog(
+                                    requireActivity(),
+                                    "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                    "OK",
+                                    "",
+                                    object : CommonAlertDialog.OnButtonClickListener {
+                                        override fun onPositiveButtonClicked() {
+                                            replaceFragment(
+                                                requireActivity().supportFragmentManager,
+                                                mapRFIDLocationFragment,
+                                                R.id.content_frame
+                                            )
+                                        }
 
+                                        override fun onNegativeButtonClicked() {
+
+                                        }
+                                    }).show()
+                            } else {
                                 if (range_seekbar2.value.toInt() != 30) {
-                                    val builder1 = AlertDialog.Builder(requireActivity())
-                                    builder1.setMessage("RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely")
-                                    builder1.setCancelable(false)
-                                    builder1.setPositiveButton(
-                                        "Ok"
-                                    ) { dialog, id ->
-                                        dialog.cancel()
-                                        replaceFragment(
-                                            requireActivity().supportFragmentManager,
-                                            mapRFIDLocationFragment,
-                                            R.id.content_frame
-                                        )
-                                    }
-                                    val alert11 = builder1.create()
-                                    alert11.show()
-                                }
-                                else
-                                {
+
+                                    CommonAlertDialog(
+                                        requireActivity(),
+                                        "RFID Reader Scan Range changed to ${range_seekbar2.value.toInt()}m. Please Scan Closely",
+                                        "OK",
+                                        "",
+                                        object : CommonAlertDialog.OnButtonClickListener {
+                                            override fun onPositiveButtonClicked() {
+                                                replaceFragment(
+                                                    requireActivity().supportFragmentManager,
+                                                    mapRFIDLocationFragment,
+                                                    R.id.content_frame
+                                                )
+                                            }
+
+                                            override fun onNegativeButtonClicked() {
+
+                                            }
+                                        }).show()
+                                } else {
                                     replaceFragment(
                                         requireActivity().supportFragmentManager,
                                         mapRFIDLocationFragment,

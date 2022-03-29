@@ -27,19 +27,23 @@
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/drawable/ic_sync_small.xml" value="0.1595" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_home.xml" value="0.37251908396946565" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_my_library_search.xml" value="0.37251908396946565" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_not_found.xml" value="0.56875" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_reconcile_assets.xml" value="0.536" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_view_inventory.xml" value="0.536" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/itme_result.xml" value="0.536" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/activity_main_scan.xml" value="0.38125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/activity_test.xml" value="0.38125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/content_main.xml" value="0.38125" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/custom_dialog_layout.xml" value="0.61" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_locate_tag.xml" value="0.38125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_maplocation.xml" value="0.38125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_rr.xml" value="0.6" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_rr_global.xml" value="0.16953125" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/fragment_single_tag_locate.xml" value="0.37251908396946565" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout/itme_result_bottom.xml" value="0.56875" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/menu/menu_home.xml" value="0.61" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/menu/menu_locate_tag.xml" value="0.38125" />
+        <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.136" />
       </map>
     </option>
   </component>

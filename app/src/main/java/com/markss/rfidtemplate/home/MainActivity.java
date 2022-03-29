@@ -48,12 +48,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import asset.trak.utils.CommonAlertDialog;
 import asset.trak.views.baseclasses.BaseActivity;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ViewInventoryFragment;
 import cafe.adriel.kbus.KBus;
 
 import asset.trak.scannercode.DWInterface;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.markss.rfidtemplate.R;
@@ -985,14 +987,18 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 if (DisconnectTask != null)
                     DisconnectTask.cancel(true);
                 //Alert Dialog
-                showMessageOKCancel("Do you want to close this application?",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Application.isFirstTime = true;
-                                finish();
-                            }
-                        });
+                showMessageOKCancel("Do you want to close this application?", new CommonAlertDialog.OnButtonClickListener() {
+                    @Override
+                    public void onPositiveButtonClicked() {
+                        Application.isFirstTime = true;
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClicked() {
+
+                    }
+                });
             } else if (fragment == null) {
                 //stop Timer
                 Inventorytimer.getInstance().stopTimer();
@@ -1001,13 +1007,17 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 if (DisconnectTask != null)
                     DisconnectTask.cancel(true);
                 //Alert Dialog
-                showMessageOKCancel("Do you want to close this application?",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        });
+                showMessageOKCancel("Do you want to close this application?", new CommonAlertDialog.OnButtonClickListener() {
+                    @Override
+                    public void onPositiveButtonClicked() {
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClicked() {
+
+                    }
+                });
             } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStackImmediate();
             } else {
@@ -1042,7 +1052,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             inventoryBT = findViewById(R.id.inventoryButton);
         } else if (fragment != null && (fragment instanceof RapidReadFragment || fragment instanceof MapRFIDLocationFragment || fragment instanceof GlobalRapidReadFragment)) {
             //temoprary uncommented
-             inventoryBT = findViewById(R.id.rr_inventoryButton);
+            inventoryBT = findViewById(R.id.rr_inventoryButton);
         }
 
         //tagListMatchNotice = false;
@@ -1050,10 +1060,10 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             if (!mIsInventoryRunning) {
                 clearInventoryData();
                 //button.setText("STOP");
-            //   Toast.makeText(this,"STOP",Toast.LENGTH_LONG).show();
+                //   Toast.makeText(this,"STOP",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
-                    Intent intent=new Intent("INVENTORYSTART");
-                    intent.putExtra("istart",false);
+                    Intent intent = new Intent("INVENTORYSTART");
+                    intent.putExtra("istart", false);
                     sendBroadcast(intent);
                     inventoryBT.setImageResource(android.R.drawable.ic_media_pause);
                 }
@@ -1099,10 +1109,10 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     memoryBankId = -1;
                     if (fragment instanceof RapidReadFragment) {
                         ((RapidReadFragment) fragment).resetTagsInfo();
-                    }else if (fragment instanceof MapRFIDLocationFragment){
-                        ((MapRFIDLocationFragment)fragment).resetTagsInfo();
-                    }else if (fragment instanceof GlobalRapidReadFragment){
-                        ((GlobalRapidReadFragment)fragment).resetTagsInfo();
+                    } else if (fragment instanceof MapRFIDLocationFragment) {
+                        ((MapRFIDLocationFragment) fragment).resetTagsInfo();
+                    } else if (fragment instanceof GlobalRapidReadFragment) {
+                        ((GlobalRapidReadFragment) fragment).resetTagsInfo();
                     }
                     if (TAG_LIST_MATCH_MODE) {
                         if (missedTags > 9999) {
@@ -1113,10 +1123,10 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     }
                     if (fragment instanceof RapidReadFragment) {
                         ((RapidReadFragment) fragment).updateTexts();
-                    }else if (fragment instanceof MapRFIDLocationFragment){
-                        ((MapRFIDLocationFragment)fragment).updateTexts();
-                    }else if (fragment instanceof GlobalRapidReadFragment){
-                        ((GlobalRapidReadFragment)fragment).updateTexts();
+                    } else if (fragment instanceof MapRFIDLocationFragment) {
+                        ((MapRFIDLocationFragment) fragment).updateTexts();
+                    } else if (fragment instanceof GlobalRapidReadFragment) {
+                        ((GlobalRapidReadFragment) fragment).updateTexts();
                     }
                 }
                 // perform read or inventory
@@ -1195,11 +1205,11 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     ((Spinner) findViewById(R.id.inventoryOptions)).setEnabled(true);
                 }
                 //button.setText("START");
-             //  Toast.makeText(this,"START",Toast.LENGTH_LONG).show();
+                //  Toast.makeText(this,"START",Toast.LENGTH_LONG).show();
                 if (inventoryBT != null) {
                     inventoryBT.setImageResource(android.R.drawable.ic_media_play);
-                    Intent intent=new Intent("INVENTORYSTART");
-                    intent.putExtra("istart",true);
+                    Intent intent = new Intent("INVENTORYSTART");
+                    intent.putExtra("istart", true);
                     sendBroadcast(intent);
                     inventoryBT.setImageResource(R.drawable.ic_play_stop);
                 }
@@ -2100,10 +2110,10 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             ((InventoryFragment) fragment).resetInventoryDetail();
                         else if (fragment instanceof RapidReadFragment) {
                             ((RapidReadFragment) fragment).resetInventoryDetail();
-                        }else if (fragment instanceof MapRFIDLocationFragment){
-                            ((MapRFIDLocationFragment)fragment).resetInventoryDetail();
-                        }else if (fragment instanceof GlobalRapidReadFragment){
-                            ((GlobalRapidReadFragment)fragment).resetInventoryDetail();
+                        } else if (fragment instanceof MapRFIDLocationFragment) {
+                            ((MapRFIDLocationFragment) fragment).resetInventoryDetail();
+                        } else if (fragment instanceof GlobalRapidReadFragment) {
+                            ((GlobalRapidReadFragment) fragment).resetInventoryDetail();
                         }
                         //export Data to the file
                         if (EXPORT_DATA)
@@ -2173,11 +2183,16 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     //Toast.makeText(this,"Write to external storage permission needed to export inventory.",Toast.LENGTH_LONG).show();
                     showMessageOKCancel("Write to external storage permission needed to export the inventory.",
-                            new DialogInterface.OnClickListener() {
+                            new CommonAlertDialog.OnButtonClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                public void onPositiveButtonClicked() {
                                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                             code);
+                                }
+
+                                @Override
+                                public void onNegativeButtonClicked() {
+
                                 }
                             });
                     return;
@@ -2201,13 +2216,15 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         }
     }
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(com.markss.rfidtemplate.home.MainActivity.this)
+    private void showMessageOKCancel(String message, CommonAlertDialog.OnButtonClickListener okListener) {
+        /*new AlertDialog.Builder(com.markss.rfidtemplate.home.MainActivity.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)
                 .create()
-                .show();
+                .show();*/
+
+        new CommonAlertDialog(MainActivity.this, message, "OK", "Cancel", okListener).show();
     }
 
     /**
@@ -2526,7 +2543,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                     new DataExportTask(getApplicationContext(), tagsReadInventory, mConnectedDevice.getName(), TOTAL_TAGS, UNIQUE_TAGS, mRRStartedTime).execute();
                                 }
                             });
-                        }else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof MapRFIDLocationFragment && UNIQUE_TAGS != 0) {
+                        } else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof MapRFIDLocationFragment && UNIQUE_TAGS != 0) {
                             currentFragment = "MapRFIDLocationFragment";
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -2534,7 +2551,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                     new DataExportTask(getApplicationContext(), tagsReadInventory, mConnectedDevice.getName(), TOTAL_TAGS, UNIQUE_TAGS, mRRStartedTime).execute();
                                 }
                             });
-                        }else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof GlobalRapidReadFragment && UNIQUE_TAGS != 0) {
+                        } else if (tagsReadInventory != null && !tagsReadInventory.isEmpty() && fragment instanceof GlobalRapidReadFragment && UNIQUE_TAGS != 0) {
                             currentFragment = "GlobalRapidReadFragment";
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -2579,14 +2596,14 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         ((RapidReadFragment) fragment).updateInventoryDetails();
                     }
                 });
-            }else  if (fragment instanceof MapRFIDLocationFragment) {
+            } else if (fragment instanceof MapRFIDLocationFragment) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         ((MapRFIDLocationFragment) fragment).updateInventoryDetails();
                     }
                 });
-            }else  if (fragment instanceof GlobalRapidReadFragment) {
+            } else if (fragment instanceof GlobalRapidReadFragment) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -3626,8 +3643,8 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (previousFragment instanceof HomeFragment){
-            previousFragment.onActivityResult(requestCode,resultCode,data);
+        if (previousFragment instanceof HomeFragment) {
+            previousFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

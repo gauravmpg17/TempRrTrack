@@ -72,6 +72,8 @@ import asset.trak.model.MapToLocationApiRequest;
 import asset.trak.modelsrrtrack.AssetData;
 import asset.trak.modelsrrtrack.AssetMain;
 import asset.trak.modelsrrtrack.MasterLocation;
+import asset.trak.utils.CommonAlertDialog;
+import asset.trak.utils.ExtensionKt;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ReconcileAssetsFragment;
 import asset.trak.views.listener.RapidReadCallback;
@@ -120,7 +122,6 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     private View imgIgnore;
     private TextView tvRegisteredCount;
     private TextView tvLocation;
-    private AlertDialog alert111;
 
     public static MapRFIDLocationFragment newInstance() {
         return new MapRFIDLocationFragment();
@@ -198,51 +199,35 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         totalRegisteredCount = getArguments().getInt("totalRegistered");
         tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationData.getLocID())));
         imgIgnore.setOnClickListener(v -> {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-            builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
-            builder1.setCancelable(false);
-            builder1.setPositiveButton(
-                    "Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            isAbandoned=true;
-                            if (Application.isReconsiled) {
-                                try {
-                                    if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
-                                        Inventorymaster lastItem = pendingInventoryScan.get(0);
-                                        bookDao.deletemapRFIDLocationAll();
-                                        bookDao.deleteInventorySingle(lastItem.getScanID());
-                                        //sync api call
-                                        dialog.cancel();
-                                        requireActivity().getSupportFragmentManager().popBackStackImmediate();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    dialog.cancel();
-                                }
-                            } else {
+            ExtensionKt.showYesNoAlert(requireActivity(), "Are you sure you want to abandon this scan? Your data will be lost.", new CommonAlertDialog.OnButtonClickListener() {
+                @Override
+                public void onPositiveButtonClicked() {
+                    isAbandoned=true;
+                    if (Application.isReconsiled) {
+                        try {
+                            if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
                                 Inventorymaster lastItem = pendingInventoryScan.get(0);
                                 bookDao.deletemapRFIDLocationAll();
                                 bookDao.deleteInventorySingle(lastItem.getScanID());
-                                dialog.cancel();
+                                //sync api call
                                 requireActivity().getSupportFragmentManager().popBackStackImmediate();
                             }
-
-
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    });
+                    } else {
+                        Inventorymaster lastItem = pendingInventoryScan.get(0);
+                        bookDao.deletemapRFIDLocationAll();
+                        bookDao.deleteInventorySingle(lastItem.getScanID());
+                        requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                    }
+                }
 
-            builder1.setNegativeButton(
-                    "No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //   progressBar.setVisibility(View.GONE);
-                            dialog.cancel();
-                        }
-                    });
+                @Override
+                public void onNegativeButtonClicked() {
 
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
+                }
+            });
         });
 
         //   tvRegisteredCount.setText(String.valueOf(totalRegisteredCount));
@@ -714,94 +699,82 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
 
     private void postAssetSync() {
         progressBar.setVisibility(View.VISIBLE);
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-        builder1.setMessage("Are you sure you want to complete Scan?.");
-        builder1.setCancelable(false);
 
-        builder1.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        isReconsiled = false;
-                        dialog.cancel();
-                        disableUserInteraction(getActivity());
-                        //   List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
-                        //      List<Inventorymaster> pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
-                        //    Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
-                        // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
+        ExtensionKt.showYesNoAlert(requireActivity(), "Are you sure you want to complete Scan?.", new CommonAlertDialog.OnButtonClickListener() {
+            @Override
+            public void onPositiveButtonClicked() {
+                isReconsiled = false;
+                disableUserInteraction(getActivity());
+                //   List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
+                //      List<Inventorymaster> pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getLocID());
+                //    Inventorymaster inventoryMaster = pendingInventoryScan.get(0);
+                // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID()));
 
-                        MapToLocationApiRequest mapToLocationApiRequest = new MapToLocationApiRequest();
+                MapToLocationApiRequest mapToLocationApiRequest = new MapToLocationApiRequest();
 
-                        //new logic
-                        List<MapRFIDLocation> listScan = bookDao.getMapRFIDLocationAll();
+                //new logic
+                List<MapRFIDLocation> listScan = bookDao.getMapRFIDLocationAll();
 
-                        Inventorymaster lastItem = pendingInventoryScan.get(0);
-                        bookDao.deleteInventorySingle(lastItem.getScanID());
-                        List<AssetData> listAssetData = new ArrayList<>();
-                        //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Inventorymaster lastItem = pendingInventoryScan.get(0);
+                bookDao.deleteInventorySingle(lastItem.getScanID());
+                List<AssetData> listAssetData = new ArrayList<>();
+                //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-                        if (String.valueOf(locationData.getLocID()) == null) {
-                            locationData.setLocID(0);
-                        }
+                if (String.valueOf(locationData.getLocID()) == null) {
+                    locationData.setLocID(0);
+                }
 
-                        for (MapRFIDLocation n : listScan) {
-                            AssetData scanTag = new AssetData();
-                            // sending ID in rfidTag field, need to update attribute name accordingly in API
-                            if (n.getRfidTag() == null) n.setRfidTag("");
-                            scanTag.assetRFID = n.getRfidTag();
-                            scanTag.locID = n.getLocationId();
-                            //   listAssetData.add(scanTag);
-                            mapToLocationApiRequest.getAssetData().add(scanTag);
-                        }
+                for (MapRFIDLocation n : listScan) {
+                    AssetData scanTag = new AssetData();
+                    // sending ID in rfidTag field, need to update attribute name accordingly in API
+                    if (n.getRfidTag() == null) n.setRfidTag("");
+                    scanTag.assetRFID = n.getRfidTag();
+                    scanTag.locID = n.getLocationId();
+                    //   listAssetData.add(scanTag);
+                    mapToLocationApiRequest.getAssetData().add(scanTag);
+                }
 
 
-                        RequestBody body = RequestBody.create(new Gson().toJson(mapToLocationApiRequest), MediaType.parse("application/json"));
+                RequestBody body = RequestBody.create(new Gson().toJson(mapToLocationApiRequest), MediaType.parse("application/json"));
 
 
-                        Log.e("data", "" + new Gson().toJson(mapToLocationApiRequest));
-                        inventoryViewModel.updateMapLocation(body).observe(getViewLifecycleOwner(), response -> {
-                            if (response == SUCCESS) {
-                                enableUserInteraction(getActivity());
-                                Log.d("final", "postAssetSync: ");
-                                progressBar.setVisibility(View.GONE);
-                                btnInventoryRecord.setEnabled(true);
-                                btnInventoryRecord.setClickable(true);
-
-                                bookDao.deletemapRFIDLocationAll();
-                                //temporary commented
-                                //  bookDao.clearSyncFlagOfAssets(syncedIds);
-
-                                //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
-                                FancyToast.makeText(requireActivity(), getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
-                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
-
-                            } else {
-                                Log.d("final", "Failure: ");
-                                progressBar.setVisibility(View.GONE);
-                                btnInventoryRecord.setEnabled(true);
-                                btnInventoryRecord.setClickable(true);
-                                enableUserInteraction(getActivity());
-                                FancyToast.makeText(requireActivity(), getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
-
-                            }
-                        });
-
-                    }
-                });
-
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                Log.e("data", "" + new Gson().toJson(mapToLocationApiRequest));
+                inventoryViewModel.updateMapLocation(body).observe(getViewLifecycleOwner(), response -> {
+                    if (response == SUCCESS) {
+                        enableUserInteraction(getActivity());
+                        Log.d("final", "postAssetSync: ");
+                        progressBar.setVisibility(View.GONE);
                         btnInventoryRecord.setEnabled(true);
                         btnInventoryRecord.setClickable(true);
+
+                        bookDao.deletemapRFIDLocationAll();
+                        //temporary commented
+                        //  bookDao.clearSyncFlagOfAssets(syncedIds);
+
+                        //Toast.makeText(getContext(), getString(R.string.data_sync_success), Toast.LENGTH_SHORT).show();
+                        FancyToast.makeText(requireActivity(), getString(R.string.data_sync_success), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
+                        requireActivity().getSupportFragmentManager().popBackStackImmediate();
+
+                    } else {
+                        Log.d("final", "Failure: ");
                         progressBar.setVisibility(View.GONE);
+                        btnInventoryRecord.setEnabled(true);
+                        btnInventoryRecord.setClickable(true);
+                        enableUserInteraction(getActivity());
+                        FancyToast.makeText(requireActivity(), getString(R.string.error_data_sync), FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+
                     }
                 });
 
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+            }
+
+            @Override
+            public void onNegativeButtonClicked() {
+                btnInventoryRecord.setEnabled(true);
+                btnInventoryRecord.setClickable(true);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     BroadcastReceiver receiver=new BroadcastReceiver() {
@@ -848,55 +821,36 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(requireActivity());
-                    builder1.setMessage("Are you sure you want to abandon this scan? Your data will be lost.");
-                    builder1.setCancelable(false);
-                    builder1.setPositiveButton(
-                            "Yes",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    try {
-                                        if (Application.isReconsiled) {
-                                            dialog.cancel();
-                                            if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
-                                                Inventorymaster lastItem = pendingInventoryScan.get(0);
-                                                bookDao.deletemapRFIDLocationAll();
-                                                bookDao.deleteInventorySingle(lastItem.getScanID());
-                                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
-                                                //call sync api
-                                            }
-                                        } else {
-                                            dialog.cancel();
-                                            if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
-                                                Inventorymaster lastItem = pendingInventoryScan.get(0);
-                                                bookDao.deletemapRFIDLocationAll();
-                                                bookDao.deleteInventorySingle(lastItem.getScanID());
-                                                requireActivity().getSupportFragmentManager().popBackStackImmediate();
-                                            }
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        dialog.cancel();
+                    ExtensionKt.showYesNoAlert(requireActivity(), "Are you sure you want to abandon this scan? Your data will be lost.", new CommonAlertDialog.OnButtonClickListener() {
+                        @Override
+                        public void onPositiveButtonClicked() {
+                            try {
+                                if (Application.isReconsiled) {
+                                    if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
+                                        Inventorymaster lastItem = pendingInventoryScan.get(0);
+                                        bookDao.deletemapRFIDLocationAll();
+                                        bookDao.deleteInventorySingle(lastItem.getScanID());
+                                        requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                                        //call sync api
                                     }
-                                    //  progressBar.setVisibility(View.GONE);
-
+                                } else {
+                                    if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
+                                        Inventorymaster lastItem = pendingInventoryScan.get(0);
+                                        bookDao.deletemapRFIDLocationAll();
+                                        bookDao.deleteInventorySingle(lastItem.getScanID());
+                                        requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                                    }
                                 }
-                            });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                    builder1.setNegativeButton(
-                            "No",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //  progressBar.setVisibility(View.GONE);
-                                    dialog.cancel();
-                                }
-                            });
+                        @Override
+                        public void onNegativeButtonClicked() {
 
-                    alert111 = builder1.create();
-                    if (alert111 != null && !alert111.isShowing()) {
-                        alert111.show();
-                    }
-
+                        }
+                    });
                     return true;
                 }
                 return false;

@@ -212,3 +212,11 @@ fun Context.getThumbView(): View {
 
 }
 
+fun showYesNoAlert(
+    context: Context,
+    message: String,
+    listener: CommonAlertDialog.OnButtonClickListener
+) {
+    CommonAlertDialog(context, message, "Yes", "No", listener).show()
+}
+
