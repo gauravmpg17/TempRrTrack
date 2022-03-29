@@ -70,11 +70,13 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                 if(!newText.isNullOrEmpty())
                 {
                     resultAdapter.filter.filter(newText)
+                    tvResult.text="${getString(R.string.lblResults)} (${resultAdapter.itemCount})"
                 }
                 else
                 {
                     listBook.clear()
                     listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+                    tvResult.text="${getString(R.string.lblResults)} (${listBook.size})"
                     resultAdapter = ResultAdapter(requireContext(), this@MyLibrarySearchFragment, listBook,true)
                     rvResult.adapter = resultAdapter
                     Log.d("tag1212121", "setAdaptor: ${listBook.size} ")
@@ -84,6 +86,11 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             }
         })
 
+    }
+
+    fun displayCount(count:Int)
+    {
+        tvResult.text="${getString(R.string.lblResults)} (${count})"
     }
 
     override fun onGoalClick(bookAttributes: AssetMain) {
@@ -122,6 +129,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                         listBook.clear()
                         Application.bookDao?.addAssetMain(it.AssetMain)
                         listBook.addAll(Application.roomDatabaseBuilder?.getBookDao()?.getBooks() ?: emptyList())
+                        tvResult.text="${getString(R.string.lblResults)} (${listBook.size})"
                         resultAdapter.notifyDataSetChanged()
                         Log.d("tag1212121", "setAdaptor: ${listBook.size} ")
                     }
