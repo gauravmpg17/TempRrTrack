@@ -26,28 +26,10 @@ class BookRepository @Inject constructor(
     private var bookDao: BookDao,var assetTrakAPIInterface: AssetTrakAPIInterface
 ) {
 
-    private lateinit var mbookResponse: List<BookAttributes>
     var mTakePickAction = MutableLiveData<String>()
     var mLastSync = MutableLiveData<LastSyncResponse>()
     var mAssetSync = MutableLiveData<Int>()
     private val mRetrofitException = MutableLiveData<Boolean>()
-
-
-    suspend fun getBookData(): List<BookAttributes> {
-
-        withContext(Dispatchers.Main)
-        {
-            try {
-//               if (database != null) {
-//                   bookDao = database.getBookDao()
-//               }
-                // mbookResponse = bookDao.getBooks()
-            } catch (error: Throwable) {
-                Log.d("SampleAPI", "data1::${error}")
-            }
-        }
-        return mbookResponse
-    }
 
 
     suspend fun getLastSync(syncTime: String?): LiveData<LastSyncResponse>? {

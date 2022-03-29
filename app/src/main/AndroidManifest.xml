@@ -65,11 +65,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.RFIDTemplate.NoActionBar"
             android:windowSoftInputMode="adjustPan">
-           <!-- <intent-filter>
-                <action android:name="com.rrtrack.SCAN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>-->
         </activity>
         <activity
             android:name=".settings.SettingsDetailActivity"
@@ -114,7 +109,6 @@
             android:name="asset.trak.scannercode.DWReceiver"
             android:enabled="true"
             android:exported="true" />
-        <!--        <uses-library android:name="com.symbol.emdk" />-->
     </application>
 
 </manifest>

@@ -177,12 +177,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             CoroutineScope(Dispatchers.Main).launch {
                 val job = CoroutineScope(Dispatchers.IO).async {
                     roomDatabaseBuilder.getBookDao().deleteAssetMainTable()
-                    roomDatabaseBuilder.getBookDao().deleteMasterClassTable()
                     roomDatabaseBuilder.getBookDao().deleteInventoryScanTable()
                     roomDatabaseBuilder.getBookDao().deleteMapRFIDLocationTable()
                     roomDatabaseBuilder.getBookDao().deleteMasterLocationTable()
                     roomDatabaseBuilder.getBookDao().deleteMasterVendorTable()
-                    roomDatabaseBuilder.getBookDao().deleteSamplingArticlesTable()
                     roomDatabaseBuilder.getBookDao().deleteTblAssetCatalogueTable()
                     roomDatabaseBuilder.getBookDao().deleteTblAssetClassCatMapTable()
                     roomDatabaseBuilder.getBookDao().deleteTblAssetClassificationTable()
