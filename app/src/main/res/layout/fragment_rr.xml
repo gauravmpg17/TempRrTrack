@@ -772,7 +772,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/rr_inventoryButton"
                 android:text="Clear"
                 android:textSize="15dp"
                 android:visibility="gone" />
@@ -781,7 +780,6 @@
                 android:id="@+id/tv_prefilter_enabled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rr_inventoryButton"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
