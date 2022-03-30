@@ -502,7 +502,13 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             inventoryButton.performClick();
         }
 
-
+      /*  inventoryViewModel.stopTime();
+        inventoryButton.setTag("1");
+        llBottomParent.setVisibility(View.VISIBLE);
+        inventoryButton.setImageResource(android.R.drawable.ic_media_play);
+        addDataToScanTag();
+        showCountFound();
+        updateCountInDb();*/
     }
 
 
