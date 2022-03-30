@@ -22,7 +22,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:src="@mipmap/ic_launcher_foreground"
-                android:textColor="@color/blue_"
                 android:textSize="20sp" />
 
             <TextView
@@ -35,7 +34,7 @@
                 android:layout_marginBottom="@dimen/eight_dp"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/four_dp"
-                android:textColor="@color/blue_"
+                android:textColor="#00008B"
                 android:textSize="14sp" />
 
 
@@ -62,7 +61,7 @@
                     android:gravity="center"
                     android:text="OK"
                     android:paddingVertical="@dimen/ten_dp"
-                    android:textColor="@color/blue_"
+                    android:textColor="#00008B"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -72,7 +71,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:paddingVertical="@dimen/ten_dp"
-                    android:textColor="@color/blue_"
+                    android:textColor="#00008B"
                     android:textSize="14sp"
                     android:text="Cancel"
                     android:visibility="visible"  />
