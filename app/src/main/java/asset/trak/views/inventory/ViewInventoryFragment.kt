@@ -173,6 +173,9 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     if (!it.Inventorymaster.isNullOrEmpty()) {
                         Application.bookDao?.addInventoryMaster(it.Inventorymaster)
                     }
+                    val newlyRegistered =
+                        roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                    tvNewlyScanCount.text = newlyRegistered.toString()
                 }
                 Application.isReconsiled = false
             }

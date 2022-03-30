@@ -6,9 +6,11 @@ import android.content.Context;
 import android.media.ToneGenerator;
 import android.telephony.TelephonyManager;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import androidx.room.Room;
 
+import com.google.gson.Gson;
 import com.zebra.rfid.api3.Antennas;
 import com.zebra.rfid.api3.BEEPER_VOLUME;
 import com.zebra.rfid.api3.DYNAMIC_POWER_OPTIMIZATION;
@@ -32,6 +34,8 @@ import com.markss.rfidtemplate.settings.ProfileContent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import asset.trak.database.BookDao;
 import asset.trak.database.BookDatabase;
@@ -217,7 +221,17 @@ public class Application extends android.app.Application {
                 roomDatabaseBuilder =
                         Room.databaseBuilder(context, BookDatabase.class, "BooksDatabase")
                                 .allowMainThreadQueries()
+                                .setQueryCallback((sqlQuery, bindArgs) -> {
+                                    try{
+                                        if (!sqlQuery.toLowerCase().contains("insert")) {
+                                            Log.e("DATA", sqlQuery + " ARGUMENTS: " + new Gson().toJson(bindArgs));
+                                        }
+                                    }catch (Exception e){
+
+                                    }
+                                },(Executor) Executors.newSingleThreadExecutor())
                                 .build();
+
             }
         }
         return roomDatabaseBuilder;

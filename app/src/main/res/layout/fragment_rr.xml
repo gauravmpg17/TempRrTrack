@@ -417,7 +417,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/thirteen_dp"
                     android:fontFamily="@font/jio_type_light"
-                    android:text="Not\nRegister"
+                    android:text="Not\nRegistered"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14"
