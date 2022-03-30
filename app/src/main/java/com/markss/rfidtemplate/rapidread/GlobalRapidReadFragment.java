@@ -155,7 +155,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                 llBottomParent.setVisibility(View.GONE);
                 inventoryButton.setImageResource(android.R.drawable.ic_media_pause);
                 listInventoryList = new HashSet<>();
-
                 //new requirement
                 foundLocParent.setVisibility(View.GONE);
                 foundForDifferentParent.setVisibility(View.GONE);
@@ -816,17 +815,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                 return false;
             }
         } );
-
-        if (btnScan != null) {
-
-//
-            //      btnScan.setTag("0");
-            //  llBottomParent.setVisibility(View.VISIBLE);
-//            btnScan.setImageResource(android.R.drawable.ic_media_play);
-//            addDataToScanTag();
-//            showCountFound();
-        }
-
 
     }
 

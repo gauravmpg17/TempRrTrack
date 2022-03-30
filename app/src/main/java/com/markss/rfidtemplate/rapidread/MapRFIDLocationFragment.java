@@ -682,15 +682,15 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         btnInventoryRecord.setOnClickListener(v -> {
             Log.d("RapidRead", countNotFoundCurrentLocation + " " + countFoundDifferentLoc + " " + countFoundDifferentLoc);
 
-            if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
+       //     if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
                 progressBar.setVisibility(View.VISIBLE);
                 btnInventoryRecord.setEnabled(false);
                 btnInventoryRecord.setClickable(false);
                 postAssetSync();
-            } else {
+          //  } else {
                 //  FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
                 //   Toast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", Toast.LENGTH_SHORT).show();
-            }
+            //}
 
         });
 
@@ -718,13 +718,12 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
 
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
                 bookDao.deleteInventorySingle(lastItem.getScanID());
-                List<AssetData> listAssetData = new ArrayList<>();
+              //  List<AssetData> listAssetData = new ArrayList<>();
                 //   SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
                 if (String.valueOf(locationData.getLocID()) == null) {
                     locationData.setLocID(0);
                 }
-
                 for (MapRFIDLocation n : listScan) {
                     AssetData scanTag = new AssetData();
                     // sending ID in rfidTag field, need to update attribute name accordingly in API
