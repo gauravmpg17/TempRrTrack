@@ -47,7 +47,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        range_seekbar1.setAnimated(true, 3000L)
+      //  range_seekbar1.setAnimated(true, 3000L)
         range_seekbar2.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
         range_seekbar2.setLabelFormatter { value: Float ->
             return@setLabelFormatter value.toInt().toString()
@@ -113,24 +113,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 ).putExtra("type", type), 102
             )
         }
-
-        seekBar.progress = 30
-        seekBar.thumb = getThumb(30, requireActivity().resources, requireActivity().getThumbView())
-
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                seekBar.thumb = getThumb(
-                    p1, requireActivity().resources, requireActivity().getThumbView()
-                )
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-
-            }
-        })
     }
 
     override fun onStop() {

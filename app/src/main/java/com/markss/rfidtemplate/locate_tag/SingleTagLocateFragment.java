@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.markss.rfidtemplate.R;
 import com.markss.rfidtemplate.application.Application;
 import com.markss.rfidtemplate.common.ResponseHandlerInterfaces;
@@ -58,7 +59,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
         LocateOperationsFragment.OnRefreshListener {
     private RangeGraph locationBar;
     //private TextView distance;
-    private Button btn_locate;
+    private FloatingActionButton btn_locate;
     private AutoCompleteTextView et_locateTag;
     private ArrayAdapter<String> adapter;
     View constLay;
@@ -127,7 +128,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             }
             et_locateTag.setFocusable(false);
             if (btn_locate != null) {
-                // btn_locate.setImageResource(R.drawable.ic_play_stop);
+                 btn_locate.setImageResource(android.R.drawable.ic_media_pause);
             }
             showTagLocationingDetails();
         } else {
@@ -138,7 +139,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                     et_locateTag.setText(asciitohex.convert(Application.locateTag));
             }
             if (btn_locate != null) {
-                //btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                btn_locate.setImageResource(android.R.drawable.ic_media_play);
             }
         }
         if (RFIDController.asciiMode == true) {
@@ -156,7 +157,6 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 
 //        if(getArguments().containsKey("hide"))
         if (Application.comefrom.contains("hide")) {
-
             et_locateTag.setVisibility(View.VISIBLE);
             et_locateTag.setText(Application.locateTag);
             constLay.setVisibility(View.GONE);
@@ -178,8 +178,6 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
         TextView tvCategory = getActivity().findViewById(R.id.tvCategory);
         TextView tv = getActivity().findViewById(R.id.tv);
         if (roomDatabaseBuilder.getBookDao().getBookForRFID(RFIDTag) != null) {
-
-
             list.addAll(roomDatabaseBuilder.getBookDao().getBookForRFID(RFIDTag));
             if (list.isEmpty()) {
                 constLay.setVisibility(View.GONE);
@@ -315,7 +313,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             @Override
             public void run() {
                 if (btn_locate != null) {
-                    //btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                    btn_locate.setImageResource(android.R.drawable.ic_media_play);
                 }
                 if (isDeviceDisconnected && locationBar != null) {
                     locationBar.setValue(0);
@@ -340,7 +338,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 //                    {
                     RFIDController.isLocatingTag = false;
                     if (btn_locate != null) {
-                        // btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                         btn_locate.setImageResource(android.R.drawable.ic_media_play);
                     }
                     if (et_locateTag != null) {
                         et_locateTag.setFocusableInTouchMode(true);

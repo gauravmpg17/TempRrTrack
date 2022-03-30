@@ -26,7 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="90"
-        android:layout_marginBottom="@dimen/twenty_dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/margin_5"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -39,17 +40,25 @@
     </LinearLayout>
 
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_locate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/button_background"
         android:onClick="locationingButtonClicked"
-        android:text="Start"
-        android:visibility="gone"
-        app:backgroundTint="#0066ff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:background="@color/lightt_blue"
+        android:fontFamily="@font/jio_type_bold"
+        android:letterSpacing="0.1"
+        android:paddingStart="@dimen/thirty_dp"
+        android:paddingEnd="@dimen/thirty_dp"
+        android:src="@android:drawable/ic_media_play"
+        android:tag="0"
+        android:text="@string/stop"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_13"
+        android:theme="@style/fabtheme"
+        android:layout_marginBottom="@dimen/twenty_dp"
         app:srcCompat="@android:drawable/ic_media_play" />
 </LinearLayout>
 

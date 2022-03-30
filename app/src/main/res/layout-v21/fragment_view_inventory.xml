@@ -265,21 +265,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:visibility="gone"
-            android:id="@+id/seekBar"
-            android:max="30"
-            android:min="18"
-            android:splitTrack="false"
-            android:progressDrawable="@drawable/custom_seekbar"
-            android:indeterminate="false"
-            android:layout_width="0dp"
-            android:layout_marginBottom="4dp"
-            android:thumbOffset="-0dp"
-            app:layout_constraintBottom_toTopOf="@id/range_seekbar2"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            android:layout_height="wrap_content"/>
 
 
         <com.google.android.material.slider.Slider
@@ -301,29 +286,7 @@
             android:valueTo="30"/>
 
 
-        <com.mohammedalaa.seekbar.RangeSeekBarView
-            android:id="@+id/range_seekbar1"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="@dimen/margin_15"
-            android:layout_marginEnd="@dimen/margin_15"
-            app:barHeight="17dp"
-            app:baseColor="@color/lightt_blue"
-            app:circleFillColor="@color/blue_"
-            app:circleRadius="15dp"
-            app:circleTextColor="@color/white"
-            app:circleTextSize="@dimen/value_bar_circleTextSize"
-            app:currentValue="30"
-            app:fillColor="@color/blue_"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/buttonscan"
-            app:maxValue="30"
-            app:minValue="18"
-            app:orientation="LEFT_TO_RIGHT"
-            app:stepValue="1" />
+
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -369,7 +332,7 @@
             android:layout_width="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/txMedium"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/range_seekbar1"
+            app:layout_constraintBottom_toTopOf="@id/buttonscan"
             android:text="@string/low"
             app:layout_constraintStart_toStartOf="@id/range_seekbar2"
            />
