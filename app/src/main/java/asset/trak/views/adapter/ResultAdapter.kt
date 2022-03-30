@@ -86,12 +86,6 @@ class ResultAdapter(
 
 
         holder.itemView.setOnClickListener {
-            try {
-                decreaseRangeToThirty(300)
-            }
-            catch (e: Exception){
-                Log.d("decreaseRangeToThirty", e.message.toString())
-            }
             onGoalClickListener.onGoalClick(homeGoalsItem)
         }
     }
