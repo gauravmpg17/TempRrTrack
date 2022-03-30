@@ -36,7 +36,7 @@ interface OnResultClickListener {
 class ResultAdapter(
     private val context: Context,
     private val onGoalClickListener: OnResultClickListener,
-    private var items: ArrayList<AssetMain>,
+    private var items: ArrayList<AssetMain>?,
     private var isFromLib: Boolean? = false
 ) :
     RecyclerView.Adapter<ResultAdapter.HomeGoalsHolder>(), Filterable {
@@ -61,42 +61,45 @@ class ResultAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
-        val homeGoalsItem = items[position]
-        holder.tvTitle.text = homeGoalsItem.Supplier
+        val homeGoalsItem = items?.get(position)
+        homeGoalsItem?.let {
+            holder.tvTitle.text = homeGoalsItem.Supplier
 
-        if (homeGoalsItem.SampleType.isNullOrEmpty()) {
-            holder.tvAuthor.text = "-"
-        } else {
-            holder.tvAuthor.text = homeGoalsItem.SampleType
-        }
-        holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
-        holder.tvTag.text = homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
-            ""
-        } else {
-            if (homeGoalsItem.Location.isNullOrEmpty()) {
+            if (homeGoalsItem.SampleType.isNullOrEmpty()) {
+                holder.tvAuthor.text = "-"
+            } else {
+                holder.tvAuthor.text = homeGoalsItem.SampleType
+            }
+            holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
+            holder.tvTag.text = homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
                 ""
             } else {
-                " | "
-            } + getFormattedDate(
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-                SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString()
-            )
+                if (homeGoalsItem.Location.isNullOrEmpty()) {
+                    ""
+                } else {
+                    " | "
+                } + getFormattedDate(
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                    SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString()
+                )
+            }
+            holder.itemView.setOnClickListener {
+                try {
+                    decreaseRangeToThirty(300)
+                }
+                catch (e: Exception){
+                    Log.d("decreaseRangeToThirty", e.message.toString())
+                }
+                onGoalClickListener.onGoalClick(homeGoalsItem)
+            }
         }
 
 
-        holder.itemView.setOnClickListener {
-            try {
-                decreaseRangeToThirty(300)
-            }
-            catch (e: Exception){
-                Log.d("decreaseRangeToThirty", e.message.toString())
-            }
-            onGoalClickListener.onGoalClick(homeGoalsItem)
-        }
+
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        if(items.isNullOrEmpty()) return 0 else return items!!.size
     }
 
 
@@ -135,7 +138,7 @@ class ResultAdapter(
                     oReturn.count = results.size
                     oReturn.values = results
                 } else {
-                    oReturn.count = items.size
+                    oReturn.count = items!!.size
                     oReturn.values = items
                 }
                 return oReturn
@@ -143,11 +146,11 @@ class ResultAdapter(
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = results.values as ArrayList<AssetMain>
-                Log.d("tag1212121", "setAdaptor: ${items.size} ")
+                items = results.values as ArrayList<AssetMain>?
+                Log.d("tag1212121", "setAdaptor: ${items?.size} ")
                 notifyDataSetChanged()
                 val intent=Intent("COUNT_UPDATE_SEARCH")
-                intent.putExtra("searchCount",items.size)
+                intent.putExtra("searchCount",items?.size)
                 com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
             }
         }

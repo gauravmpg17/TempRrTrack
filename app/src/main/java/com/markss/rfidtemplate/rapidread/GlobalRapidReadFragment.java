@@ -816,17 +816,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
             }
         } );
 
-        if (btnScan != null) {
-
-//
-            //      btnScan.setTag("0");
-            //  llBottomParent.setVisibility(View.VISIBLE);
-//            btnScan.setImageResource(android.R.drawable.ic_media_play);
-//            addDataToScanTag();
-//            showCountFound();
-        }
-
-
     }
 
     private void postAssetSync() {
