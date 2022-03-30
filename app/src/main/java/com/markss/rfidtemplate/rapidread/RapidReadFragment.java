@@ -848,7 +848,8 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         new CommonAlertDialog(requireActivity(), "Are you sure you want to complete Scan?.", "Yes", "No", new CommonAlertDialog.OnButtonClickListener() {
             @Override
             public void onPositiveButtonClicked() {
-                isReconsiled = false;
+               //isReconsiled = false;
+                inventoryViewModel.setFirstTime(true);
                 progressBar.setVisibility(View.VISIBLE);
                 disableUserInteraction(getActivity());
                 List<AssetMain> bookAndAssetData = new ArrayList<AssetMain>();
