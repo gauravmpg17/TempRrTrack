@@ -55,17 +55,17 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
         if (isFromWhat.equals("location")) {
             range_seekbar2.valueFrom = 0f
-            range_seekbar2.valueTo = 100f
-            range_seekbar2.value = 100f
+            range_seekbar2.valueTo = 200f
+            range_seekbar2.value = 200f
         }
 
         range_seekbar2.addOnChangeListener { rangeSlider, value, fromUser ->
             // Responds to when slider's value is changed
             if (isFromWhat.equals("location")) {
-                if (value.toInt() == 0 || value < 50) {
+                if (value.toInt() == 0 || value < 100) {
                     range_seekbar2.thumbTintList =
                         ColorStateList.valueOf(resources.getColor(R.color.red))
-                } else if (value.toInt() == 50 || value < 100) {
+                } else if (value.toInt() == 100 || value < 200) {
                     range_seekbar2.thumbTintList =
                         ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
                 } else {
@@ -381,7 +381,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                     }).show()
 
                             } else {
-                                if (range_seekbar2.value.toInt() != 100) {
+                                if (range_seekbar2.value.toInt() != 200) {
                                     CommonAlertDialog(
                                         requireActivity(),
                                         "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
