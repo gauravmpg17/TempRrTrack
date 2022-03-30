@@ -90,12 +90,12 @@ class DifferntLocationAdapter(
 
         holder.tvSearch.visibility = View.VISIBLE
         holder.tvSearch.setOnClickListener {
-            try {
+      /*      try {
                 decreaseRangeToThirty(300)
             }
             catch (e: Exception){
                 Log.d("decreaseRangeToThirty", e.message.toString())
-            }
+            }*/
             Application.locateTag = item.AssetRFID
             RFIDController.accessControlTag = item.AssetRFID
             Application.PreFilterTag = item.AssetRFID

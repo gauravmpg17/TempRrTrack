@@ -221,15 +221,6 @@ public class Application extends android.app.Application {
                 roomDatabaseBuilder =
                         Room.databaseBuilder(context, BookDatabase.class, "BooksDatabase")
                                 .allowMainThreadQueries()
-                                .setQueryCallback((sqlQuery, bindArgs) -> {
-                                    try{
-                                        if (!sqlQuery.toLowerCase().contains("insert")) {
-                                            Log.e("DATA", sqlQuery + " ARGUMENTS: " + new Gson().toJson(bindArgs));
-                                        }
-                                    }catch (Exception e){
-
-                                    }
-                                },(Executor) Executors.newSingleThreadExecutor())
                                 .build();
 
             }

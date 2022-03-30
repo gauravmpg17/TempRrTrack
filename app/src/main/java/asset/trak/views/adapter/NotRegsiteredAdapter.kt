@@ -86,12 +86,12 @@ class NotRegsiteredAdapter(private val context: Context,private val fragment: Fr
 
         holder.tvSearch.setOnClickListener{
 
-            try {
+     /*       try {
                 decreaseRangeToThirty(300)
             }
             catch (e: Exception){
                 Log.d("decreaseRangeToThirty", e.message.toString())
-            }
+            }*/
             Application.locateTag = item.rfidTag
 
             Application.comefrom ="hide"

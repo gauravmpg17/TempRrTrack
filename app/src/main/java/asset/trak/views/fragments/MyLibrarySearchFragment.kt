@@ -94,12 +94,12 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
     }
 
     override fun onGoalClick(bookAttributes: AssetMain) {
-        try {
-            decreaseRangeToThirty(300)
-        }
-        catch (e: Exception){
-            Log.d("decreaseRangeToThirty", e.message.toString())
-        }
+//        try {
+//            decreaseRangeToThirty(300)
+//        }
+//        catch (e: Exception){
+//            Log.d("decreaseRangeToThirty", e.message.toString())
+//        }
 
         Application.locateTag = bookAttributes.AssetRFID
         RFIDController.accessControlTag =bookAttributes.AssetRFID

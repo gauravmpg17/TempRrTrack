@@ -462,12 +462,12 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
+     /*   try {
             decreaseRangeToThirty(300);
         }
         catch (Exception e){
             Log.d("decreaseRangeToThirty", e.getMessage());
-        }
+        }*/
     }
 
     /**

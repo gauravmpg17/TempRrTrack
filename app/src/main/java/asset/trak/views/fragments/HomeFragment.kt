@@ -64,12 +64,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 getLastSync()
             } else {
                 Log.e("dhdgdhdh", "getLastSync Not Called")
-                    try {
-                        decreaseRangeToThirty(300)
-                    }
-                    catch (e: Exception){
-                        Log.d("decreaseRangeToThirty", e.message.toString())
-                    }
+
 
             }
 
@@ -81,12 +76,25 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun listeners() {
         searchLin.setOnClickListener {
             //connectRFIDReader()
+
+//            try {
+//                decreaseRangeToThirty(300)
+//            }
+//            catch (e: Exception){
+//                Log.d("decreaseRangeToThirty", e.message.toString())
+//            }
             replaceFragment(
                 requireActivity().supportFragmentManager, MyLibrarySearchFragment(),
                 R.id.content_frame
             )
         }
         globalInventory.setOnClickListener {
+            try {
+                decreaseRangeToThirty(300)
+            }
+            catch (e: Exception){
+                Log.d("decreaseRangeToThirty", e.message.toString())
+            }
             getLastSync()
 //            try {
 //              //  decreaseRangeToThirty(30)

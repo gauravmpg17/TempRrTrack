@@ -71,12 +71,12 @@ open class BaseFragment(@LayoutRes private val layout: Int) : Fragment(layout) {
     }
 
     fun getBackToPreviousFragment() {
-        try {
+     /*   try {
             decreaseRangeToThirty(300)
         }
         catch (e: Exception){
             Log.d("decreaseRangeToThirty", e.message.toString())
-        }
+        }*/
         requireActivity().supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
         requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment())?.commit()
 
