@@ -506,13 +506,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 //                            ).show()
 
                         if (inventorymaster == null) {
-                            var countofNotRegistered = 0
+                            val countofNotRegistered = 0
                             val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 //                            tablayout.getTabAt(2)?.text = notRegistered
                             notRegisterTab(notRegistered)
 
                         } else {
-                            var countofNotRegistered =
+                            val countofNotRegistered =
                                 bookDao.getCountNotRegistered(inventorymaster!!.scanID)
                             val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 //                            tablayout.getTabAt(2)?.text = notRegistered

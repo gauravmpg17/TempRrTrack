@@ -297,15 +297,14 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     false
                 ).show()
             } else if (barCodeName.isNotEmpty()) {
-                //here
-//                try {
-//                    // if (isFromWhat.equals("rfidlocation")) {
-//                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
-//                    decreaseRangeToThirty(range_seekbar2.value.toInt())
-//                    //}
-//                } catch (e: Exception) {
-//                    Log.d("decreaseRangeToThirty", e.message.toString())
-//                }
+                try {
+                    // if (isFromWhat.equals("rfidlocation")) {
+                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
+                    decreaseRangeToThirty(range_seekbar2.value.toInt())
+                    //}
+                } catch (e: Exception) {
+                    Log.d("decreaseRangeToThirty", e.message.toString())
+                }
 
                 //  connectRFIDReader()
                 currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
