@@ -77,7 +77,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                 if(!newText.isNullOrEmpty())
                 {
                     resultAdapter.filter.filter(newText)
-
                 }
                 else
                 {

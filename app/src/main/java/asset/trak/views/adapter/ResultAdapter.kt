@@ -22,6 +22,7 @@ import asset.trak.utils.Constants.setTitleImage
 import asset.trak.utils.decreaseRangeToThirty
 import asset.trak.utils.getFormattedDate
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
@@ -143,12 +144,18 @@ class ResultAdapter(
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                items = results.values as ArrayList<AssetMain>
-                Log.d("tag1212121", "setAdaptor: ${items.size} ")
-                notifyDataSetChanged()
-                val intent=Intent("COUNT_UPDATE_SEARCH")
-                intent.putExtra("searchCount",items.size)
-                com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
+                try {
+                    items = results.values as ArrayList<AssetMain>
+                    Log.d("tag1212121", "setAdaptor: ${items.size} ")
+                    notifyDataSetChanged()
+                    val intent=Intent("COUNT_UPDATE_SEARCH")
+                    intent.putExtra("searchCount",items.size)
+                    com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
+                }catch (e:java.lang.Exception){
+                    Log.e("DATA",Gson().toJson(results.values) +"::::"+constraint.toString())
+                    filter.filter(constraint)
+                }
+
             }
         }
     }
