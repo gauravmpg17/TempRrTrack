@@ -1211,7 +1211,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                     Intent intent = new Intent("INVENTORYSTART");
                     intent.putExtra("istart", true);
                     sendBroadcast(intent);
-                    inventoryBT.setImageResource(R.drawable.ic_play_stop);
+                    inventoryBT.setImageResource(android.R.drawable.ic_media_pause);
                 }
 
                 isInventoryAborted = true;
@@ -1264,7 +1264,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
             if (Application.multiTagLocateTagListExist) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT);
                 if (!Application.mIsMultiTagLocatingRunning) {
-                    ((FloatingActionButton) v).setImageResource(R.drawable.ic_play_stop);
+                    ((FloatingActionButton) v).setImageResource(android.R.drawable.ic_media_pause);
                     Application.mIsMultiTagLocatingRunning = true;
                     new AsyncTask<Void, Void, Boolean>() {
                         private InvalidUsageException invalidUsageException;
@@ -2030,7 +2030,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
      */
     public void locationingButtonClicked(final View v) {
 
-        Button btn_locate = findViewById(R.id.btn_locate);
+        FloatingActionButton btn_locate = findViewById(R.id.btn_locate);
         EditText lt_et_epc = (AutoCompleteTextView) findViewById(R.id.lt_et_epc);
         String locateTag = lt_et_epc.getText().toString();
 
@@ -2038,7 +2038,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
             lt_et_epc.setFocusable(false);
             if (btn_locate != null) {
-                // btn_locate.setImageResource(R.drawable.ic_play_stop);
+                 btn_locate.setImageResource(android.R.drawable.ic_media_pause);
             }
             RangeGraph locationBar = findViewById(R.id.locationBar);
             locationBar.setValue(0);
@@ -2047,7 +2047,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         } else {
             isLocationingAborted = true;
             if (btn_locate != null) {
-                // btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                 btn_locate.setImageResource(android.R.drawable.ic_media_play);
             }
             (findViewById(R.id.lt_et_epc)).setFocusableInTouchMode(true);
             (findViewById(R.id.lt_et_epc)).setFocusable(true);
@@ -2081,7 +2081,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         getApplicationContext(),
                         message,
                         FancyToast.LENGTH_LONG,
-                        FancyToast.LENGTH_SHORT,
+                        FancyToast.WARNING,
                         false
                 ).show();
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT);

@@ -3,6 +3,7 @@ package com.markss.rfidtemplate.locate_tag;
 
 import static com.markss.rfidtemplate.application.Application.roomDatabaseBuilder;
 import static com.markss.rfidtemplate.home.MainActivity.filter;
+import static com.markss.rfidtemplate.rfid.RFIDController.isLocatingTag;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -103,7 +104,6 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
         locationBar = (RangeGraph) getActivity().findViewById(R.id.locationBar);
         // distance=(TextView)getActivity().findViewById(R.id.distance);
         btn_locate = getActivity().findViewById(R.id.btn_locate);
-        TextView tvTitle = getActivity().findViewById(R.id.btn_locate);
         TextView tvSearch = getActivity().findViewById(R.id.tvSearch);
         tvSearch.setVisibility(View.GONE);
         constLay = getActivity().findViewById(R.id.lt_book_info);
@@ -128,7 +128,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
             }
             et_locateTag.setFocusable(false);
             if (btn_locate != null) {
-                 btn_locate.setImageResource(android.R.drawable.ic_media_pause);
+                btn_locate.setImageResource(android.R.drawable.ic_media_pause);
             }
             showTagLocationingDetails();
         } else {
@@ -201,42 +201,38 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                 } else {
                     tvAuthor.setText(list.get(0).getSampleType());
                 }
-                String sampleNature="";
-                String season="";
+                String sampleNature = "";
+                String season = "";
 
-                if(list.get(0).getSampleNature()==null && list.get(0).getSeason()==null)
-                {
+                if (list.get(0).getSampleNature() == null && list.get(0).getSeason() == null) {
                     tvCategory.setText("-");
-                }
-                else{
-                    if(list.get(0).getSampleNature() == null){
-                        sampleNature="";
+                } else {
+                    if (list.get(0).getSampleNature() == null) {
+                        sampleNature = "";
                     }
                     if (list.get(0).getSampleNature() != null) {
-                        sampleNature=list.get(0).getSampleNature() + " | ";
+                        sampleNature = list.get(0).getSampleNature() + " | ";
                     }
-                    if(list.get(0).getSeason()!=null)
-                    {
-                        season=list.get(0).getSeason();
+                    if (list.get(0).getSeason() != null) {
+                        season = list.get(0).getSeason();
                     }
-                    tvCategory.setText(sampleNature+""+season);
+                    tvCategory.setText(sampleNature + "" + season);
                 }
 
 
-                    String dateTime = "";
-                    if (list.get(0).getScanDate()==null || list.get(0).getScanDate().isEmpty()) {
-                        dateTime = "";
+                String dateTime = "";
+                if (list.get(0).getScanDate() == null || list.get(0).getScanDate().isEmpty()) {
+                    dateTime = "";
+                } else {
+                    if (list.get(0).getLocation().isEmpty()) {
+                        dateTime += "";
                     } else {
-                        if (list.get(0).getLocation().isEmpty()) {
-                            dateTime += "";
-                        } else {
-                            dateTime += " | ";
-                        }
-                        dateTime += ExtensionKt.getFormattedDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), new SimpleDateFormat("dd-MM-yyyy"), list.get(0).getScanDate());
-
+                        dateTime += " | ";
                     }
-                    tvTag.setText(list.get(0).getLocation() + dateTime);
+                    dateTime += ExtensionKt.getFormattedDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), new SimpleDateFormat("dd-MM-yyyy"), list.get(0).getScanDate());
 
+                }
+                tvTag.setText(list.get(0).getLocation() + dateTime);
 
 
                 //          LocationMaster locationMaster = roomDatabaseBuilder.getBookDao().getLocationName(list.get(0).getAssetCatalogue().getLocationId());
@@ -256,6 +252,9 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
     public void onDetach() {
         super.onDetach();
         Application.locateTag = et_locateTag.getText().toString();
+        if (isLocatingTag) {
+            btn_locate.performClick();
+        }
     }
 
     public void showTagLocationingDetails() {
@@ -338,7 +337,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
 //                    {
                     RFIDController.isLocatingTag = false;
                     if (btn_locate != null) {
-                         btn_locate.setImageResource(android.R.drawable.ic_media_play);
+                        btn_locate.setImageResource(android.R.drawable.ic_media_play);
                     }
                     if (et_locateTag != null) {
                         et_locateTag.setFocusableInTouchMode(true);
@@ -358,4 +357,5 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
     @Override
     public void onRefresh() {
     }
+
 }
