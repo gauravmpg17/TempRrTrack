@@ -298,4 +298,7 @@ interface BookDao {
 
     @Query("DELETE FROM tblSubCategoryMaster")
     fun deleteTblSubCategoryMasterTable()
+
+    @Delete
+    fun deleteScanTag(listScanTag: List<ScanTag>)
 }

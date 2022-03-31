@@ -117,9 +117,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         val tabOne = LayoutInflater.from(requireActivity())
             .inflate(R.layout.custom_tab, null) as TextView
         tabOne.text = textValue
-        if (tablayout.getTabAt(0)?.customView==null) {
+        if (tablayout.getTabAt(0)?.customView == null) {
             tablayout.getTabAt(0)?.customView = tabOne
-        }else{
+        } else {
             tablayout.getTabAt(0)?.customView = null
             tablayout.getTabAt(0)?.customView = tabOne
         }
@@ -129,9 +129,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         val tabOne = LayoutInflater.from(requireActivity())
             .inflate(R.layout.custom_tab, null) as TextView
         tabOne.text = textValue
-        if (tablayout.getTabAt(1)?.customView==null) {
+        if (tablayout.getTabAt(1)?.customView == null) {
             tablayout.getTabAt(1)?.customView = tabOne
-        }else{
+        } else {
             tablayout.getTabAt(1)?.customView = null
             tablayout.getTabAt(1)?.customView = tabOne
         }
@@ -141,9 +141,9 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         val tabOne = LayoutInflater.from(requireActivity())
             .inflate(R.layout.custom_tab, null) as TextView
         tabOne.text = textValue
-        if (tablayout.getTabAt(2)?.customView==null) {
+        if (tablayout.getTabAt(2)?.customView == null) {
             tablayout.getTabAt(2)?.customView = tabOne
-        }else{
+        } else {
             tablayout.getTabAt(2)?.customView = null
             tablayout.getTabAt(2)?.customView = tabOne
         }
@@ -485,13 +485,12 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             }
                         }
                         if (listRfids.isNotEmpty()) {
-                            listRfids.forEach {
-                                bookDao.deleteScanTagNotReg(it.scanId!!, it!!.rfidTag!!)
-                            }
-
+                            /* listRfids.forEach {
+                                 bookDao.deleteScanTagNotReg(it.scanId!!, it!!.rfidTag!!)
+                             }*/
+                            bookDao.deleteScanTag(listRfids)
                             (adapter.getCurrentFragment() as NotRegisteredFragment).updateList()
-                        } else
-
+                        } else {
                             FancyToast.makeText(
                                 requireActivity(),
                                 "No Item Selected.",
@@ -499,6 +498,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 FancyToast.WARNING,
                                 false
                             ).show()
+                        }
 
 //                            Toast.makeText(
 //                                requireContext(), "No Item Selected",
