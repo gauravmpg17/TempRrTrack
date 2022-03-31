@@ -155,9 +155,14 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     if (!it.Inventorymaster.isNullOrEmpty()) {
                         Application.bookDao?.addInventoryMaster(it.Inventorymaster)
                     }
-                    val newlyRegistered =
-                        roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                    tvNewlyScanCount.text = newlyRegistered.toString()
+
+                    if(currLocId!=0)
+                    {
+                        val newlyRegistered =
+                            roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                        tvNewlyScanCount.text = newlyRegistered.toString()
+                    }
+
                 }
                 Application.isReconsiled = false
             }
@@ -233,8 +238,11 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                             } else {
                                 registeredAsPerLastScan = 0
                             }
-                            newlyRegistered =
-                                roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                            if(currLocId!=0)
+                            {
+                                newlyRegistered =
+                                    roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+                            }
                         }
                         tvRegisteredCount.text = registeredAsPerLastScan.toString()
                         tvNewlyScanCount.text = newlyRegistered.toString()
