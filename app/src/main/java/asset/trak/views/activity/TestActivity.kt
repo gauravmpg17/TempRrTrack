@@ -60,8 +60,6 @@ class TestActivity : AppCompatActivity(), Observer, View.OnTouchListener {
 //            onNewIntent(intent)
         }
 
-        seekBar.visibility = View.GONE
-
         if (intent.getStringExtra("type") == "2") {
             tvTitle.text = "Put Away Inventory"
             tvInventoryReport.visibility = View.INVISIBLE
