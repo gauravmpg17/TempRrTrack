@@ -492,6 +492,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             (adapter.getCurrentFragment() as NotRegisteredFragment).updateList()
                         } else
 
+                        {
                             FancyToast.makeText(
                                 requireActivity(),
                                 "No Item Selected.",
@@ -499,11 +500,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 FancyToast.WARNING,
                                 false
                             ).show()
-
-//                            Toast.makeText(
-//                                requireContext(), "No Item Selected",
-//                                Toast.LENGTH_LONG
-//                            ).show()
+                        }
 
                         if (inventorymaster == null) {
                             val countofNotRegistered = 0

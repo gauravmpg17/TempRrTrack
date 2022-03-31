@@ -69,10 +69,8 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(!newText.isNullOrEmpty())
                 {
@@ -101,6 +99,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 //            Log.d("decreaseRangeToThirty", e.message.toString())
 //        }
 
+        Log.d("tag123", "onGoalClick: ${bookAttributes.AssetRFID}")
         Application.locateTag = bookAttributes.AssetRFID
         RFIDController.accessControlTag =bookAttributes.AssetRFID
         Application.PreFilterTag =bookAttributes.AssetRFID
