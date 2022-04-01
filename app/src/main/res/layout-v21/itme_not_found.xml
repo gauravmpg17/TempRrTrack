@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="tvCategory" />
+            app:constraint_referenced_ids="tvAuthor" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierTag"
@@ -110,33 +110,32 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAuthor"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_10"
             android:layout_marginTop="@dimen/five_dp"
             android:fontFamily="@font/jio_type_light"
-            android:maxLines="2"
+            android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrierLinear"
             app:layout_constraintTop_toBottomOf="@id/barrierTitle"
-            tools:text="@string/dummy" />
+            tools:text="" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_10"
-            android:layout_marginTop="@dimen/five_dp"
             android:fontFamily="@font/jio_type_light"
-            android:maxLines="2"
+            android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/barrierLinear"
-            app:layout_constraintTop_toBottomOf="@id/barrierAuther"
-            tools:text="@string/dummy" />
+            app:layout_constraintTop_toTopOf="@id/tvAuthor"
+            app:layout_constraintStart_toEndOf="@id/tvAuthor"
+            app:layout_constraintBottom_toBottomOf="@id/tvAuthor"
+            tools:text="" />
 
         <TextView
             android:id="@+id/tvTag"
