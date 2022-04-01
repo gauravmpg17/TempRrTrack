@@ -30,6 +30,9 @@ import com.markss.rfidtemplate.rapidread.MapRFIDLocationFragment
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,7 +50,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  range_seekbar1.setAnimated(true, 3000L)
+        //  range_seekbar1.setAnimated(true, 3000L)
         range_seekbar2.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
         range_seekbar2.setLabelFormatter { value: Float ->
             return@setLabelFormatter value.toInt().toString()
@@ -135,34 +138,38 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
             if (it != null && it.statuscode == 200 && it.data != null) {
                 it.data.let {
-                    if (!it.AssetMain.isNullOrEmpty()) {
-                        Application.bookDao?.addAssetMain(it.AssetMain)
+                    ioCoroutines {
+                        if (!it.AssetMain.isNullOrEmpty()) {
+                            Application.bookDao?.addAssetMain(it.AssetMain)
+                        }
+
+                        if (!it.InventoryScan.isNullOrEmpty()) {
+                            Application.bookDao?.addInventoryScan(it.InventoryScan)
+                        }
+
+                        if (!it.MasterLocation.isNullOrEmpty()) {
+                            Application.bookDao?.addMasterLocation(it.MasterLocation)
+                        }
+
+
+                        if (!it.MasterVendor.isNullOrEmpty()) {
+                            Application.bookDao?.addMasterVendor(it.MasterVendor)
+                        }
+
+                        if (!it.Inventorymaster.isNullOrEmpty()) {
+                            Application.bookDao?.addInventoryMaster(it.Inventorymaster)
+                        }
+
+                        if (currLocId != 0) {
+                            val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
+                                roomDatabaseBuilder.getBookDao().getCountLocationIdKt(currLocId)
+                            }.await()
+                            mainCoroutines {
+                                tvNewlyScanCount.text = newlyRegistered.toString()
+                            }
+                        }
+
                     }
-
-                    if (!it.InventoryScan.isNullOrEmpty()) {
-                        Application.bookDao?.addInventoryScan(it.InventoryScan)
-                    }
-
-                    if (!it.MasterLocation.isNullOrEmpty()) {
-                        Application.bookDao?.addMasterLocation(it.MasterLocation)
-                    }
-
-
-                    if (!it.MasterVendor.isNullOrEmpty()) {
-                        Application.bookDao?.addMasterVendor(it.MasterVendor)
-                    }
-
-                    if (!it.Inventorymaster.isNullOrEmpty()) {
-                        Application.bookDao?.addInventoryMaster(it.Inventorymaster)
-                    }
-
-                    if(currLocId!=0)
-                    {
-                        val newlyRegistered =
-                            roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
-                        tvNewlyScanCount.text = newlyRegistered.toString()
-                    }
-
                 }
                 Application.isReconsiled = false
             }
@@ -179,13 +186,17 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
     private fun initialisation() {
         listOfLocations.clear()
-        listOfLocations.addAll(roomDatabaseBuilder.getBookDao().getLocationMasterList())
-        if (isFromWhat.equals("rfidlocation")) {
-            tvTitle.text = "Put Away Inventory"
-            //   range_seekbar1.visibility=View.VISIBLE
-            tvInventoryReport.visibility = View.INVISIBLE
-            tvILastRecord.visibility = View.INVISIBLE
-            registered.visibility = View.INVISIBLE
+        mainCoroutines {
+            listOfLocations.addAll(CoroutineScope(Dispatchers.IO).async {
+                roomDatabaseBuilder.getBookDao().getLocationMasterList()
+            }.await())
+            if (isFromWhat.equals("rfidlocation")) {
+                tvTitle.text = "Put Away Inventory"
+                //   range_seekbar1.visibility=View.VISIBLE
+                tvInventoryReport.visibility = View.INVISIBLE
+                tvILastRecord.visibility = View.INVISIBLE
+                registered.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -201,51 +212,56 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 if (s.toString().trim().isEmpty()) {
                     tvLocation.text = ""
                     tvRegisteredCount.text = "0"
-                   tvNewlyScanCount.text = "0"
+                    tvNewlyScanCount.text = "0"
                 } else if (s.toString().length >= 4) {
-                    tvLocation.text=""
-                    barCodeName = s.toString().trim()
-                    //here
-                    currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
-                   if(currMasterLocation==null)
-                   {
-                       tvLocation.text = ""
-                   }
-                    currMasterLocation?.let {
-                        it.Name?.let {
-                            tvLocation.text = it
+                    mainCoroutines {
+                        tvLocation.text = ""
+                        barCodeName = s.toString().trim()
+                        //here
+                        currMasterLocation = CoroutineScope(Dispatchers.IO).async {
+                            Application.bookDao.getLocationMasterDataRR(barCodeName)
+                        }.await()
+                        if (currMasterLocation == null) {
+                            tvLocation.text = ""
                         }
-
-                        currLocId = currMasterLocation!!.LocID
-                        var lastScanId = ""
-                        var lastRecodedDate = ""
-                        var registeredAsPerLastScan = 0
-                        var newlyRegistered = 0
-                        if (currLocId != 0) {
-                            val invData = roomDatabaseBuilder.getBookDao()
-                                .getLastRecordedInventoryOfLocation(currLocId)
-                            if (invData.count() > 0) {
-                                lastRecodedDate = invData.get(0).scanOn.toString()
-                                lastScanId = invData.get(0).scanID
-                                //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
-                                registeredAsPerLastScan = roomDatabaseBuilder.getBookDao()
-                                    .getCountOfRegisteredAsPerLastInventoryOfLocation(
-                                        currLocId,
-                                        lastScanId
-                                    )
-                                //    newlyRegistered = roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
-
-                            } else {
-                                registeredAsPerLastScan = 0
+                        currMasterLocation?.let {
+                            it.Name?.let {
+                                tvLocation.text = it
                             }
-                            if(currLocId!=0)
-                            {
-                                newlyRegistered =
-                                    roomDatabaseBuilder.getBookDao().getCountLocationId(currLocId)
+
+                            currLocId = currMasterLocation!!.LocID
+                            var lastScanId = ""
+                            var lastRecodedDate = ""
+                            var registeredAsPerLastScan = 0
+                            var newlyRegistered = 0
+                            if (currLocId != 0) {
+                                val invData = CoroutineScope(Dispatchers.IO).async {
+                                    roomDatabaseBuilder.getBookDao()
+                                        .getLastRecordedInventoryOfLocation(currLocId)
+                                }.await()
+                                if (invData.count() > 0) {
+                                    lastRecodedDate = invData.get(0).scanOn.toString()
+                                    lastScanId = invData.get(0).scanID
+                                    //registeredAsPerLastScan= roomDatabaseBuilder.getBookDao().getCountLastScanRegistered(locId,lastScanId)
+                                    registeredAsPerLastScan = CoroutineScope(Dispatchers.IO).async {
+                                        roomDatabaseBuilder.getBookDao()
+                                            .getCountOfRegisteredAsPerLastInventoryOfLocation(
+                                                currLocId,
+                                                lastScanId
+                                            )
+                                    }.await()
+                                    //    newlyRegistered = roomDatabaseBuilder.getBookDao().getCountNewlyRegisteredAfterLastScan(currLocId, lastScanId)
+
+                                } else {
+                                    registeredAsPerLastScan = 0
+                                }
+                                newlyRegistered = CoroutineScope(Dispatchers.IO).async {
+                                    roomDatabaseBuilder.getBookDao().getCountLocationIdKt(currLocId)
+                                }.await()
                             }
+                            tvRegisteredCount.text = registeredAsPerLastScan.toString()
+                            tvNewlyScanCount.text = newlyRegistered.toString()
                         }
-                        tvRegisteredCount.text = registeredAsPerLastScan.toString()
-                        tvNewlyScanCount.text = newlyRegistered.toString()
                     }
                 } else {
                     tvLocation.text = ""
@@ -280,8 +296,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
         buttonscan.setOnClickListener {
             if (barCodeName.isEmpty()) {
-                tvLocation.text =
-                    ""
                 FancyToast.makeText(
                     requireActivity(),
                     "Please Enter Barcode.",
@@ -289,89 +303,76 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     FancyToast.WARNING,
                     false
                 ).show()
-            } else if (barCodeName.isNotEmpty()) {
-                try {
-                    // if (isFromWhat.equals("rfidlocation")) {
-                    Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
-                    decreaseRangeToThirty(range_seekbar2.value.toInt())
-                    //}
-                } catch (e: Exception) {
-                    Log.d("decreaseRangeToThirty", e.message.toString())
-                }
+            } else {
+                mainCoroutines {
+                    try {
+                        // if (isFromWhat.equals("rfidlocation")) {
+                        Log.d("range", "listeners:${range_seekbar2.value.toInt()} ")
+                        decreaseRangeToThirty(range_seekbar2.value.toInt())
+                        //}
+                    } catch (e: Exception) {
+                        Log.d("decreaseRangeToThirty", e.message.toString())
+                    }
 
-                //  connectRFIDReader()
-                currMasterLocation = Application.bookDao.getLocationMasterDataRR(barCodeName)
-                currMasterLocation?.let {
-                    //  requireActivity().hideKeyboard(it)
-                    if (currMasterLocation == null) {
-                        FancyToast.makeText(
-                            requireActivity(),
-                            "Please Enter Valid Bar Code.",
-                            FancyToast.LENGTH_LONG,
-                            FancyToast.WARNING,
-                            false
-                        ).show()
-                    } else {
-                        currLocId = currMasterLocation!!.LocID
-                        val pendingInventory =
-                            roomDatabaseBuilder.getBookDao().getPendingInventoryScan(currLocId)
-                        val cnt = roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
-                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-                        val cal = Calendar.getInstance()
-                        val dateFormat = sdf.format(cal.time)
-                        if (pendingInventory.isEmpty()) {
-                            Log.d("tag1212", "listeners: " + UUID.randomUUID().toString())
-                            val inventoryMaster = Inventorymaster(
-                                scanID = "A" + UUID.randomUUID().toString(),
-                                deviceId = deviceId,
-                                deviceIdCount = ((cnt ?: 0) + 1),
-                                status = Constants.InventoryStatus.PENDING,
-                                locationId = currLocId,
-                                scanStartDatetime = dateFormat
+                    //  connectRFIDReader()
+                    currMasterLocation = CoroutineScope(Dispatchers.IO).async {
+                        Application.bookDao.getLocationMasterDataRR(barCodeName)
+                    }.await()
+                    currMasterLocation?.let {
+                        //  requireActivity().hideKeyboard(it)
+                        if (currMasterLocation == null) {
+                            FancyToast.makeText(
+                                requireActivity(),
+                                "Please Enter Valid Bar Code.",
+                                FancyToast.LENGTH_LONG,
+                                FancyToast.WARNING,
+                                false
+                            ).show()
+                        } else {
+                            currLocId = currMasterLocation!!.LocID
+                            val pendingInventory = CoroutineScope(Dispatchers.IO).async {
+                                roomDatabaseBuilder.getBookDao().getPendingInventoryScanKt(currLocId)
+                            }.await()
+                            val cnt = CoroutineScope(Dispatchers.IO).async {
+                                roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+                            }.await()
+                            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+                            val cal = Calendar.getInstance()
+                            val dateFormat = sdf.format(cal.time)
+                            if (pendingInventory.isEmpty()) {
+                                Log.d("tag1212", "listeners: " + UUID.randomUUID().toString())
+                                val inventoryMaster = Inventorymaster(
+                                    scanID = "A" + UUID.randomUUID().toString(),
+                                    deviceId = deviceId,
+                                    deviceIdCount = ((cnt ?: 0) + 1),
+                                    status = Constants.InventoryStatus.PENDING,
+                                    locationId = currLocId,
+                                    scanStartDatetime = dateFormat
+                                )
+                                ioCoroutines {
+                                    roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+                                    roomDatabaseBuilder.getBookDao()
+                                        .resetScanIdOfAssetsAtLocation(currLocId)
+                                }
+                            }
+                            val fragmentRapidReadFragment = RapidReadFragment()
+                            val mapRFIDLocationFragment = MapRFIDLocationFragment()
+                            val bundle = Bundle()
+                            bundle.putParcelable(
+                                "LocationData",
+                                currMasterLocation
                             )
-                            roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
-                            roomDatabaseBuilder.getBookDao()
-                                .resetScanIdOfAssetsAtLocation(currLocId)
-                        }
-                        val fragmentRapidReadFragment = RapidReadFragment()
-                        val mapRFIDLocationFragment = MapRFIDLocationFragment()
-                        val bundle = Bundle()
-                        bundle.putParcelable(
-                            "LocationData",
-                            currMasterLocation
-                        )
-                        bundle.putInt(
-                            "totalRegistered", tvRegisteredCount.text.toString().toInt().plus(
-                                tvNewlyScanCount.text.toString().toInt()
+                            bundle.putInt(
+                                "totalRegistered", tvRegisteredCount.text.toString().toInt().plus(
+                                    tvNewlyScanCount.text.toString().toInt()
+                                )
                             )
-                        )
-                        fragmentRapidReadFragment.arguments = bundle
-                        mapRFIDLocationFragment.arguments = bundle
-                        if (isFromWhat.equals("location")) {
+                            fragmentRapidReadFragment.arguments = bundle
+                            mapRFIDLocationFragment.arguments = bundle
+                            if (isFromWhat.equals("location")) {
 
-                            /*RFID Reader Power changed to 50dbm. Please Scan closely*/
-                            if (inventoryViewModel.isFirstTime) {
-                                CommonAlertDialog(
-                                    requireActivity(),
-                                    "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
-                                    "OK",
-                                    "",
-                                    object : CommonAlertDialog.OnButtonClickListener {
-                                        override fun onPositiveButtonClicked() {
-                                            replaceFragment(
-                                                requireActivity().supportFragmentManager,
-                                                fragmentRapidReadFragment,
-                                                R.id.content_frame
-                                            )
-                                        }
-
-                                        override fun onNegativeButtonClicked() {
-
-                                        }
-                                    }).show()
-
-                            } else {
-                                if (range_seekbar2.value.toInt() != 200) {
+                                /*RFID Reader Power changed to 50dbm. Please Scan closely*/
+                                if (inventoryViewModel.isFirstTime) {
                                     CommonAlertDialog(
                                         requireActivity(),
                                         "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
@@ -390,39 +391,39 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
                                             }
                                         }).show()
+
                                 } else {
-                                    replaceFragment(
-                                        requireActivity().supportFragmentManager,
-                                        fragmentRapidReadFragment,
-                                        R.id.content_frame
-                                    )
+                                    if (range_seekbar2.value.toInt() != 200) {
+                                        CommonAlertDialog(
+                                            requireActivity(),
+                                            "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
+                                            "OK",
+                                            "",
+                                            object : CommonAlertDialog.OnButtonClickListener {
+                                                override fun onPositiveButtonClicked() {
+                                                    replaceFragment(
+                                                        requireActivity().supportFragmentManager,
+                                                        fragmentRapidReadFragment,
+                                                        R.id.content_frame
+                                                    )
+                                                }
+
+                                                override fun onNegativeButtonClicked() {
+
+                                                }
+                                            }).show()
+                                    } else {
+                                        replaceFragment(
+                                            requireActivity().supportFragmentManager,
+                                            fragmentRapidReadFragment,
+                                            R.id.content_frame
+                                        )
+                                    }
                                 }
-                            }
 
 
-                        } else if (isFromWhat.equals("rfidlocation")) {
-                            if (inventoryViewModel.isFirstTime) {
-                                CommonAlertDialog(
-                                    requireActivity(),
-                                    "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
-                                    "OK",
-                                    "",
-                                    object : CommonAlertDialog.OnButtonClickListener {
-                                        override fun onPositiveButtonClicked() {
-                                            replaceFragment(
-                                                requireActivity().supportFragmentManager,
-                                                mapRFIDLocationFragment,
-                                                R.id.content_frame
-                                            )
-                                        }
-
-                                        override fun onNegativeButtonClicked() {
-
-                                        }
-                                    }).show()
-                            } else {
-                                if (range_seekbar2.value.toInt() != 30) {
-
+                            } else if (isFromWhat.equals("rfidlocation")) {
+                                if (inventoryViewModel.isFirstTime) {
                                     CommonAlertDialog(
                                         requireActivity(),
                                         "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
@@ -442,18 +443,38 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                             }
                                         }).show()
                                 } else {
-                                    replaceFragment(
-                                        requireActivity().supportFragmentManager,
-                                        mapRFIDLocationFragment,
-                                        R.id.content_frame
-                                    )
+                                    if (range_seekbar2.value.toInt() != 30) {
+
+                                        CommonAlertDialog(
+                                            requireActivity(),
+                                            "RFID Reader Power changed to ${range_seekbar2.value.toInt()}dbm. Please Scan closely",
+                                            "OK",
+                                            "",
+                                            object : CommonAlertDialog.OnButtonClickListener {
+                                                override fun onPositiveButtonClicked() {
+                                                    replaceFragment(
+                                                        requireActivity().supportFragmentManager,
+                                                        mapRFIDLocationFragment,
+                                                        R.id.content_frame
+                                                    )
+                                                }
+
+                                                override fun onNegativeButtonClicked() {
+
+                                                }
+                                            }).show()
+                                    } else {
+                                        replaceFragment(
+                                            requireActivity().supportFragmentManager,
+                                            mapRFIDLocationFragment,
+                                            R.id.content_frame
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            } else {
-                tvLocation.text = ""
             }
         }
     }

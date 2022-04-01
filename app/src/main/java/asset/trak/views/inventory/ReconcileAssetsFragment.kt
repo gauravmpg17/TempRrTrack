@@ -22,6 +22,7 @@ import asset.trak.model.LocationUpdate
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.modelsrrtrack.MasterLocation
 import asset.trak.utils.inter.UpdateItemInterface
+import asset.trak.utils.mainCoroutines
 import asset.trak.views.adapter.ReconcileAssetsPagerAdapter
 import asset.trak.views.adapter.UpdateLocationAdapter
 import asset.trak.views.baseclasses.BaseFragment
@@ -38,6 +39,9 @@ import com.markss.rfidtemplate.rfid.RFIDController
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.zebra.rfid.api3.RFIDResults
 import kotlinx.android.synthetic.main.fragment_reconcile_assets.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -161,45 +165,51 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
         val locationData = arguments?.getParcelable<MasterLocation>("LocationData")
 
         tvFloorTitle.text = locationData?.Name
-        var locationRegsiterCount = bookDao.getCountLocationId(locationId)
-        val totalcount = "Total Registered Assets : $locationRegsiterCount"
-        tvTotalRegisteredAssets.text = totalcount
-        inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
-        if (inventoryMasterList.isEmpty() || inventoryMasterList == null) {
-            var notFoundCount = 0
-            val notFound = "Not\nFound ($notFoundCount)"
-            var differntLocationCount = 0
-            val differentLocation = "Different\nLocation ($differntLocationCount)"
-            var countofNotRegistered = 0
-            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+
+        mainCoroutines {
+
+            var locationRegsiterCount = CoroutineScope(Dispatchers.IO).async {
+                bookDao.getCountLocationId(locationId)
+            }.await()
+            val totalcount = "Total Registered Assets : $locationRegsiterCount"
+            tvTotalRegisteredAssets.text = totalcount
+            inventoryMasterList = bookDao.getPendingInventoryScan(locationId)
+            if (inventoryMasterList.isEmpty() || inventoryMasterList == null) {
+                var notFoundCount = 0
+                val notFound = "Not\nFound ($notFoundCount)"
+                var differntLocationCount = 0
+                val differentLocation = "Different\nLocation ($differntLocationCount)"
+                var countofNotRegistered = 0
+                val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 
 //            tablayout.addTab(tablayout.newTab().setText(notFound));
-            notFoundTab(notFound)
+                notFoundTab(notFound)
 
-            // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
-            if (!whichInventory.equals("global")) {
+                // pendingInventoryScan = bookDao.getPendingInventoryScan(locationData.getId());
+                if (!whichInventory.equals("global")) {
 //                tablayout.addTab(tablayout.newTab().setText(differentLocation))
-                differentLocationTab(differentLocation)
-            }
+                    differentLocationTab(differentLocation)
+                }
 //            tablayout.addTab(tablayout.newTab().setText(notRegistered))
-            notRegisterTab(notRegistered)
-        } else {
-            inventorymaster = inventoryMasterList.get(0)
-            var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, inventorymaster!!.scanID)
-            val notFound = "Not\nFound ($notFoundCount)"
-            var differntLocationCount =
-                bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
-            val differentLocation = "Different\nLocation ($differntLocationCount)"
-            var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
-            val notRegistered = "Not\nRegistered ($countofNotRegistered)"
+                notRegisterTab(notRegistered)
+            } else {
+                inventorymaster = inventoryMasterList.get(0)
+                var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, inventorymaster!!.scanID)
+                val notFound = "Not\nFound ($notFoundCount)"
+                var differntLocationCount =
+                    bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+                val differentLocation = "Different\nLocation ($differntLocationCount)"
+                var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
+                val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 //            tablayout.addTab(tablayout.newTab().setText(notFound));
-            notFoundTab(notFound)
-            if (!whichInventory.equals("global")) {
+                notFoundTab(notFound)
+                if (!whichInventory.equals("global")) {
 //                tablayout.addTab(tablayout.newTab().setText(differentLocation))
-                differentLocationTab(differentLocation)
-            }
+                    differentLocationTab(differentLocation)
+                }
 //            tablayout.addTab(tablayout.newTab().setText(notRegistered))
-            notRegisterTab(notRegistered)
+                notRegisterTab(notRegistered)
+            }
         }
         tablayout.tabGravity = TabLayout.GRAVITY_FILL
         viewPager.offscreenPageLimit = 3
@@ -595,9 +605,13 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     }
 
     fun refreshRegisteredAssetCount() {
-        var count = bookDao.getCountLocationId(locationId)
-        val totalcount = "Total Registered Assets : $count"
-        tvTotalRegisteredAssets.text = totalcount
+        mainCoroutines {
+            var count = CoroutineScope(Dispatchers.IO).async {
+                bookDao.getCountLocationId(locationId)
+            }.await()
+            val totalcount = "Total Registered Assets : $count"
+            tvTotalRegisteredAssets.text = totalcount
+        }
     }
 
     fun addScan() {
@@ -748,8 +762,12 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
     }
 
     private fun initialisation() {
-        listOfLocations.clear()
-        listOfLocations.addAll(Application.roomDatabaseBuilder.getBookDao().getLocationMasterList())
+        mainCoroutines {
+            listOfLocations.clear()
+            listOfLocations.addAll(CoroutineScope(Dispatchers.IO).async {
+                Application.roomDatabaseBuilder.getBookDao().getLocationMasterList()
+            }.await())
+        }
     }
 
     override fun onUpdateItemCallback(locationData: LocationUpdate) {

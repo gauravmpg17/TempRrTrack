@@ -10,6 +10,7 @@ import asset.trak.database.entity.BookAttributes
 import asset.trak.modelsrrtrack.LastSyncData
 import asset.trak.modelsrrtrack.LastSyncResponse
 import asset.trak.repository.BookRepository
+import asset.trak.utils.SingleLiveEvent
 import asset.trak.utils.getFormattedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +26,7 @@ import kotlin.collections.ArrayList
 class InventoryViewModel @Inject constructor(private val bookRepository: BookRepository) :
     ViewModel() {
      var mLastSyncData = MutableLiveData<LastSyncResponse>()
+     var mLastSyncDataSearch = SingleLiveEvent<LastSyncResponse>()
     private var mAssetSyncData = MutableLiveData<Int>()
     var listBookAttributes: ArrayList<BookAttributes> = ArrayList()
     var isFirstTime: Boolean = false
@@ -91,6 +93,16 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
             }
         }
         return mLastSyncData
+    }
+
+    fun getLastSyncSearch(syncTime: String?): LiveData<LastSyncResponse> {
+        viewModelScope.launch {
+            val data = bookRepository.getLastSync(syncTime)
+            data?.apply {
+                mLastSyncDataSearch.value = this.value
+            }
+        }
+        return mLastSyncDataSearch
     }
 
     fun postAssetSync(body: RequestBody): LiveData<Int> {

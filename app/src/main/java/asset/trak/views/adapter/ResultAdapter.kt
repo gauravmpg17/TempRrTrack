@@ -37,11 +37,15 @@ interface OnResultClickListener {
 class ResultAdapter(
     private val context: Context,
     private val onGoalClickListener: OnResultClickListener,
-    private var items: ArrayList<AssetMain>,
+    private var items: ArrayList<AssetMain>?,
     private var isFromLib: Boolean? = false
 ) :
     RecyclerView.Adapter<ResultAdapter.HomeGoalsHolder>(), Filterable {
     private var mFilteredList: List<AssetMain>? = null
+
+    init {
+        mFilteredList=items
+    }
 
     inner class HomeGoalsHolder(view: View) : RecyclerView.ViewHolder(view) {
         var tvTitle: AppCompatTextView = view.findViewById(R.id.tvTitle)
@@ -62,38 +66,45 @@ class ResultAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeGoalsHolder, position: Int) {
-        val homeGoalsItem = items[position]
-        holder.tvTitle.text = homeGoalsItem.Supplier
+        val homeGoalsItem = mFilteredList?.get(position)
+        homeGoalsItem?.let {
+            holder.tvTitle.text = homeGoalsItem.Supplier
 
-        if (homeGoalsItem.SampleType.isNullOrEmpty()) {
-            holder.tvAuthor.text = "-"
-        } else {
-            holder.tvAuthor.text = homeGoalsItem.SampleType
-        }
-        holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
-        holder.tvTag.text = homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
-            ""
-        } else {
-            if (homeGoalsItem.Location.isNullOrEmpty()) {
-                ""
+            if (homeGoalsItem.SampleType.isNullOrEmpty()) {
+                holder.tvAuthor.text = "-"
             } else {
-                " | "
-            } + getFormattedDate(
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-                SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString()
-            )
+                holder.tvAuthor.text = homeGoalsItem.SampleType
+            }
+            holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
+            holder.tvTag.text =
+                homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
+                    ""
+                } else {
+                    if (homeGoalsItem.Location.isNullOrEmpty()) {
+                        ""
+                    } else {
+                        " | "
+                    } + getFormattedDate(
+                        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+                        SimpleDateFormat("dd-MM-yyyy"), homeGoalsItem.ScanDate.toString()
+                    )
+                }
+            holder.itemView.setOnClickListener {
+                try {
+                    decreaseRangeToThirty(300)
+                } catch (e: Exception) {
+                    Log.d("decreaseRangeToThirty", e.message.toString())
+                }
+                onGoalClickListener.onGoalClick(homeGoalsItem)
+            }
         }
 
 
-        holder.itemView.setOnClickListener {
-            onGoalClickListener.onGoalClick(homeGoalsItem)
-        }
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        if (mFilteredList.isNullOrEmpty()) return 0 else return mFilteredList!!.size
     }
-
 
     override fun getFilter(): Filter {
         return object : Filter() {
@@ -105,8 +116,8 @@ class ResultAdapter(
                 if (mFilteredList == null)
                     mFilteredList = items
                 if (constraint != null) {
-                    if (mFilteredList != null && mFilteredList!!.isNotEmpty()) {
-                        for (mFilterData in mFilteredList!!) {
+                    if (items != null && items!!.isNotEmpty()) {
+                        for (mFilterData in items!!) {
                             if (mFilterData.Supplier?.lowercase()
                                     ?.contains(constraint.toString().lowercase()) == true
                                 || mFilterData.Location?.lowercase()
@@ -130,25 +141,20 @@ class ResultAdapter(
                     oReturn.count = results.size
                     oReturn.values = results
                 } else {
-                    oReturn.count = items.size
+                    oReturn.count = items!!.size
                     oReturn.values = items
                 }
                 return oReturn
             }
 
             @SuppressLint("NotifyDataSetChanged")
-            override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                try {
-                    items = results.values as ArrayList<AssetMain>
-                    Log.d("tag1212121", "setAdaptor: ${items.size} ")
-                    notifyDataSetChanged()
-                    val intent=Intent("COUNT_UPDATE_SEARCH")
-                    intent.putExtra("searchCount",items.size)
-                    com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
-                }catch (e:java.lang.Exception){
-                    Log.e("DATA",Gson().toJson(results.values) +"::::"+constraint.toString())
-                    filter.filter(constraint)
-                }
+            override fun publishResults(constraint: CharSequence, results: FilterResults?) {
+                mFilteredList = results?.values as ArrayList<AssetMain>
+                Log.d("tag1212121", "setAdaptor: ${mFilteredList?.size} ")
+                notifyDataSetChanged()
+                val intent = Intent("COUNT_UPDATE_SEARCH")
+                intent.putExtra("searchCount", mFilteredList?.size)
+                com.markss.rfidtemplate.application.Application.context.sendBroadcast(intent)
 
             }
         }

@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import asset.trak.database.entity.LocationMaster
 import asset.trak.model.AssetSyncRequestDataModel
+import asset.trak.utils.ioCoroutines
+import asset.trak.utils.mainCoroutines
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
@@ -18,11 +20,14 @@ import kotlinx.android.synthetic.main.fragment_record_inventory_new.ivBackButton
 import kotlinx.android.synthetic.main.fragment_record_inventory_new.spinnerLocation
 import kotlinx.android.synthetic.main.fragment_record_inventory_new.tvRegisteredCount
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 
-class RecordInventoryNewFragment : BaseFragment(R.layout.fragment_record_inventory_new){
+class RecordInventoryNewFragment : BaseFragment(R.layout.fragment_record_inventory_new) {
 
-    private var listOfLocations= ArrayList<LocationMaster>()
+    private var listOfLocations = ArrayList<LocationMaster>()
     private val inventoryViewModel: InventoryViewModel by viewModels()
 
 
@@ -34,22 +39,32 @@ class RecordInventoryNewFragment : BaseFragment(R.layout.fragment_record_invento
         listeners()
 
     }
+
     private fun initialisation() {
         listOfLocations.clear()
-        listOfLocations.addAll(Application.roomDatabaseBuilder.getBookDao().getLocationMasterList())
+        ioCoroutines {
+            listOfLocations.addAll(CoroutineScope(Dispatchers.IO).async {
+                Application.roomDatabaseBuilder.getBookDao().getLocationMasterList()
+            }.await())
+        }
     }
 
     private fun setAdaptor() {
-        val listOfItems=ArrayList<String>()
+        val listOfItems = ArrayList<String>()
         listOfLocations.forEach {
-            listOfItems.add(it.locationName ?:"")
+            listOfItems.add(it.locationName ?: "")
         }
 
         val spinnerArrayAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOfItems)
+            ArrayAdapter<String>(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                listOfItems
+            )
         spinnerLocation.adapter = spinnerArrayAdapter
 
     }
+
     private fun listeners() {
         ivBackButton.setOnClickListener {
             getBackToPreviousFragment()
@@ -63,12 +78,17 @@ class RecordInventoryNewFragment : BaseFragment(R.layout.fragment_record_invento
             )
         }
 
-        spinnerLocation.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
+        spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
             }
         }

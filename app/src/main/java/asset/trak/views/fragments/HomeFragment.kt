@@ -18,6 +18,8 @@ import asset.trak.utils.Constants
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
 import asset.trak.utils.decreaseRangeToThirty
+import asset.trak.utils.ioCoroutines
+import asset.trak.utils.mainCoroutines
 import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.inventory.ViewInventoryFragment
@@ -89,47 +91,56 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             )
         }
         globalInventory.setOnClickListener {
-            try {
-                decreaseRangeToThirty(300)
-            }
-            catch (e: Exception){
-                Log.d("decreaseRangeToThirty", e.message.toString())
-            }
-            getLastSync()
+            mainCoroutines {
+                try {
+                    decreaseRangeToThirty(300)
+                }
+                catch (e: Exception){
+                    Log.d("decreaseRangeToThirty", e.message.toString())
+                }
+                getLastSync()
+
 //            try {
 //              //  decreaseRangeToThirty(30)
 //            } catch (e: Exception) {
 //                Log.d("decreaseRangeToThirty", e.message.toString())
 //            }
-            // connectRFIDReader()
-            // inventoryViewModel.isFirstTime=true
-            //global
-            val pendingInventory =
-                Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+                // connectRFIDReader()
+                // inventoryViewModel.isFirstTime=true
+                //global
+                val pendingInventory = CoroutineScope(Dispatchers.IO).async {
+                    Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+                }.await()
 
-            val cnt = Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+                val cnt = CoroutineScope(Dispatchers.IO).async {
+                    Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+                }.await()
 //
 //            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
 //                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-            val cal = Calendar.getInstance()
-            val dateFormat = sdf.format(cal.time)
-            if (pendingInventory.isEmpty()) {
-                val inventoryMaster = Inventorymaster(
-                    scanID = "A" + UUID.randomUUID().toString(),
-                    deviceId = sharedPreference?.getString(Constants.DeviceId, "A").toString(),
-                    deviceIdCount = ((cnt ?: 0) + 1),
-                    status = Constants.InventoryStatus.PENDING,
-                    locationId = 0,
-                    scanStartDatetime = dateFormat
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+                val cal = Calendar.getInstance()
+                val dateFormat = sdf.format(cal.time)
+                if (pendingInventory.isEmpty()) {
+                    val inventoryMaster = Inventorymaster(
+                        scanID = "A" + UUID.randomUUID().toString(),
+                        deviceId = sharedPreference?.getString(Constants.DeviceId, "A").toString(),
+                        deviceIdCount = ((cnt ?: 0) + 1),
+                        status = Constants.InventoryStatus.PENDING,
+                        locationId = 0,
+                        scanStartDatetime = dateFormat
+                    )
+                    ioCoroutines {
+                        roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+                    }
+                }
+                replaceFragment(
+                    requireActivity().supportFragmentManager,
+                    GlobalRapidReadFragment.newInstance("global"),
+                    R.id.content_frame
                 )
-                roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+
             }
-            replaceFragment(
-                requireActivity().supportFragmentManager,
-                GlobalRapidReadFragment.newInstance("global"),
-                R.id.content_frame
-            )
         }
         locationInventory.setOnClickListener {
             //  disconnectRFIDReader()
@@ -217,24 +228,26 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
             if (it != null && it.statuscode == 200 && it.data != null) {
                 it.data.let {
-                    if (!it.AssetMain.isNullOrEmpty()) {
-                        bookDao?.addAssetMain(it.AssetMain)
-                    }
+                    ioCoroutines {
+                        if (!it.AssetMain.isNullOrEmpty()) {
+                            bookDao?.addAssetMain(it.AssetMain)
+                        }
 
-                    if (!it.InventoryScan.isNullOrEmpty()) {
-                        bookDao?.addInventoryScan(it.InventoryScan)
-                    }
+                        if (!it.InventoryScan.isNullOrEmpty()) {
+                            bookDao?.addInventoryScan(it.InventoryScan)
+                        }
 
-                    if (!it.MasterLocation.isNullOrEmpty()) {
-                        bookDao?.addMasterLocation(it.MasterLocation)
-                    }
+                        if (!it.MasterLocation.isNullOrEmpty()) {
+                            bookDao?.addMasterLocation(it.MasterLocation)
+                        }
 
-                    if (!it.MasterVendor.isNullOrEmpty()) {
-                        bookDao?.addMasterVendor(it.MasterVendor)
-                    }
+                        if (!it.MasterVendor.isNullOrEmpty()) {
+                            bookDao?.addMasterVendor(it.MasterVendor)
+                        }
 
-                    if (!it.Inventorymaster.isNullOrEmpty()) {
-                        bookDao?.addInventoryMaster(it.Inventorymaster)
+                        if (!it.Inventorymaster.isNullOrEmpty()) {
+                            bookDao?.addInventoryMaster(it.Inventorymaster)
+                        }
                     }
                 }
                 Application.isFirstTime = false

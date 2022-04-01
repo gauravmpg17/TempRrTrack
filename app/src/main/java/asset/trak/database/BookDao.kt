@@ -12,21 +12,21 @@ import asset.trak.modelsrrtrack.MasterVendor
 interface BookDao {
     /*RrTrack*/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAssetMain(assetMain: List<AssetMain>)
+    suspend fun addAssetMain(assetMain: List<AssetMain>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addInventoryScan(inventoryScan: List<InventoryScan>)
+    suspend fun addInventoryScan(inventoryScan: List<InventoryScan>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMasterLocation(masterLocation: List<MasterLocation>)
+    suspend fun addMasterLocation(masterLocation: List<MasterLocation>)
 
     //MasterVendor
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMasterVendor(masterVendor: List<MasterVendor>)
+    suspend fun addMasterVendor(masterVendor: List<MasterVendor>)
     /**/
 
     @Query("SELECT * FROM assetMain")
-    fun getBooks(): List<AssetMain>
+    suspend fun getBooks(): List<AssetMain>
 
     @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE assetClassId IN (:assetId)")
     fun getAssetCount(assetId: Int): Int
@@ -47,6 +47,9 @@ interface BookDao {
 
     @Query("SELECT COUNT(id) FROM tblAssetCatalogue")
     fun getCount(): Int
+
+    @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
+    suspend fun getCountLocationIdKt(locationId: Int): Int
 
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
@@ -76,7 +79,7 @@ interface BookDao {
     fun getCategoryListByCategoriesIds(catIds: ArrayList<Int>): List<CategoryMaster>
 
     @Query("SELECT * FROM tblLocationMaster")
-    fun getLocationMasterList(): List<LocationMaster>
+    suspend fun getLocationMasterList(): List<LocationMaster>
 
 
     @Query("SELECT * FROM tblAssetClassCatMap WHERE classificationId IN (:classId) ")
@@ -93,17 +96,21 @@ interface BookDao {
     fun getInventoryMaster(id: Int): List<Inventorymaster>
 
     @Query("SELECT COUNT(_id) FROM tblInventorymaster")
-    fun getInventoryMasterAllCount(): Int
+    suspend fun getInventoryMasterAllCount(): Int
 
     //temporary
     @Query("SELECT * FROM assetMain WHERE inventorySyncFlag=1")
     fun getAssetsPendingToSync(): List<AssetMain>
 
     @Query("SELECT * FROM masterLocation WHERE LocBarcode=:loccode")
-    fun getLocationMasterDataRR(loccode: String): MasterLocation
+    suspend fun getLocationMasterDataRR(loccode: String): MasterLocation
 
 //    @Query("UPDATE assetMain SET  inventorySyncFlag= 0  WHERE id IN (:ids)")
 //    fun clearSyncFlagOfAssets(ids:List<String>)
+
+    @Query("SELECT * FROM tblInventorymaster where locationId in (:locationId) AND Status='Pending' ORDER BY _id desc LIMIT 1")
+    suspend fun getPendingInventoryScanKt(locationId: Int): List<Inventorymaster>
+
 
     @Query("SELECT * FROM tblInventorymaster where locationId in (:locationId) AND Status='Pending' ORDER BY _id desc LIMIT 1")
     fun getPendingInventoryScan(locationId: Int): List<Inventorymaster>
@@ -114,10 +121,10 @@ interface BookDao {
 
 
     @Query("SELECT * FROM tblInventorymaster WHERE locationId IN (:id) AND Status ='Completed' ORDER BY ScanOn Desc LIMIT 1")
-    fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
+    suspend fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
 
     @Query("SELECT  COUNT(ScanID) FROM assetMain WHERE locationId IN (:locationId) AND ScanID =(:scanId)")
-    fun getCountOfRegisteredAsPerLastInventoryOfLocation(locationId: Int, scanId: String): Int
+    suspend fun getCountOfRegisteredAsPerLastInventoryOfLocation(locationId: Int, scanId: String): Int
 
     @Query("SELECT * FROM tblScanTag")
     fun getScanTagAll(): List<ScanTag>
@@ -193,7 +200,7 @@ interface BookDao {
     fun updateScanIdOfReconciledAssets(scanId: String, locationId: Int)
 
     @Query("UPDATE assetMain  SET ScanID=NULL WHERE locationId  IN (:locationId)")
-    fun resetScanIdOfAssetsAtLocation(locationId: Int)
+    suspend fun resetScanIdOfAssetsAtLocation(locationId: Int)
 
 
 //    @Query("UPDATE assetMain SET locationId= (:locationId) WHERE LocationId=(:id)")
@@ -204,10 +211,10 @@ interface BookDao {
 
     //  fun addAssetCatalogueList(book: AssetCatalogue)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addInventoryMaster(inventoryMasterList: List<Inventorymaster>)
+    suspend fun addInventoryMaster(inventoryMasterList: List<Inventorymaster>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addInventoryItem(inventoryMaster: Inventorymaster)
+    suspend fun addInventoryItem(inventoryMaster: Inventorymaster)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addScanTag(scanTag: ScanTag)
@@ -254,50 +261,50 @@ interface BookDao {
 
 
     @Query("DELETE FROM assetMain")
-    fun deleteAssetMainTable()
+    suspend fun deleteAssetMainTable()
 
 
     @Query("DELETE FROM inventoryScan")
-    fun deleteInventoryScanTable()
+    suspend fun deleteInventoryScanTable()
 
     @Query("DELETE FROM mapRFIDLocation")
-    fun deleteMapRFIDLocationTable()
+    suspend fun deleteMapRFIDLocationTable()
 
     @Query("DELETE FROM masterLocation")
-    fun deleteMasterLocationTable()
+    suspend fun deleteMasterLocationTable()
 
     @Query("DELETE FROM masterVendor")
-    fun deleteMasterVendorTable()
+    suspend fun deleteMasterVendorTable()
 
     @Query("DELETE FROM tblAssetCatalogue")
-    fun deleteTblAssetCatalogueTable()
+    suspend fun deleteTblAssetCatalogueTable()
 
     @Query("DELETE FROM tblAssetClassCatMap")
-    fun deleteTblAssetClassCatMapTable()
+    suspend fun deleteTblAssetClassCatMapTable()
 
     @Query("DELETE FROM tblAssetClassification")
-    fun deleteTblAssetClassificationTable()
+    suspend fun deleteTblAssetClassificationTable()
 
     @Query("DELETE FROM tblBookAttributes")
-    fun deleteTblBookAttributesTable()
+    suspend fun deleteTblBookAttributesTable()
 
     @Query("DELETE FROM tblCatSubCatMap")
-    fun deleteTblCatSubCatMapTable()
+    suspend fun deleteTblCatSubCatMapTable()
 
     @Query("DELETE FROM tblCategoryMaster")
-    fun deleteTblCategoryMasterTable()
+    suspend fun deleteTblCategoryMasterTable()
 
     @Query("DELETE FROM tblInventorymaster")
-    fun deleteTblInventoryMasterTable()
+    suspend fun deleteTblInventoryMasterTable()
 
     @Query("DELETE FROM tblLocationMaster")
-    fun deleteTblLocationMasterTable()
+    suspend fun deleteTblLocationMasterTable()
 
     @Query("DELETE FROM tblScanTag")
-    fun deleteTblScanTagTable()
+    suspend fun deleteTblScanTagTable()
 
     @Query("DELETE FROM tblSubCategoryMaster")
-    fun deleteTblSubCategoryMasterTable()
+    suspend fun deleteTblSubCategoryMasterTable()
 
     @Delete
     fun deleteScanTag(listScanTag: List<ScanTag>)

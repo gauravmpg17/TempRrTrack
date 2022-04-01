@@ -24,6 +24,9 @@ import com.markss.rfidtemplate.rfid.RFIDController.mConnectedReader
 import com.zebra.rfid.api3.Antennas
 import com.zebra.rfid.api3.InvalidUsageException
 import com.zebra.rfid.api3.OperationFailureException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -225,3 +228,19 @@ fun getRFIDDistinct(list: List<AssetData>): List<AssetData> {
     return list.distinctBy { it.assetRFID }
 }
 
+
+fun ioCoroutines(
+    block: suspend CoroutineScope.() -> Unit
+) {
+    CoroutineScope(Dispatchers.IO).launch {
+        block(this)
+    }
+}
+
+fun mainCoroutines(
+    block: suspend CoroutineScope.() -> Unit
+) {
+    CoroutineScope(Dispatchers.Main).launch {
+        block(this)
+    }
+}
