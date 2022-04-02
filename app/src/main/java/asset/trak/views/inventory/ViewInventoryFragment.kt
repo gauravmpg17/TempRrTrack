@@ -14,8 +14,10 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.database.entity.LocationMaster
+import asset.trak.modelsrrtrack.AppTimeStamp
 import asset.trak.modelsrrtrack.MasterLocation
 import asset.trak.utils.*
 import asset.trak.utils.Constants.disableUserInteraction
@@ -33,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_view_inventory.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -99,8 +102,33 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         listeners()
         if (inventoryViewModel.isFirstTime || (Application.isReconsiled && isAbandoned)) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
-            getLastSync()
-        }
+            disableUserInteraction(requireActivity())
+            progressBar1.visibility = View.VISIBLE
+            lifecycleScope.launch {
+            Application.bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
+            val appTimeStamp = async {
+                Application.bookDao?.retriveTimeStamp()
+            }.await()
+            Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
+                inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
+                inventoryViewModel.getLastSync(inventoryViewModel.dateLastSync,inventoryViewModel.defaultOffLocation)
+            inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) {isDataSynced->
+                progressBar1.visibility = View.INVISIBLE
+              if(isDataSynced){
+                  launch {
+                      if (currLocId != 0) {
+                          val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
+                              roomDatabaseBuilder.getBookDao().getCountLocationIdKt(currLocId)
+                          }.await()
+                          tvNewlyScanCount.text = newlyRegistered.toString()
+                      }
+                  }
+              }
+              }
+                Application.isReconsiled = false
+                Constants.enableUserInteraction(requireActivity())
+                }
+            }
 
         ivScanBar.setOnClickListener {
             val type = if (isFromWhat.equals("rfidlocation")) {
@@ -124,65 +152,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         isAbandoned = false
     }
 
-
-    private fun getLastSync() {
-        progressBar1.visibility = View.VISIBLE
-        disableUserInteraction(requireActivity())
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-        val currSyncTime = sdf.format(Date())
-        val deviceId =
-            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
-        // Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
-
-        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
-            if (it != null && it.statuscode == 200 && it.data != null) {
-                it.data.let {
-                    ioCoroutines {
-                        if (!it.AssetMain.isNullOrEmpty()) {
-                            Application.bookDao?.addAssetMain(it.AssetMain)
-                        }
-
-                        if (!it.InventoryScan.isNullOrEmpty()) {
-                            Application.bookDao?.addInventoryScan(it.InventoryScan)
-                        }
-
-                        if (!it.MasterLocation.isNullOrEmpty()) {
-                            Application.bookDao?.addMasterLocation(it.MasterLocation)
-                        }
-
-
-                        if (!it.MasterVendor.isNullOrEmpty()) {
-                            Application.bookDao?.addMasterVendor(it.MasterVendor)
-                        }
-
-                        if (!it.Inventorymaster.isNullOrEmpty()) {
-                            Application.bookDao?.addInventoryMaster(it.Inventorymaster)
-                        }
-
-                        if (currLocId != 0) {
-                            val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
-                                roomDatabaseBuilder.getBookDao().getCountLocationIdKt(currLocId)
-                            }.await()
-                            mainCoroutines {
-                                tvNewlyScanCount.text = newlyRegistered.toString()
-                            }
-                        }
-
-                    }
-                }
-                Application.isReconsiled = false
-            }
-            //save last sync time in sp
-            var editor = sharedPreference?.edit()
-            editor?.putString(Constants.LastSyncTs, currSyncTime)
-            editor?.putString(Constants.DeviceId, deviceId)
-            editor?.commit()
-            progressBar1.visibility = View.INVISIBLE
-            Constants.enableUserInteraction(requireActivity())
-            // Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun initialisation() {
         listOfLocations.clear()

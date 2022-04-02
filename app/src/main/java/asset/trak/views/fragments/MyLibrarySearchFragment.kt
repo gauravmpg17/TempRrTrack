@@ -9,10 +9,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import asset.trak.modelsrrtrack.AppTimeStamp
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.Constants
+import asset.trak.utils.apiDateFormat
 import asset.trak.utils.decreaseRangeToThirty
+import asset.trak.utils.mainCoroutines
 import asset.trak.views.adapter.OnResultClickListener
 import asset.trak.views.adapter.ResultAdapter
 import asset.trak.views.baseclasses.BaseFragment
@@ -42,7 +46,15 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getLastSync()
+        lifecycleScope.launch {
+                Application.bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
+                val appTimeStamp = async {
+                    Application.bookDao?.retriveTimeStamp()
+                }.await()
+            inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
+            Log.e("dhdgdhdh", "getLastSync First11 ${ inventoryViewModel.dateLastSync}")
+            inventoryViewModel.getLastSync(inventoryViewModel.dateLastSync,inventoryViewModel.defaultOffLocation)
+       }
     }
 
     val receiver = object : BroadcastReceiver() {
@@ -50,7 +62,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
             tvResult.text =
                 "${getString(R.string.lblResults)} (${intent?.getIntExtra("searchCount", 0)})"
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +83,7 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
+                searchView.clearFocus()
                 return true
             }
 
@@ -111,23 +122,19 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
 //    }
 
     private fun setAdaptor() {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-        var currSyncTime = sdf.format(Date())
-        var deviceId =
-            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+   //     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+   //     var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
+     //   var currSyncTime = sdf.format(Date())
+       // var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         //     Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
 
 
-        inventoryViewModel.mLastSyncDataSearch.observe(viewLifecycleOwner) {
+        inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) {isDataSynced->
             Log.e("DATA", "OBSERVE_DATA")
             apiHit=false
-            if (it != null && it.statuscode == 200 && it.data != null) {
-                it.data.let {
-                    if (!it.AssetMain.isNullOrEmpty()) {
+            if (isDataSynced) {
                         listBook.clear()
                         CoroutineScope(Dispatchers.IO).launch {
-                            Application.bookDao?.addAssetMain(it.AssetMain)
                             listBook.addAll(
                                 Application.roomDatabaseBuilder?.getBookDao()?.getBooks()
                                     ?: emptyList()
@@ -137,30 +144,28 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                                     "${getString(R.string.lblResults)} (${listBook.size})"
                                 resultAdapter.notifyDataSetChanged()
                             }
-
                         }
-                    }
-                }
+
             }
             //save last sync time in sp
-            var editor = sharedPreference?.edit()
-            editor?.putString(Constants.LastSyncTs, currSyncTime)
-            editor?.putString(Constants.DeviceId, deviceId)
-            editor?.commit()
+//            var editor = sharedPreference?.edit()
+//            editor?.putString(Constants.LastSyncTs, currSyncTime)
+//            editor?.putString(Constants.DeviceId, deviceId)
+//            editor?.commit()
             progressBar.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
-            inventoryViewModel.mLastSyncDataSearch.removeObservers(viewLifecycleOwner)
+           inventoryViewModel.dataSyncStatus.removeObservers(viewLifecycleOwner)
         }
     }
 
-    private fun getLastSync() {
-        Log.e("DATA", "CALL API")
-        sharedPreference =
-            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-        inventoryViewModel.getLastSyncSearch(syncTime)
-    }
+//    private fun getLastSync() {
+//        Log.e("DATA", "CALL API")
+//        sharedPreference =
+//            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
+//        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//        var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
+//        inventoryViewModel.getLastSyncSearch(syncTime)
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

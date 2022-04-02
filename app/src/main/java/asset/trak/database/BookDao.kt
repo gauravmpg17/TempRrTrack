@@ -3,10 +3,7 @@ package asset.trak.database
 import androidx.room.*
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.*
-import asset.trak.modelsrrtrack.AssetMain
-import asset.trak.modelsrrtrack.InventoryScan
-import asset.trak.modelsrrtrack.MasterLocation
-import asset.trak.modelsrrtrack.MasterVendor
+import asset.trak.modelsrrtrack.*
 
 @Dao
 interface BookDao {
@@ -308,4 +305,11 @@ interface BookDao {
 
     @Delete
     fun deleteScanTag(listScanTag: List<ScanTag>)
+
+    @Insert
+    suspend fun saveAppTimeStamp(appTimeStamp: AppTimeStamp)
+
+    @Query("SELECT * FROM appTimeStamp ORDER BY id DESC LIMIT 1,1")
+    suspend fun retriveTimeStamp():AppTimeStamp
+
 }

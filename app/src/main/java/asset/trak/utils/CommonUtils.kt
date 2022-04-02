@@ -20,6 +20,7 @@ import java.io.IOException
 
 
 object Constants {
+
     val LastSyncTs="LastSyncTs"
     val DeviceId="DeviceId"
     var AssetClassId = 0
@@ -34,6 +35,8 @@ object Constants {
     var PrefenceFileName = "myprefs"
     var globalInventory="global"
     var locationInventory="location"
+    val firstTimeKey: String="firstTimeKey"
+    val appIstalledFirstTime: String="appIstalledFirstTime"
 
 
     fun isInternetAvailable(context: Context): Boolean {

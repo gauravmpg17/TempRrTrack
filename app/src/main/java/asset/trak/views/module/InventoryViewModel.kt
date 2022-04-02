@@ -2,6 +2,7 @@ package asset.trak.views.module
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import asset.trak.modelsrrtrack.LastSyncResponse
 import asset.trak.repository.BookRepository
 import asset.trak.utils.SingleLiveEvent
 import asset.trak.utils.getFormattedDate
+import com.markss.rfidtemplate.application.Application
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,9 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
 
     private val _isStart = MutableLiveData(false)
     val isStart: LiveData<Boolean> get() = _isStart
-
+    var dateLastSync:String?=null
+    val defaultOffLocation="Bangalore Richmond"
+    var dataSyncStatus=SingleLiveEvent<Boolean>()
 
     fun updateBarCode(barCode: String) {
         _barCode.value = barCode
@@ -85,19 +89,53 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
     }
 
 
-    fun getLastSync(syncTime: String?): LiveData<LastSyncResponse> {
+    fun getLastSync(syncTime: String?,offLocation:String): LiveData<LastSyncResponse> {
         viewModelScope.launch {
-            val data = bookRepository.getLastSync(syncTime)
-            data?.apply {
-                mLastSyncData.value = this.value
+            val response = bookRepository.getLastSync(syncTime,offLocation)
+            response?.value?.let {
+                if(it.statuscode==200 && it.data!=null)
+                {
+                    saveDataToDatabase(it.data)
+                }
+                else
+                {
+                    dataSyncStatus.value=false
+                    Log.d("tag12122", "getLastSync:${it.statuscode} ")
+                }
             }
         }
         return mLastSyncData
     }
 
-    fun getLastSyncSearch(syncTime: String?): LiveData<LastSyncResponse> {
+    private fun saveDataToDatabase(data: LastSyncData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (!data.AssetMain.isNullOrEmpty()) {
+                Application.bookDao?.addAssetMain(data.AssetMain)
+            }
+
+            if (!data.InventoryScan.isNullOrEmpty()) {
+                Application.bookDao?.addInventoryScan(data.InventoryScan)
+            }
+
+            if (!data.MasterLocation.isNullOrEmpty()) {
+                Application.bookDao?.addMasterLocation(data.MasterLocation)
+            }
+
+            if (!data.MasterVendor.isNullOrEmpty()) {
+                Application.bookDao?.addMasterVendor(data.MasterVendor)
+            }
+
+            if (!data.Inventorymaster.isNullOrEmpty()) {
+                Application.bookDao?.addInventoryMaster(data.Inventorymaster)
+            }
+        }
+        dataSyncStatus.value=true
+    }
+
+
+    fun getLastSyncSearch(syncTime: String?,offLocation:String): LiveData<LastSyncResponse> {
         viewModelScope.launch {
-            val data = bookRepository.getLastSync(syncTime)
+            val data = bookRepository.getLastSync(syncTime,offLocation)
             data?.apply {
                 mLastSyncDataSearch.value = this.value
             }

@@ -32,15 +32,15 @@ class BookRepository @Inject constructor(
     private val mRetrofitException = MutableLiveData<Boolean>()
 
 
-    suspend fun getLastSync(syncTime: String?): LiveData<LastSyncResponse>? {
+    suspend fun getLastSync(syncTime: String?,offLocation:String): LiveData<LastSyncResponse>? {
 
         try {
          //   val android_id = Settings.Secure.getString(Application.context.contentResolver, Settings.Secure.ANDROID_ID);
 
             val hashMap = HashMap<String, String>()
-           // hashMap["LastSyncDateTime"] = syncTime.toString()
-            hashMap["LastSyncDateTime"]="2022-03-08"
-            //hashMap["CurrentDateTime"] = "2022-02-08"
+            hashMap["LastSyncDateTime"] = syncTime.toString()
+            hashMap["OffLocation"]=offLocation
+           // hashMap["LastSyncDateTime"]="2022-03-08"
           //  hashMap["MacId"] = android_id
 
             val response = assetTrakAPIInterface.geLastSync(hashMap)

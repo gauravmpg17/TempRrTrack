@@ -13,6 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import asset.trak.modelsrrtrack.AssetData
 import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.utils.compressimage.Compressor
@@ -243,4 +246,17 @@ fun mainCoroutines(
     CoroutineScope(Dispatchers.Main).launch {
         block(this)
     }
+}
+
+fun appFirstTimeInstalledPrefs(){
+    val  sharedPreference =
+        Application.context.getSharedPreferences(Constants.appIstalledFirstTime, Context.MODE_PRIVATE)
+    val editor = sharedPreference?.edit()
+    editor?.putBoolean(Constants.firstTimeKey,true)
+    editor?.commit()
+}
+
+fun apiDateFormat(date: Date):String?{
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+    return sdf.format(date)
 }

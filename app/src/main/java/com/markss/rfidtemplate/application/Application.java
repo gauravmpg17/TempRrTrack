@@ -1,5 +1,7 @@
 package com.markss.rfidtemplate.application;
 
+import static asset.trak.utils.ExtensionKt.appFirstTimeInstalledPrefs;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -213,6 +215,7 @@ public class Application extends android.app.Application {
         isFirstTime=true;
         roomDatabaseBuilder = getDatabase(context);
         bookDao=roomDatabaseBuilder.getBookDao();
+      //  appFirstTimeInstalledPrefs();
     }
 
     private BookDatabase getDatabase(Context context) {

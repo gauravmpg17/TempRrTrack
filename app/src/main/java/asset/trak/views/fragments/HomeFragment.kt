@@ -12,14 +12,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import asset.trak.database.entity.BookAttributes
 import asset.trak.database.entity.Inventorymaster
-import asset.trak.utils.Constants
+import asset.trak.modelsrrtrack.AppTimeStamp
+import asset.trak.utils.*
 import asset.trak.utils.Constants.disableUserInteraction
 import asset.trak.utils.Constants.enableUserInteraction
-import asset.trak.utils.decreaseRangeToThirty
-import asset.trak.utils.ioCoroutines
-import asset.trak.utils.mainCoroutines
+import asset.trak.utils.Constants.firstTimeKey
 import asset.trak.views.activity.TestActivity
 import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.inventory.ViewInventoryFragment
@@ -32,6 +32,7 @@ import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
 import com.markss.rfidtemplate.settings.SettingListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_view_inventory.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -40,51 +41,41 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-private const val TAG = "HomeFragment"
-
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var sharedPreference: SharedPreferences? = null
-
+    private var isFirstInstall: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // disableUserInteraction(requireActivity())
-        sharedPreference =
-            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
-        //  progressBar.visibility=View.VISIBLE
-        /*Save Books Data to Database*/
-//        saveDataToDataBase()
+        sharedPreference = requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
         listeners()
-
         if (Constants.isInternetAvailable(requireContext())) {
-            if (Application.isFirstTime) {
-                Log.e("dhdgdhdh", "getLastSync First")
                 disableUserInteraction(requireActivity())
                 getLastSync()
-            } else {
-                Log.e("dhdgdhdh", "getLastSync Not Called")
-
-
-            }
-
         }
-        Log.e("dhdgdhdh", "djd")
+        else{
+            CommonAlertDialog(
+                requireActivity(),
+                getString(R.string.check_internet),
+                "OK",
+                "",
+                object : CommonAlertDialog.OnButtonClickListener {
+                    override fun onPositiveButtonClicked() {
+
+                    }
+
+                    override fun onNegativeButtonClicked() {
+
+                    }
+                }).show()
+        }
     }
 
 
     private fun listeners() {
         searchLin.setOnClickListener {
-            //connectRFIDReader()
-
-//            try {
-//                decreaseRangeToThirty(300)
-//            }
-//            catch (e: Exception){
-//                Log.d("decreaseRangeToThirty", e.message.toString())
-//            }
             replaceFragment(
                 requireActivity().supportFragmentManager, MyLibrarySearchFragment(),
                 R.id.content_frame
@@ -94,30 +85,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             mainCoroutines {
                 try {
                     decreaseRangeToThirty(300)
-                }
-                catch (e: Exception){
+                } catch (e: Exception) {
                     Log.d("decreaseRangeToThirty", e.message.toString())
                 }
-                getLastSync()
-
-//            try {
-//              //  decreaseRangeToThirty(30)
-//            } catch (e: Exception) {
-//                Log.d("decreaseRangeToThirty", e.message.toString())
-//            }
-                // connectRFIDReader()
-                // inventoryViewModel.isFirstTime=true
-                //global
+             //   getLastSync()
                 val pendingInventory = CoroutineScope(Dispatchers.IO).async {
-                    Application.roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
+                    roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
                 }.await()
 
                 val cnt = CoroutineScope(Dispatchers.IO).async {
-                    Application.roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
+                    roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
                 }.await()
-//
-//            val inventoryLastItem: Inventorymaster = if (getListInventoryMaster.isNotEmpty())
-//                getListInventoryMaster[getListInventoryMaster.size - 1] else Inventorymaster()
                 val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
                 val cal = Calendar.getInstance()
                 val dateFormat = sdf.format(cal.time)
@@ -139,16 +117,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     GlobalRapidReadFragment.newInstance("global"),
                     R.id.content_frame
                 )
-
             }
         }
         locationInventory.setOnClickListener {
-            //  disconnectRFIDReader()
-
-//            replaceFragment(
-//                requireActivity().supportFragmentManager, InventoryScanFragment(),
-//                R.id.content_frame
-//            )
             inventoryViewModel.isFirstTime = true
             startActivityForResult(
                 Intent(
@@ -207,73 +178,102 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 }
                 job.await()
                 getLastSync(true)
-
-
             }
-
         }
     }
 
 
-    private fun getLastSync(isFromDelete:Boolean=false) {
+    private fun getLastSync(isFromDelete: Boolean = false) {
         progressBar.visibility = View.VISIBLE
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-        var currSyncTime = sdf.format(Date())
-        var deviceId =
-            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
-        //     Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
-
-        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
-
-            if (it != null && it.statuscode == 200 && it.data != null) {
-                it.data.let {
-                    ioCoroutines {
-                        if (!it.AssetMain.isNullOrEmpty()) {
-                            bookDao?.addAssetMain(it.AssetMain)
-                        }
-
-                        if (!it.InventoryScan.isNullOrEmpty()) {
-                            bookDao?.addInventoryScan(it.InventoryScan)
-                        }
-
-                        if (!it.MasterLocation.isNullOrEmpty()) {
-                            bookDao?.addMasterLocation(it.MasterLocation)
-                        }
-
-                        if (!it.MasterVendor.isNullOrEmpty()) {
-                            bookDao?.addMasterVendor(it.MasterVendor)
-                        }
-
-                        if (!it.Inventorymaster.isNullOrEmpty()) {
-                            bookDao?.addInventoryMaster(it.Inventorymaster)
-                        }
-                    }
-                }
-                Application.isFirstTime = false
+        //  val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        //var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
+        //var currSyncTime = sdf.format(Date())
+        val sharedPreferenceFirstInstall = Application.context.getSharedPreferences(
+            Constants.appIstalledFirstTime,
+            Context.MODE_PRIVATE
+        )
+        isFirstInstall = sharedPreferenceFirstInstall.getBoolean(firstTimeKey, true)
+        val deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+        val editor = sharedPreference?.edit()
+        //  editor?.putString(Constants.LastSyncTs, currSyncTime)
+        editor?.putString(Constants.DeviceId, deviceId)
+        editor?.commit()
+        if (isFirstInstall || isFromDelete) {
+            lifecycleScope.launch {
+                // bookDao?.saveAppTimeStamp(AppTimeStamp(null))
+                bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
+                inventoryViewModel.getLastSync("",inventoryViewModel.defaultOffLocation)
+                sharedPreferenceFirstInstall.edit().putBoolean(firstTimeKey,false).commit()
             }
-            //save last sync time in sp
-            var editor = sharedPreference?.edit()
-            editor?.putString(Constants.LastSyncTs, currSyncTime)
-            editor?.putString(Constants.DeviceId, deviceId)
-            editor?.commit()
+        } else {
+            lifecycleScope.launch {
+                bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
+                val appTimeStamp = async {
+                    bookDao?.retriveTimeStamp()
+                }.await()
+                inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
+                    Log.e(
+                        "dhdgdhdh",
+                        "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
+                    )
+                    inventoryViewModel.getLastSync(
+                        inventoryViewModel.dateLastSync,
+                        inventoryViewModel.defaultOffLocation
+                    )
+            }
+        }
+        inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
             progressBar.visibility = View.INVISIBLE
             enableUserInteraction(requireActivity())
-
-            if(isFromDelete)
-            {
-
-                Toast.makeText(requireActivity(), "Data Refreshed successfully", Toast.LENGTH_LONG)
+            if (isFromDelete) {
+                Toast.makeText(
+                    requireActivity(),
+                    "Data Refreshed successfully",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } else {
+                Toast.makeText(activity, "Saved SynTime in sp", Toast.LENGTH_SHORT)
                     .show()
             }
-            else
-            {
-                Toast.makeText(activity, "Saved SynTime in sp:$currSyncTime", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-
         }
+
+
+//        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
+//            if (it != null && it.statuscode == 200 && it.data != null) {
+//                it.data.let {
+//                    ioCoroutines {
+//                        if (!it.AssetMain.isNullOrEmpty()) {
+//                            bookDao?.addAssetMain(it.AssetMain)
+//                        }
+//
+//                        if (!it.InventoryScan.isNullOrEmpty()) {
+//                            bookDao?.addInventoryScan(it.InventoryScan)
+//                        }
+//
+//                        if (!it.MasterLocation.isNullOrEmpty()) {
+//                            bookDao?.addMasterLocation(it.MasterLocation)
+//                        }
+//
+//                        if (!it.MasterVendor.isNullOrEmpty()) {
+//                            bookDao?.addMasterVendor(it.MasterVendor)
+//                        }
+//
+//                        if (!it.Inventorymaster.isNullOrEmpty()) {
+//                            bookDao?.addInventoryMaster(it.Inventorymaster)
+//                        }
+//                    }
+//                }
+//               Application.isFirstTime = false
+//            }
+//            //save last sync time in sp
+
+
+//
+
+//
+//
+//        }
 
     }
 
