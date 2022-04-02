@@ -312,4 +312,7 @@ interface BookDao {
     @Query("SELECT * FROM appTimeStamp ORDER BY id DESC LIMIT 1,1")
     suspend fun retriveTimeStamp():AppTimeStamp
 
+    @Query("DELETE FROM assetMain WHERE ExitDate IS NOT NULL")
+    suspend fun deleteOutwardRecords()
+
 }

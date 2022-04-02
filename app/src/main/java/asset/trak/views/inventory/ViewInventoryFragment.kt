@@ -53,7 +53,6 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //  range_seekbar1.setAnimated(true, 3000L)
         range_seekbar2.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.green))
         range_seekbar2.setLabelFormatter { value: Float ->
             return@setLabelFormatter value.toInt().toString()
@@ -102,33 +101,55 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         listeners()
         if (inventoryViewModel.isFirstTime || (Application.isReconsiled && isAbandoned)) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
-            disableUserInteraction(requireActivity())
-            progressBar1.visibility = View.VISIBLE
-            lifecycleScope.launch {
-            Application.bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
-            val appTimeStamp = async {
-                Application.bookDao?.retriveTimeStamp()
-            }.await()
-            Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
-                inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-                inventoryViewModel.getLastSync(inventoryViewModel.dateLastSync,inventoryViewModel.defaultOffLocation)
-            inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) {isDataSynced->
-                progressBar1.visibility = View.INVISIBLE
-              if(isDataSynced){
-                  launch {
-                      if (currLocId != 0) {
-                          val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
-                              roomDatabaseBuilder.getBookDao().getCountLocationIdKt(currLocId)
-                          }.await()
-                          tvNewlyScanCount.text = newlyRegistered.toString()
-                      }
-                  }
-              }
-              }
-                Application.isReconsiled = false
-                Constants.enableUserInteraction(requireActivity())
+            if (Constants.isInternetAvailable(requireContext())) {
+                disableUserInteraction(requireActivity())
+                progressBar1.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    Application.bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
+                    val appTimeStamp = async {
+                        Application.bookDao?.retriveTimeStamp()
+                    }.await()
+                    Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
+                    inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
+                    inventoryViewModel.getLastSync(
+                        inventoryViewModel.dateLastSync,
+                        inventoryViewModel.defaultOffLocation
+                    )
+                    inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
+                        progressBar1.visibility = View.INVISIBLE
+                        if (isDataSynced) {
+                            launch {
+                                if (currLocId != 0) {
+                                    val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
+                                        roomDatabaseBuilder.getBookDao()
+                                            .getCountLocationIdKt(currLocId)
+                                    }.await()
+                                    tvNewlyScanCount.text = newlyRegistered.toString()
+                                }
+                            }
+                        }
+                    }
+                    Application.isReconsiled = false
+                    Constants.enableUserInteraction(requireActivity())
                 }
+            } else {
+                CommonAlertDialog(
+                    requireActivity(),
+                    getString(R.string.check_internet),
+                    "OK",
+                    "",
+                    object : CommonAlertDialog.OnButtonClickListener {
+                        override fun onPositiveButtonClicked() {
+                        }
+
+                        override fun onNegativeButtonClicked() {
+
+                        }
+                    }).show()
             }
+
+
+        }
 
         ivScanBar.setOnClickListener {
             val type = if (isFromWhat.equals("rfidlocation")) {
@@ -300,7 +321,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         } else {
                             currLocId = currMasterLocation!!.LocID
                             val pendingInventory = CoroutineScope(Dispatchers.IO).async {
-                                roomDatabaseBuilder.getBookDao().getPendingInventoryScanKt(currLocId)
+                                roomDatabaseBuilder.getBookDao()
+                                    .getPendingInventoryScanKt(currLocId)
                             }.await()
                             val cnt = CoroutineScope(Dispatchers.IO).async {
                                 roomDatabaseBuilder.getBookDao().getInventoryMasterAllCount()
@@ -319,7 +341,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                                     scanStartDatetime = dateFormat
                                 )
                                 ioCoroutines {
-                                    roomDatabaseBuilder.getBookDao().addInventoryItem(inventoryMaster)
+                                    roomDatabaseBuilder.getBookDao()
+                                        .addInventoryItem(inventoryMaster)
                                     roomDatabaseBuilder.getBookDao()
                                         .resetScanIdOfAssetsAtLocation(currLocId)
                                 }

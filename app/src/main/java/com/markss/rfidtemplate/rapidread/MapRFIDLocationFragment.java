@@ -681,17 +681,32 @@ public class MapRFIDLocationFragment extends Fragment implements ResponseHandler
         llBottomParent.setVisibility(View.VISIBLE);
         btnInventoryRecord.setOnClickListener(v -> {
             Log.d("RapidRead", countNotFoundCurrentLocation + " " + countFoundDifferentLoc + " " + countFoundDifferentLoc);
-
-       //     if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
+            if (asset.trak.utils.Constants.INSTANCE.isInternetAvailable(requireContext()))
+            {
                 progressBar.setVisibility(View.VISIBLE);
                 btnInventoryRecord.setEnabled(false);
                 btnInventoryRecord.setClickable(false);
                 postAssetSync();
-          //  } else {
-                //  FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
-                //   Toast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", Toast.LENGTH_SHORT).show();
-            //}
+            }
+            else
+            {
+                new CommonAlertDialog(
+                        requireActivity(),
+                        getString(R.string.check_internet),
+                        "OK",
+                        "",
+                        new  CommonAlertDialog.OnButtonClickListener() {
+                            @Override
+                            public void onNegativeButtonClicked() {
 
+                            }
+
+                            @Override
+                            public void onPositiveButtonClicked() {
+
+                            }
+                        }).show();
+            }
         });
 
 

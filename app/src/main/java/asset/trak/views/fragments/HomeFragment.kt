@@ -49,13 +49,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
+        sharedPreference =
+            requireActivity().getSharedPreferences(Constants.PrefenceFileName, Context.MODE_PRIVATE)
         listeners()
         if (Constants.isInternetAvailable(requireContext())) {
-                disableUserInteraction(requireActivity())
-                getLastSync()
-        }
-        else{
+            disableUserInteraction(requireActivity())
+            getLastSync()
+        } else {
             CommonAlertDialog(
                 requireActivity(),
                 getString(R.string.check_internet),
@@ -88,7 +88,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 } catch (e: Exception) {
                     Log.d("decreaseRangeToThirty", e.message.toString())
                 }
-             //   getLastSync()
+                //   getLastSync()
                 val pendingInventory = CoroutineScope(Dispatchers.IO).async {
                     roomDatabaseBuilder.getBookDao().getGlobalPendingInventoryScan()
                 }.await()
@@ -193,7 +193,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             Context.MODE_PRIVATE
         )
         isFirstInstall = sharedPreferenceFirstInstall.getBoolean(firstTimeKey, true)
-        val deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
+        val deviceId =
+            Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         val editor = sharedPreference?.edit()
         //  editor?.putString(Constants.LastSyncTs, currSyncTime)
         editor?.putString(Constants.DeviceId, deviceId)
@@ -202,8 +203,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             lifecycleScope.launch {
                 // bookDao?.saveAppTimeStamp(AppTimeStamp(null))
                 bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
-                inventoryViewModel.getLastSync("",inventoryViewModel.defaultOffLocation)
-                sharedPreferenceFirstInstall.edit().putBoolean(firstTimeKey,false).commit()
+                inventoryViewModel.getLastSync("", inventoryViewModel.defaultOffLocation)
+                sharedPreferenceFirstInstall.edit().putBoolean(firstTimeKey, false).commit()
             }
         } else {
             lifecycleScope.launch {
@@ -212,14 +213,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     bookDao?.retriveTimeStamp()
                 }.await()
                 inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-                    Log.e(
-                        "dhdgdhdh",
-                        "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
-                    )
-                    inventoryViewModel.getLastSync(
-                        inventoryViewModel.dateLastSync,
-                        inventoryViewModel.defaultOffLocation
-                    )
+                Log.e(
+                    "dhdgdhdh",
+                    "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
+                )
+                inventoryViewModel.getLastSync(
+                    inventoryViewModel.dateLastSync,
+                    inventoryViewModel.defaultOffLocation
+                )
             }
         }
         inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->

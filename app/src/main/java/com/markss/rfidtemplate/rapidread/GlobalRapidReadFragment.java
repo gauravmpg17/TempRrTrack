@@ -228,16 +228,32 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
        // locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
         btnInventoryRecord.setOnClickListener(v -> {
-            if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countFoundDifferentLoc == 0) {
-                progressBar.setVisibility(View.VISIBLE);
-                btnInventoryRecord.setEnabled(false);
-                btnInventoryRecord.setClickable(false);
-                  postAssetSync();
-            } else {
-                FancyToast.makeText(requireActivity(),"Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG,FancyToast.WARNING,false).show();
-                //   Toast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", Toast.LENGTH_SHORT).show();
-            }
 
+            if (asset.trak.utils.Constants.INSTANCE.isInternetAvailable(requireContext()))
+                {
+                    progressBar.setVisibility(View.VISIBLE);
+                    btnInventoryRecord.setEnabled(false);
+                    btnInventoryRecord.setClickable(false);
+                    postAssetSync();
+                }
+                else{
+                new CommonAlertDialog(
+                        requireActivity(),
+                        getString(R.string.check_internet),
+                        "OK",
+                        "",
+                        new  CommonAlertDialog.OnButtonClickListener() {
+                            @Override
+                            public void onNegativeButtonClicked() {
+
+                            }
+
+                            @Override
+                            public void onPositiveButtonClicked() {
+
+                            }
+                        }).show();
+                }
         });
 
 

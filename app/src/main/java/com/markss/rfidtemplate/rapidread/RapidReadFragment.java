@@ -829,14 +829,36 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         btnInventoryRecord.setOnClickListener(v -> {
             Log.d("RapidRead", countNotFoundCurrentLocation + " " + countFoundDifferentLoc + " " + countFoundDifferentLoc);
 
-            if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
-                progressBar.setVisibility(View.VISIBLE);
-                btnInventoryRecord.setEnabled(false);
-                btnInventoryRecord.setClickable(false);
-                postAssetSync();
-            } else {
-                FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
+            if (asset.trak.utils.Constants.INSTANCE.isInternetAvailable(requireContext())) {
+                if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    btnInventoryRecord.setEnabled(false);
+                    btnInventoryRecord.setClickable(false);
+                    postAssetSync();
+                } else {
+                    FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
+                }
             }
+            else
+            {
+                new CommonAlertDialog(
+                        requireActivity(),
+                        getString(R.string.check_internet),
+                        "OK",
+                        "",
+                        new  CommonAlertDialog.OnButtonClickListener() {
+                            @Override
+                            public void onNegativeButtonClicked() {
+
+                            }
+
+                            @Override
+                            public void onPositiveButtonClicked() {
+
+                            }
+                        }).show();
+            }
+
         });
 
 

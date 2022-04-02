@@ -111,6 +111,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         viewModelScope.launch(Dispatchers.IO) {
             if (!data.AssetMain.isNullOrEmpty()) {
                 Application.bookDao?.addAssetMain(data.AssetMain)
+                Application.bookDao?.deleteOutwardRecords()
             }
 
             if (!data.InventoryScan.isNullOrEmpty()) {
