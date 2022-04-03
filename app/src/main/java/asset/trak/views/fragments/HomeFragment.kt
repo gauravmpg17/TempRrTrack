@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -13,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import asset.trak.database.entity.BookAttributes
 import asset.trak.database.entity.Inventorymaster
 import asset.trak.modelsrrtrack.AppTimeStamp
 import asset.trak.utils.*
@@ -29,7 +26,7 @@ import com.markss.rfidtemplate.application.Application
 import com.markss.rfidtemplate.application.Application.bookDao
 import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
 import com.markss.rfidtemplate.rapidread.GlobalRapidReadFragment
-import com.markss.rfidtemplate.settings.SettingListFragment
+import com.shashank.sony.fancytoastlib.FancyToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_view_inventory.*
@@ -37,7 +34,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +42,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private val inventoryViewModel: InventoryViewModel by activityViewModels()
     var sharedPreference: SharedPreferences? = null
     private var isFirstInstall: Boolean = false
-
+    private var isDataRefreshed=false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreference =
@@ -170,6 +166,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
 
     private fun getLastSync(isFromDelete: Boolean = false) {
+        isDataRefreshed=isFromDelete
         progressBar.visibility = View.VISIBLE
         //  val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         //var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
@@ -199,10 +196,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     bookDao?.retriveTimeStamp()
                 }.await()
                 inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-//                Log.e(
-//                    "dhdgdhdh",
-//                    "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
-//                )
                 inventoryViewModel.getLastSync(
                     inventoryViewModel.dateLastSync
                 )
@@ -211,58 +204,26 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
             progressBar.visibility = View.INVISIBLE
             enableUserInteraction(requireActivity())
-           if(isDataSynced){
-               if (isFromDelete) {
-                   Toast.makeText(
-                       requireActivity(),
-                       "Data Refreshed successfully",
-                       Toast.LENGTH_SHORT
-                   )
-                       .show()
-               } else {
-                   Toast.makeText(activity, "Saved SynTime in sp", Toast.LENGTH_SHORT)
-                       .show()
-               }
-           }
+            if (isDataSynced) {
+                if (isDataRefreshed) {
+                    FancyToast.makeText(
+                        requireActivity(),
+                        "Data Refreshed successfully",
+                        FancyToast.LENGTH_SHORT,
+                        FancyToast.SUCCESS,
+                        false
+                    ).show()
+                } else {
+//                 FancyToast.makeText(
+//                        requireActivity(),
+//                        "Data Synced Successfully",
+//                        FancyToast.LENGTH_SHORT,
+//                        FancyToast.SUCCESS,
+//                        false
+//                    ).show()
+                }
+            }
         }
-
-
-//        inventoryViewModel.getLastSync(syncTime).observe(viewLifecycleOwner) {
-//            if (it != null && it.statuscode == 200 && it.data != null) {
-//                it.data.let {
-//                    ioCoroutines {
-//                        if (!it.AssetMain.isNullOrEmpty()) {
-//                            bookDao?.addAssetMain(it.AssetMain)
-//                        }
-//
-//                        if (!it.InventoryScan.isNullOrEmpty()) {
-//                            bookDao?.addInventoryScan(it.InventoryScan)
-//                        }
-//
-//                        if (!it.MasterLocation.isNullOrEmpty()) {
-//                            bookDao?.addMasterLocation(it.MasterLocation)
-//                        }
-//
-//                        if (!it.MasterVendor.isNullOrEmpty()) {
-//                            bookDao?.addMasterVendor(it.MasterVendor)
-//                        }
-//
-//                        if (!it.Inventorymaster.isNullOrEmpty()) {
-//                            bookDao?.addInventoryMaster(it.Inventorymaster)
-//                        }
-//                    }
-//                }
-//               Application.isFirstTime = false
-//            }
-//            //save last sync time in sp
-
-
-//
-
-//
-//
-//        }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -147,11 +147,6 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                         }
 
             }
-            //save last sync time in sp
-//            var editor = sharedPreference?.edit()
-//            editor?.putString(Constants.LastSyncTs, currSyncTime)
-//            editor?.putString(Constants.DeviceId, deviceId)
-//            editor?.commit()
             progressBar.visibility = View.INVISIBLE
             Constants.enableUserInteraction(requireActivity())
            inventoryViewModel.dataSyncStatus.removeObservers(viewLifecycleOwner)
