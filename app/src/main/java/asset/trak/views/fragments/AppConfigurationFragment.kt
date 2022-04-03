@@ -38,8 +38,6 @@ class AppConfigurationFragment : BaseFragment(R.layout.fragment_app_configuratio
 
     private val inventoryViewModel: InventoryViewModel by viewModels()
 
-    private lateinit var resultAdapter: ResultAdapter
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +58,14 @@ class AppConfigurationFragment : BaseFragment(R.layout.fragment_app_configuratio
                 locationNames.adapter = arrayAdapter
 
 
+                ioCoroutines {
+                    if (Application.bookDao?.checkTableIsEmpty() != 0) {
+                        val result = CoroutineScope(Dispatchers.IO).async {
+                            Application.bookDao?.getOffLocation()
+                        }.await()
+                        locationNames.setSelection(it.indexOf(result?.locationName.toString()))
+                    }
+                }
 
                 locationNames.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -75,9 +81,6 @@ class AppConfigurationFragment : BaseFragment(R.layout.fragment_app_configuratio
                                 "dhdgdhdh",
                                 "getLastSync First11 ${inventoryViewModel.dateLastSync}"
                             )
-                            inventoryViewModel.getAppConfig(
-                                inventoryViewModel.dateLastSync
-                            )
                         }
 
                     }
@@ -92,12 +95,6 @@ class AppConfigurationFragment : BaseFragment(R.layout.fragment_app_configuratio
 
         ivBack.setOnClickListener {
             requireActivity().onBackPressed()
-        }
-
-
-        inventoryViewModel.assertMainList.observe(viewLifecycleOwner) {
-            resultAdapter = ResultAdapter(requireContext(), this, it as ArrayList<AssetMain>, true)
-            configRecycler.adapter = resultAdapter
         }
     }
 

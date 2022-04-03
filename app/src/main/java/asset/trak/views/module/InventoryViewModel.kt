@@ -52,8 +52,6 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
     var defaultOffLocation = MutableLiveData<String>()
     var dataSyncStatus = SingleLiveEvent<Boolean>()
 
-    private val _assertMainList = MutableLiveData<List<AssetMain>>()
-    val assertMainList: LiveData<List<AssetMain>> get() = _assertMainList
 
 
     fun updateTime() {
@@ -124,28 +122,6 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         }
         return mLastSyncData
     }
-
-
-    fun getAppConfig(syncTime: String?) {
-        viewModelScope.launch {
-            CoroutineScope(Dispatchers.IO).async {
-                if (Application.bookDao?.checkTableIsEmpty() == 0) {
-                    Application.bookDao?.saveOffLocation(OffLocation(locationName = "Bangalore Richmond"))
-                }
-            }.await()
-
-            val result = CoroutineScope(Dispatchers.IO).async {
-                Application.bookDao?.getOffLocation()
-            }.await()
-            val response = bookRepository.getLastSync(syncTime, result?.locationName.toString())
-            response?.value?.let {
-                if (it.statuscode == 200 && it.data != null) {
-                    _assertMainList.value = it.data.AssetMain!!
-                }
-            }
-        }
-    }
-
     private fun saveDataToDatabase(data: LastSyncData) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!data.AssetMain.isNullOrEmpty()) {
@@ -169,9 +145,9 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
                 Application.bookDao?.addInventoryMaster(data.Inventorymaster)
             }
 
-
+            dataSyncStatus.postValue(true)
         }
-        dataSyncStatus.value = true
+
     }
 
 
