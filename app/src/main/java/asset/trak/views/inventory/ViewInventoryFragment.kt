@@ -112,8 +112,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
                     inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
                     inventoryViewModel.getLastSync(
-                        inventoryViewModel.dateLastSync,
-                        inventoryViewModel.defaultOffLocation
+                        inventoryViewModel.dateLastSync
                     )
                     inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
                         progressBar1.visibility = View.INVISIBLE

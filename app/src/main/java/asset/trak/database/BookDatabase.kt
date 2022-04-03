@@ -8,9 +8,9 @@ import asset.trak.modelsrrtrack.*
 import asset.trak.utils.DateTypeConverter
 
 @Database(
-    entities = [AssetMain::class, InventoryScan::class, MasterLocation::class, MasterVendor::class,BookAttributes::class, CategoryMaster::class, AssetClassification::class, AssetClassCatMap::class,
-        LocationMaster::class, AssetCatalogue::class, CatSubCatMap::class, SubCategoryMaster::class,Inventorymaster::class,
-        ScanTag::class,MapRFIDLocation::class,AppTimeStamp::class],
+    entities = [AssetMain::class, InventoryScan::class, MasterLocation::class, MasterVendor::class, BookAttributes::class, CategoryMaster::class, AssetClassification::class, AssetClassCatMap::class,
+        LocationMaster::class, AssetCatalogue::class, CatSubCatMap::class, SubCategoryMaster::class, Inventorymaster::class,
+        ScanTag::class, MapRFIDLocation::class, AppTimeStamp::class, OffLocation::class],
     version = 1,
     exportSchema = false
 )

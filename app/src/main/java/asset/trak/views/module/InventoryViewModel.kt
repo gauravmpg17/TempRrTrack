@@ -8,15 +8,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import asset.trak.database.entity.BookAttributes
+import asset.trak.modelsrrtrack.AssetMain
 import asset.trak.modelsrrtrack.LastSyncData
 import asset.trak.modelsrrtrack.LastSyncResponse
+import asset.trak.modelsrrtrack.OffLocation
 import asset.trak.repository.BookRepository
 import asset.trak.utils.SingleLiveEvent
 import asset.trak.utils.getFormattedDate
+import asset.trak.utils.ioCoroutines
+import asset.trak.utils.mainCoroutines
 import com.markss.rfidtemplate.application.Application
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import java.text.SimpleDateFormat
@@ -27,14 +32,12 @@ import kotlin.collections.ArrayList
 @HiltViewModel
 class InventoryViewModel @Inject constructor(private val bookRepository: BookRepository) :
     ViewModel() {
-     var mLastSyncData = MutableLiveData<LastSyncResponse>()
-     var mLastSyncDataSearch = SingleLiveEvent<LastSyncResponse>()
+    var mLastSyncData = MutableLiveData<LastSyncResponse>()
+    var mLastSyncDataSearch = SingleLiveEvent<LastSyncResponse>()
     private var mAssetSyncData = MutableLiveData<Int>()
     var listBookAttributes: ArrayList<BookAttributes> = ArrayList()
     var isFirstTime: Boolean = false
-    var isSearchClicked:Boolean=false
-    private val _barCode = MutableLiveData<String>()
-    val barCode: LiveData<String> get() = _barCode
+    var isSearchClicked: Boolean = false
 
     private val _timerVal = MutableLiveData("00:00")
     val timerVal: LiveData<String> get() = _timerVal
@@ -45,17 +48,24 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
 
     private val _isStart = MutableLiveData(false)
     val isStart: LiveData<Boolean> get() = _isStart
-    var dateLastSync:String?=null
-    val defaultOffLocation="Bangalore Richmond"
-    var dataSyncStatus=SingleLiveEvent<Boolean>()
+    var dateLastSync: String? = null
+    var defaultOffLocation = MutableLiveData<String>()
+    var dataSyncStatus = SingleLiveEvent<Boolean>()
 
-    fun updateBarCode(barCode: String) {
-        _barCode.value = barCode
-    }
+    private val _assertMainList = MutableLiveData<List<AssetMain>>()
+    val assertMainList: LiveData<List<AssetMain>> get() = _assertMainList
+
 
     fun updateTime() {
         timer.postDelayed(t, 1000)
         _isStart.value = true
+    }
+
+    fun updateOffLocation(location: String) {
+        defaultOffLocation.value = location
+        viewModelScope.launch {
+            Application.bookDao?.updateOffLocation(location)
+        }
     }
 
     val t = Runnable {
@@ -80,7 +90,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         timer.removeCallbacks(t)
         _isStart.value = false
         _timerVal.value = "00:00"
-        _timerValTemp.value="0"
+        _timerValTemp.value = "0"
     }
 
     fun stopTime() {
@@ -89,22 +99,50 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
     }
 
 
-    fun getLastSync(syncTime: String?,offLocation:String): LiveData<LastSyncResponse> {
+    fun getLastSync(syncTime: String?): LiveData<LastSyncResponse> {
         viewModelScope.launch {
-            val response = bookRepository.getLastSync(syncTime,offLocation)
-            response?.value?.let {
-                if(it.statuscode==200 && it.data!=null)
-                {
-                    saveDataToDatabase(it.data)
+            CoroutineScope(Dispatchers.IO).async {
+                if (Application.bookDao?.checkTableIsEmpty() == 0) {
+                    Application.bookDao?.saveOffLocation(OffLocation(locationName = "Bangalore Richmond"))
                 }
-                else
-                {
-                    dataSyncStatus.value=false
+            }.await()
+
+            val result = CoroutineScope(Dispatchers.IO).async {
+                Application.bookDao?.getOffLocation()
+            }.await()
+
+            val response = bookRepository.getLastSync(syncTime, result?.locationName.toString())
+            response?.value?.let {
+                if (it.statuscode == 200 && it.data != null) {
+                    saveDataToDatabase(it.data)
+                } else {
+                    dataSyncStatus.value = false
                     Log.d("tag12122", "getLastSync:${it.statuscode} ")
                 }
             }
         }
         return mLastSyncData
+    }
+
+
+    fun getAppConfig(syncTime: String?) {
+        viewModelScope.launch {
+            CoroutineScope(Dispatchers.IO).async {
+                if (Application.bookDao?.checkTableIsEmpty() == 0) {
+                    Application.bookDao?.saveOffLocation(OffLocation(locationName = "Bangalore Richmond"))
+                }
+            }.await()
+
+            val result = CoroutineScope(Dispatchers.IO).async {
+                Application.bookDao?.getOffLocation()
+            }.await()
+            val response = bookRepository.getLastSync(syncTime, result?.locationName.toString())
+            response?.value?.let {
+                if (it.statuscode == 200 && it.data != null) {
+                    _assertMainList.value = it.data.AssetMain!!
+                }
+            }
+        }
     }
 
     private fun saveDataToDatabase(data: LastSyncData) {
@@ -129,14 +167,16 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
             if (!data.Inventorymaster.isNullOrEmpty()) {
                 Application.bookDao?.addInventoryMaster(data.Inventorymaster)
             }
+
+
         }
-        dataSyncStatus.value=true
+        dataSyncStatus.value = true
     }
 
 
-    fun getLastSyncSearch(syncTime: String?,offLocation:String): LiveData<LastSyncResponse> {
+    fun getLastSyncSearch(syncTime: String?, offLocation: String): LiveData<LastSyncResponse> {
         viewModelScope.launch {
-            val data = bookRepository.getLastSync(syncTime,offLocation)
+            val data = bookRepository.getLastSync(syncTime, offLocation)
             data?.apply {
                 mLastSyncDataSearch.value = this.value
             }
