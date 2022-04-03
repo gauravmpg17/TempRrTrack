@@ -1,5 +1,6 @@
 package asset.trak.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import asset.trak.database.daoModel.BookAndAssetData
 import asset.trak.database.entity.*
@@ -121,7 +122,10 @@ interface BookDao {
     suspend fun getLastRecordedInventoryOfLocation(id: Int): List<Inventorymaster>
 
     @Query("SELECT  COUNT(ScanID) FROM assetMain WHERE locationId IN (:locationId) AND ScanID =(:scanId)")
-    suspend fun getCountOfRegisteredAsPerLastInventoryOfLocation(locationId: Int, scanId: String): Int
+    suspend fun getCountOfRegisteredAsPerLastInventoryOfLocation(
+        locationId: Int,
+        scanId: String
+    ): Int
 
     @Query("SELECT * FROM tblScanTag")
     fun getScanTagAll(): List<ScanTag>
@@ -310,9 +314,27 @@ interface BookDao {
     suspend fun saveAppTimeStamp(appTimeStamp: AppTimeStamp)
 
     @Query("SELECT * FROM appTimeStamp ORDER BY id DESC LIMIT 1,1")
-    suspend fun retriveTimeStamp():AppTimeStamp
+    suspend fun retriveTimeStamp(): AppTimeStamp
 
     @Query("DELETE FROM assetMain WHERE ExitDate IS NOT NULL")
     suspend fun deleteOutwardRecords()
+
+    @Query("SELECT Name FROM masterLocation WHERE ParentLocID IS NOT NULL")
+    suspend fun appConfigLocationNames(): List<String>
+
+    @Insert
+    suspend fun saveOffLocation(offLocation: OffLocation)
+
+    @Query("SELECT COUNT(*) FROM offlocation")
+    suspend fun checkTableIsEmpty():Int
+
+    @Query("UPDATE offlocation SET locationName=:name")
+    suspend fun updateOffLocation(name:String)
+
+    @Query("SELECT * FROM offlocation ORDER BY id DESC LIMIT 1")
+    suspend fun getOffLocation():OffLocation
+
+    @Query("DELETE FROM offlocation")
+    suspend fun deleteOffLocation()
 
 }

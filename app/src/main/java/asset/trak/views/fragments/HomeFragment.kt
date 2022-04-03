@@ -115,7 +115,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
         configLin.setOnClickListener {
             replaceFragment(
-                requireActivity().supportFragmentManager, SettingListFragment(),
+                requireActivity().supportFragmentManager, MainConfigurationFragment(),
                 R.id.content_frame
             )
         }
@@ -160,6 +160,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     roomDatabaseBuilder.getBookDao().deleteTblLocationMasterTable()
                     roomDatabaseBuilder.getBookDao().deleteTblScanTagTable()
                     roomDatabaseBuilder.getBookDao().deleteTblSubCategoryMasterTable()
+                    roomDatabaseBuilder.getBookDao().deleteOffLocation()
                 }
                 job.await()
                 getLastSync(true)
@@ -188,7 +189,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             lifecycleScope.launch {
                 // bookDao?.saveAppTimeStamp(AppTimeStamp(null))
                 bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
-                inventoryViewModel.getLastSync("", inventoryViewModel.defaultOffLocation)
+                inventoryViewModel.getLastSync("")
                 sharedPreferenceFirstInstall.edit().putBoolean(firstTimeKey, false).commit()
             }
         } else {
@@ -203,8 +204,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 //                    "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
 //                )
                 inventoryViewModel.getLastSync(
-                    inventoryViewModel.dateLastSync,
-                    inventoryViewModel.defaultOffLocation
+                    inventoryViewModel.dateLastSync
                 )
             }
         }

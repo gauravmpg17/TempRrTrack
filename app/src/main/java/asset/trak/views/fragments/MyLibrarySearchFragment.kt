@@ -52,8 +52,8 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
                     Application.bookDao?.retriveTimeStamp()
                 }.await()
             inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-        //    Log.e("dhdgdhdh", "getLastSync First11 ${ inventoryViewModel.dateLastSync}")
-            inventoryViewModel.getLastSync(inventoryViewModel.dateLastSync,inventoryViewModel.defaultOffLocation)
+            Log.e("dhdgdhdh", "getLastSync First11 ${ inventoryViewModel.dateLastSync}")
+            inventoryViewModel.getLastSync(inventoryViewModel.dateLastSync)
        }
     }
 
