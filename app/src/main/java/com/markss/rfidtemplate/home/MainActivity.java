@@ -1954,8 +1954,6 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 //                    internetStatusTV.setVisibility(View.VISIBLE);
 //                    internetStatusTV.setText("Internet is connected!!!");
 //                    internetStatusTV.setBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.green));
-                  if(!isFirstTime)
-                  {
                       new CommonAlertDialog(
                               MainActivity.this,
                               "Internet is connected!!!",
@@ -1972,9 +1970,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
                                   }
                               }).show();
-                  }
                 }else{
-                    isFirstTime=false;
 //                    internetStatusTV.setVisibility(View.GONE);
 //                    internetStatusTV.setText( "No internet connection!!!");
 //                    internetStatusTV.setBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.red));

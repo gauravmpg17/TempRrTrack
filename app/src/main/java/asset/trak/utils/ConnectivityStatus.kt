@@ -11,19 +11,28 @@ class ConnectivityStatus(context: Context) : LiveData<Boolean>() {
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
+    companion object{
+        var connectPopupShow=false
+    }
+
     private val networkCallbacks = object : ConnectivityManager.NetworkCallback(){
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            postValue(true)
+            if (connectPopupShow) {
+                postValue(true)
+                connectPopupShow=false
+            }
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
+            connectPopupShow=true
             postValue(false)
         }
 
         override fun onUnavailable() {
             super.onUnavailable()
+            connectPopupShow=true
             postValue(false)
         }
     }
