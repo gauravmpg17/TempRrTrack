@@ -839,26 +839,6 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                     FancyToast.makeText(requireActivity(), "Please reconcile asset(s) to proceed.", FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
                 }
             }
-            else
-            {
-                new CommonAlertDialog(
-                        requireActivity(),
-                        getString(R.string.check_internet),
-                        "OK",
-                        "",
-                        new  CommonAlertDialog.OnButtonClickListener() {
-                            @Override
-                            public void onNegativeButtonClicked() {
-
-                            }
-
-                            @Override
-                            public void onPositiveButtonClicked() {
-
-                            }
-                        }).show();
-            }
-
         });
 
 

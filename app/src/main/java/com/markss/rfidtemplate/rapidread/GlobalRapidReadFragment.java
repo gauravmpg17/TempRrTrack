@@ -236,24 +236,6 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                     btnInventoryRecord.setClickable(false);
                     postAssetSync();
                 }
-                else{
-                new CommonAlertDialog(
-                        requireActivity(),
-                        getString(R.string.check_internet),
-                        "OK",
-                        "",
-                        new  CommonAlertDialog.OnButtonClickListener() {
-                            @Override
-                            public void onNegativeButtonClicked() {
-
-                            }
-
-                            @Override
-                            public void onPositiveButtonClicked() {
-
-                            }
-                        }).show();
-                }
         });
 
 

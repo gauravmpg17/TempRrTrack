@@ -1,8 +1,10 @@
 package asset.trak.views.module
 
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +13,10 @@ import asset.trak.database.entity.BookAttributes
 import asset.trak.modelsrrtrack.LastSyncData
 import asset.trak.modelsrrtrack.LastSyncResponse
 import asset.trak.repository.BookRepository
+import asset.trak.utils.ConnectivityStatus
 import asset.trak.utils.SingleLiveEvent
 import asset.trak.utils.getFormattedDate
+import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -99,7 +103,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
                 }
                 else
                 {
-                    dataSyncStatus.value=false
+                    dataSyncStatus.postValue(false)
                     Log.d("tag12122", "getLastSync:${it.statuscode} ")
                 }
             }
@@ -129,8 +133,11 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
             if (!data.Inventorymaster.isNullOrEmpty()) {
                 Application.bookDao?.addInventoryMaster(data.Inventorymaster)
             }
+            Log.e("dhdgdhdh", "getLastSync First11 AssetMain1")
+            dataSyncStatus.postValue(true)
         }
-        dataSyncStatus.value=true
+        Log.e("dhdgdhdh", "getLastSync First11 AssetMain2")
+
     }
 
 

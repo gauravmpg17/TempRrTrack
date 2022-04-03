@@ -43,12 +43,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 
 import asset.trak.utils.CommonAlertDialog;
+import asset.trak.utils.ConnectivityStatus;
 import asset.trak.views.baseclasses.BaseActivity;
 import asset.trak.views.fragments.HomeFragment;
 import asset.trak.views.inventory.ViewInventoryFragment;
@@ -136,6 +139,7 @@ import static com.markss.rfidtemplate.application.Application.UNIQUE_TAGS;
 import static com.markss.rfidtemplate.application.Application.UNIQUE_TAGS_CSV;
 import static com.markss.rfidtemplate.application.Application.iBrandIDLen;
 import static com.markss.rfidtemplate.application.Application.inventoryList;
+import static com.markss.rfidtemplate.application.Application.isFirstTime;
 import static com.markss.rfidtemplate.application.Application.mIsMultiTagLocatingRunning;
 import static com.markss.rfidtemplate.application.Application.matchingTags;
 import static com.markss.rfidtemplate.application.Application.matchingTagsList;
@@ -281,6 +285,8 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
     //For multitag locate operation
     protected boolean isMultiTagLocationingAborted;
 
+    private TextView internetStatusTV;
+
     /**
      * method to know whether bluetooth is enabled or not
      *
@@ -325,7 +331,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mCon = this;
-
+        internetStatusTV=findViewById(R.id.internetStatusTV);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         toolbar = findViewById(R.id.toolbar);
         ivBack = findViewById(R.id.ivBack);
@@ -388,6 +394,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
 
 
         ivBack.setOnClickListener(this);
+        checkConnectivity();
     }
 
     @Override
@@ -1688,7 +1695,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                                 FancyToast.makeText(
                                         getApplicationContext(),
                                         exception.getMessage(),
-                                        FancyToast.LENGTH_LONG,
+                                        FancyToast.LENGTH_SHORT,
                                         FancyToast.ERROR,
                                         false
                                 ).show();
@@ -1703,7 +1710,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     message,
-                                    FancyToast.LENGTH_LONG,
+                                    FancyToast.LENGTH_SHORT,
                                     FancyToast.ERROR,
                                     false
                             ).show();
@@ -1814,7 +1821,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     message,
-                                    FancyToast.LENGTH_LONG,
+                                    FancyToast.LENGTH_SHORT,
                                     FancyToast.ERROR,
                                     false
                             ).show();
@@ -1923,7 +1930,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         @Override
                         public void onFailure(String message) {
                             progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             FancyToast.makeText(
                                     getApplicationContext(),
                                     message,
@@ -1934,6 +1941,65 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         }
                     });
 
+    }
+
+    private void checkConnectivity(){
+        ConnectivityStatus connectionLiveData = new ConnectivityStatus(getApplicationContext());
+        connectionLiveData.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isConnected) {
+
+                /* every time connection state changes, we'll be notified and can perform action accordingly */
+                if(isConnected){
+//                    internetStatusTV.setVisibility(View.VISIBLE);
+//                    internetStatusTV.setText("Internet is connected!!!");
+//                    internetStatusTV.setBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.green));
+                  if(!isFirstTime)
+                  {
+                      new CommonAlertDialog(
+                              MainActivity.this,
+                              "Internet is connected!!!",
+                              "OK",
+                              "",
+                              new  CommonAlertDialog.OnButtonClickListener() {
+                                  @Override
+                                  public void onNegativeButtonClicked() {
+                                 }
+
+                                  @Override
+                                  public void onPositiveButtonClicked() {
+                                      asset.trak.utils.Constants.INSTANCE.enableUserInteraction(MainActivity.this);
+
+                                  }
+                              }).show();
+                  }
+                }else{
+                    isFirstTime=false;
+//                    internetStatusTV.setVisibility(View.GONE);
+//                    internetStatusTV.setText( "No internet connection!!!");
+//                    internetStatusTV.setBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.red));
+                    new CommonAlertDialog(
+                            MainActivity.this,
+                            "No internet connection!!!",
+                            "OK",
+                            "",
+                            new  CommonAlertDialog.OnButtonClickListener() {
+                                @Override
+                                public void onNegativeButtonClicked() {
+
+                                }
+
+                                @Override
+                                public void onPositiveButtonClicked() {
+                                    asset.trak.utils.Constants.INSTANCE.disableUserInteraction(MainActivity.this);
+
+                                }
+                            }).show();
+
+                }
+
+            }
+        });
     }
 
     /**
@@ -3440,7 +3506,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                         mToastToShow.show();
                         toastCountDown.start();*/
 
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.tag_match_complete), Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(getApplicationContext(), getResources().getString(R.string.tag_match_complete), Toast.LENGTH_SHORT).show();
 
                         FancyToast.makeText(
                                 getApplicationContext(),
@@ -3532,7 +3598,7 @@ public class MainActivity extends BaseActivity implements Readers.RFIDReaderEven
                 FancyToast.makeText(
                         getApplicationContext(),
                         data,
-                        FancyToast.LENGTH_LONG,
+                        FancyToast.LENGTH_SHORT,
                         FancyToast.SUCCESS,
                         false
                 ).show();

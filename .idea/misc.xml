@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout-v21/fragment_home.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/activity_main.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/app_bar_main.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/content_main.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/fragment_inventory.xml" value="0.30859375" />
+        <entry key="..\:/Users/Mobile Programming/RrTrack/app/src/main/res/layout/toast_layout.xml" value="0.30859375" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_add_book.xml" value="0.56875" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/fragment_record_inventory_asset.xml" value="0.61" />
         <entry key="..\:/Users/Mobile programming/AndroidStudioProjects/rrtrack/app/src/main/res/layout-v21/item_asset_reconcillation.xml" value="0.56875" />

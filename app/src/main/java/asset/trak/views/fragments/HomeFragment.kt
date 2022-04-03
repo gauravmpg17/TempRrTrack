@@ -55,21 +55,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         if (Constants.isInternetAvailable(requireContext())) {
             disableUserInteraction(requireActivity())
             getLastSync()
-        } else {
-            CommonAlertDialog(
-                requireActivity(),
-                getString(R.string.check_internet),
-                "OK",
-                "",
-                object : CommonAlertDialog.OnButtonClickListener {
-                    override fun onPositiveButtonClicked() {
-
-                    }
-
-                    override fun onNegativeButtonClicked() {
-
-                    }
-                }).show()
         }
     }
 
@@ -213,10 +198,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     bookDao?.retriveTimeStamp()
                 }.await()
                 inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-                Log.e(
-                    "dhdgdhdh",
-                    "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
-                )
+//                Log.e(
+//                    "dhdgdhdh",
+//                    "getLastSync First ${inventoryViewModel.dateLastSync} ${appTimeStamp.id}"
+//                )
                 inventoryViewModel.getLastSync(
                     inventoryViewModel.dateLastSync,
                     inventoryViewModel.defaultOffLocation
@@ -226,17 +211,19 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
             progressBar.visibility = View.INVISIBLE
             enableUserInteraction(requireActivity())
-            if (isFromDelete) {
-                Toast.makeText(
-                    requireActivity(),
-                    "Data Refreshed successfully",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } else {
-                Toast.makeText(activity, "Saved SynTime in sp", Toast.LENGTH_SHORT)
-                    .show()
-            }
+           if(isDataSynced){
+               if (isFromDelete) {
+                   Toast.makeText(
+                       requireActivity(),
+                       "Data Refreshed successfully",
+                       Toast.LENGTH_SHORT
+                   )
+                       .show()
+               } else {
+                   Toast.makeText(activity, "Saved SynTime in sp", Toast.LENGTH_SHORT)
+                       .show()
+               }
+           }
         }
 
 

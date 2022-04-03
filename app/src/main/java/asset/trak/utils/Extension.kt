@@ -8,11 +8,14 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -155,6 +158,8 @@ fun decreaseRangeToThirty(value: Int) {
     ).show()
 }
 
+
+
 //fun connectRFIDReader() {
 //    try {
 //        val sharedPreferences: SharedPreferences =
@@ -260,3 +265,4 @@ fun apiDateFormat(date: Date):String?{
     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
     return sdf.format(date)
 }
+
