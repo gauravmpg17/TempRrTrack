@@ -168,9 +168,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun getLastSync(isFromDelete: Boolean = false) {
         isDataRefreshed=isFromDelete
         progressBar.visibility = View.VISIBLE
-        //  val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        //var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-        //var currSyncTime = sdf.format(Date())
         val sharedPreferenceFirstInstall = Application.context.getSharedPreferences(
             Constants.appIstalledFirstTime,
             Context.MODE_PRIVATE
@@ -179,12 +176,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val deviceId =
             Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
         val editor = sharedPreference?.edit()
-        //  editor?.putString(Constants.LastSyncTs, currSyncTime)
         editor?.putString(Constants.DeviceId, deviceId)
         editor?.commit()
         if (isFirstInstall || isFromDelete) {
             lifecycleScope.launch {
-                // bookDao?.saveAppTimeStamp(AppTimeStamp(null))
                 bookDao?.saveAppTimeStamp(AppTimeStamp(Date()))
                 inventoryViewModel.getLastSync("")
                 sharedPreferenceFirstInstall.edit().putBoolean(firstTimeKey, false).commit()

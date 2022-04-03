@@ -47,7 +47,7 @@ interface BookDao {
     fun getCount(): Int
 
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
-    suspend fun getCountLocationIdKt(locationId: Int): Int
+     suspend fun getCountLocationIdKt(locationId: Int): Int
 
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int

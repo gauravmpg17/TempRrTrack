@@ -112,23 +112,8 @@ class MyLibrarySearchFragment : BaseFragment(R.layout.fragment_my_library_search
         )
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        try {
-//          //  decreaseRangeToThirty(300)
-//        } catch (e: Exception) {
-//            Log.d("decreaseRangeToThirty", e.message!!)
-//        }
-//    }
 
     private fun setAdaptor() {
-   //     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-   //     var syncTime = sharedPreference?.getString(Constants.LastSyncTs, "2022-02-08")
-     //   var currSyncTime = sdf.format(Date())
-       // var deviceId = Settings.Secure.getString(requireActivity().contentResolver, Settings.Secure.ANDROID_ID)
-        //     Toast.makeText(activity, syncTime, Toast.LENGTH_SHORT).show()
-
-
         inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) {isDataSynced->
             Log.e("DATA", "OBSERVE_DATA")
             apiHit=false

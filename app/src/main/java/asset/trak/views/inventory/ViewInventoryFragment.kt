@@ -111,21 +111,33 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     }.await()
                     Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
                     inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
+//                    inventoryViewModel.getLastSync(
+//                        inventoryViewModel.dateLastSync
+//                    )
+
                     inventoryViewModel.getLastSync(
-                        inventoryViewModel.dateLastSync
+                      ""
                     )
                     inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
                         progressBar1.visibility = View.INVISIBLE
                         if (isDataSynced) {
-                            launch {
+
                                 if (currLocId != 0) {
-                                    val newlyRegistered = CoroutineScope(Dispatchers.IO).async {
-                                        roomDatabaseBuilder.getBookDao()
-                                            .getCountLocationIdKt(currLocId)
-                                    }.await()
-                                    tvNewlyScanCount.text = newlyRegistered.toString()
+
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        val newlyRegistered=async {
+                                            roomDatabaseBuilder.getBookDao()
+                                                .getCountLocationIdKt(currLocId)
+                                        }.await()
+                                        mainCoroutines {
+                                            Log.d("new123", "onViewCreated: ${currLocId}")
+                                            tvNewlyScanCount.text = newlyRegistered.toString()
+                                        }
+                                    }
+
+
                                 }
-                            }
+
                         }
                     }
                     Application.isReconsiled = false
