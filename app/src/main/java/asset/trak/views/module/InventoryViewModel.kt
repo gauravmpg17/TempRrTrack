@@ -61,6 +61,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         _isStart.value = true
     }
 
+
     fun updateOffLocation(location: String) {
         defaultOffLocation.value = location
         viewModelScope.launch {
