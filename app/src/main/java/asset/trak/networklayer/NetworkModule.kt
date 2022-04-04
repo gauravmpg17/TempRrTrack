@@ -97,7 +97,8 @@ object NetworkModule {
     fun provideHerCircleAPI(
         okHttpClient: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://resqqa.ril.com/RFIDService/AssetTracker/")
+        .baseUrl("https://rrtrackservices.ril.com/RFIDSync/AssetTracker/")
+      //  .baseUrl("https://resqqa.ril.com/RFIDService/AssetTracker/")
         .addConverterFactory(jsonConverterFactory)
         .addConverterFactory(moshiConverterFactory)
         .client(okHttpClient)
