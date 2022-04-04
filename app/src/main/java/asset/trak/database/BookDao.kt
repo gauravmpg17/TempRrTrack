@@ -319,7 +319,7 @@ interface BookDao {
     @Query("DELETE FROM assetMain WHERE ExitDate IS NOT NULL")
     suspend fun deleteOutwardRecords()
 
-    @Query("SELECT Name FROM masterLocation WHERE ParentLocID IS NOT NULL")
+    @Query("SELECT Name FROM masterLocation WHERE ParentLocID IS NULL")
     suspend fun appConfigLocationNames(): List<String>
 
     @Insert

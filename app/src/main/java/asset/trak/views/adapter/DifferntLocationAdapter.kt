@@ -73,7 +73,7 @@ class DifferntLocationAdapter(
         } else {
             holder.tvAuthor.text = item.SampleType
         }
-        holder.tvCategory.text = item.SampleNature + " | " + item.Season
+        holder.tvCategory.text = " | "+item.SampleNature + " | " + item.Season
         holder.tvEdition.text = item.Location + if (item.ScanDate.isNullOrEmpty()) {
             ""
         } else {

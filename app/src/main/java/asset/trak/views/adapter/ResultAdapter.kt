@@ -44,7 +44,7 @@ class ResultAdapter(
     private var mFilteredList: List<AssetMain>? = null
 
     init {
-        mFilteredList=items
+        mFilteredList = items
     }
 
     inner class HomeGoalsHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -75,7 +75,8 @@ class ResultAdapter(
             } else {
                 holder.tvAuthor.text = homeGoalsItem.SampleType
             }
-            holder.tvCategory.text = homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
+            holder.tvCategory.text =
+                " | " + homeGoalsItem.SampleNature + " | " + homeGoalsItem.Season
             holder.tvTag.text =
                 homeGoalsItem.Location + if (homeGoalsItem.ScanDate.isNullOrEmpty()) {
                     ""
