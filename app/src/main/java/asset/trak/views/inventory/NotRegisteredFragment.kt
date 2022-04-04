@@ -109,6 +109,7 @@ class NotRegisteredFragment(val locationId: Int) : BaseFragment(R.layout.fragmen
             {
                 tvSelectAll.visibility=View.GONE
             }
+            //////
 
             notFoundAdapter = NotRegsiteredAdapter(requireContext(),requireActivity().supportFragmentManager, rfidTags)
             rvRegistered.adapter = notFoundAdapter
