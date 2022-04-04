@@ -16,7 +16,8 @@ data class ScanTag(
     var locationId: Int? = null,
     var rfidTag: String? = null,
     var isSelected: Boolean = false,
-    var assetId: String? = null
+    var assetId: String? = null,
+    var inventorySyncFlag: Int=0
 
 ) : Parcelable {
 

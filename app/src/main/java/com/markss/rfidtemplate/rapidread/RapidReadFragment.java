@@ -809,9 +809,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             /*Get Count*/
             countFoundCurrentLocation = bookDao.getCountOfTagsFound(locationData.getLocID());
-            countNotFoundCurrentLocation = bookDao.getCountOfTagsNotFound(locationData.getLocID(), inventoryMaster.getScanID());
-            countFoundDifferentLoc = bookDao.getCountFoundDifferentLoc(inventoryMaster.getScanID(), locationData.getLocID());
-            countNotRegistered = bookDao.getCountNotRegistered(inventoryMaster.getScanID());
+            countNotFoundCurrentLocation = bookDao.getCountOfTagsNotFound();
+            countFoundDifferentLoc = bookDao.getCountFoundDifferentLoc(locationData.getLocID());
+            countNotRegistered = bookDao.getCountNotRegistered();
             List<AssetMain> bookAndAssetData = bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getLocID());
             tvFoundLocCount.setText(String.valueOf(countFoundCurrentLocation));
             tvNotFoundLocCount.setText(String.valueOf(countNotFoundCurrentLocation));

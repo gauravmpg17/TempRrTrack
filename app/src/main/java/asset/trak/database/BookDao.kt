@@ -146,28 +146,22 @@ interface BookDao {
     @Query("SELECT rfidTag FROM tblScanTag  WHERE  scanId IN (:scanId)")
     fun getGlobalScanRfid(scanId: String): List<String>
 
-    /*  @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE rfidTag IN (:scanTagIds) AND locationId IN (:locationId)")
-      fun getCountOfTagsFound(scanTagIds: List<String>,locationId: Int): Int*
-       @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
-    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
-      /
-     */
-
-//    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
-//    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
-
-    /*   @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND rfidTag is null)")
-    fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int*/
+    /*Insert data in ScanTag table
+select * from assetmain where locid = ZoneID and assetid not in (select assetid from scantag where scanid = currentscanID)
+During Insert set the LastScannedLocID to 'NF' for the inserted records.*/
     //   @Query("SELECT COUNT(*) FROM tblAssetCatalogue AC LEFT JOIN tblScanTag ST ON ST.rfidTag = AC.rfidTag WHERE ST.scanId IS NULL AND AC.locationId IN (:locationId)")
     @Query("select count(*) from tblScanTag where locationId=0 and assetId is not null")
-    fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int
+    fun getCountOfTagsNotFound(): Int
 
 
-    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId))")
-    fun getCountFoundDifferentLoc(scanId: String, locationId: Int): Int
+ //   @Query("SELECT COUNT(*) FROM assetMain WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId))")
+   @Query("SELECT COUNT(*) FROM tblScanTag WHERE assetId IS NOT NULL AND (locationId IS NULL OR locationId != (:locationId)) AND locationId NOT IN(:locationId,0)")
+    fun getCountFoundDifferentLoc(locationId: Int): Int
 
-    @Query("SELECT COUNT(*) FROM tblScanTag ST LEFT JOIN assetMain AC ON ST.rfidTag = AC.AssetRFID WHERE AC.AssetRFID IS NULL AND ST.scanId IN (:scanId)")
-    fun getCountNotRegistered(scanId: String): Int
+    /*from scantag
+where assetID is null*/
+    @Query("SELECT COUNT(*) FROM tblScanTag WHERE assetId IS NULL")
+    fun getCountNotRegistered(): Int
 
 //    @Query("SELECT COUNT(*) FROM tblScanTag  WHERE  scanId IN (:scanId) AND rfidTag NOT IN (SELECT rfidTag FROM assetMain WHERE rfidTag IS NOT NULL)")
 //    fun getCountNotRegistered(scanId: String): Int
@@ -228,13 +222,14 @@ interface BookDao {
     fun updateInventoryItem(inventoryMaster: Inventorymaster)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateBookAndAssetData(listBookAndAssetData: List<AssetMain>)
+    fun updateBookAndAssetData(listBookAndAssetData: List<ScanTag>)
 
-    @Query("UPDATE assetMain SET LocationId=(:newlocationId),ScanDate=(:scanDate),ScanID=(:scanId),inventorySyncFlag=(:flag) WHERE LocationId IN (:locationId) AND AssetRFID IN (:rfidTag)")
+    /*   /*Update the LastScannedLocID to 'F' in ScanTag table for Ignored Records.*/
+                                 */
+    @Query("UPDATE tblscantag SET LocationId=(:newlocationId),ScanID=(:scanId),inventorySyncFlag=(:flag) WHERE LocationId IN (:locationId) AND rfidTag IN (:rfidTag)")
     fun updateLocationAssetMain(
         newlocationId: Int,
         locationId: Int,
-        scanDate: String,
         scanId: String,
         flag: Int,
         rfidTag: String

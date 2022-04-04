@@ -194,12 +194,12 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 notRegisterTab(notRegistered)
             } else {
                 inventorymaster = inventoryMasterList.get(0)
-                var notFoundCount = bookDao.getCountOfTagsNotFound(locationId, inventorymaster!!.scanID)
+                var notFoundCount = bookDao.getCountOfTagsNotFound()
                 val notFound = "Not\nFound ($notFoundCount)"
                 var differntLocationCount =
-                    bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+                    bookDao.getCountFoundDifferentLoc(locationId)
                 val differentLocation = "Different\nLocation ($differntLocationCount)"
-                var countofNotRegistered = bookDao.getCountNotRegistered(inventorymaster!!.scanID)
+                var countofNotRegistered = bookDao.getCountNotRegistered()
                 val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 //            tablayout.addTab(tablayout.newTab().setText(notFound));
                 notFoundTab(notFound)
@@ -264,7 +264,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                     differentLocationTab(differentLocation)
                 } else {
                     var differntLocationCount =
-                        bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+                        bookDao.getCountFoundDifferentLoc(locationId)
                     val differentLocation = "Different\nLocation ($differntLocationCount)"
 //                    tablayout.getTabAt(1)?.text = differentLocation
                     differentLocationTab(differentLocation)
@@ -368,10 +368,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                         ).show()
                                         return@setOnClickListener
                                     }
+
+                                    /*Update the LastScannedLocID to 'F' in ScanTag table for Ignored Records.*/
                                     bookDao.updateLocationAssetMain(
-                                        0,
+                                        locationId,
                                         it.LocationId,
-                                        scanEndTime!!,
                                         lastItem.scanID,
                                         1,
                                         it.AssetRFID!!
@@ -387,10 +388,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 refreshRegisteredAssetCount()
                                 (adapter.getCurrentFragment() as NotFoundFragment).updateList()
                                 inventorymaster = inventoryMasterList[inventoryMasterList.size - 1]
-                                var notFoundCount = bookDao.getCountOfTagsNotFound(
-                                    locationId,
-                                    inventorymaster!!.scanID
-                                )
+                                var notFoundCount = bookDao.getCountOfTagsNotFound()
                                 val notFound = "Not\nFound ($notFoundCount)"
 //                                tablayout.getTabAt(0)?.text = notFound
                                 notFoundTab(notFound)
@@ -402,12 +400,11 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                 1 -> {
                     if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
                         Application.isReconsiled = true
-                        val listBook = ArrayList<AssetMain>()
+                        val listBook = ArrayList<ScanTag>()
                         (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
                             if (it.isSelected) {
-                                val assetCatalog = it
-                                assetCatalog.LocationId = locationId
-                                assetCatalog.inventorySyncFlag = 1
+                                val assetCatalog = ScanTag()
+                                assetCatalog.locationId = locationId
                                 listBook.add(assetCatalog)
                             }
                         }
@@ -477,7 +474,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                         differentLocationTab(notRegistered)
                     } else {
                         var countofDiffLocation =
-                            bookDao.getCountFoundDifferentLoc(inventorymaster!!.scanID, locationId)
+                            bookDao.getCountFoundDifferentLoc(locationId)
                         val diffLoc = "Different\nLocation ($countofDiffLocation)"
 //                        tablayout.getTabAt(1)?.text = diffLoc
                         differentLocationTab(diffLoc)
@@ -523,7 +520,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
                         } else {
                             val countofNotRegistered =
-                                bookDao.getCountNotRegistered(inventorymaster!!.scanID)
+                                bookDao.getCountNotRegistered()
                             val notRegistered = "Not\nRegistered ($countofNotRegistered)"
 //                            tablayout.getTabAt(2)?.text = notRegistered
                             notRegisterTab(notRegistered)
@@ -640,7 +637,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                             (adapter.getCurrentFragment() as NotFoundFragment).updateList()
 
                         var notFoundCount =
-                            bookDao.getCountOfTagsNotFound(locationId, scanTag.scanId!!)
+                            bookDao.getCountOfTagsNotFound()
                         val notFound = "Not\nFound ($notFoundCount)"
 //                        tablayout.getTabAt(0)?.text = notFound
                         notFoundTab(notFound)
