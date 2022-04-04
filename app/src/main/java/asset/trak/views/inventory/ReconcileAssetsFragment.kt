@@ -369,13 +369,12 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                         return@setOnClickListener
                                     }
 
+                                    Log.e("DATA","LOC :$locationId NEW_LOC: ${it.LocationId} SCAN_ID: ${lastItem.scanID} RFID: ${it.AssetRFID}")
                                     /*Update the LastScannedLocID to 'F' in ScanTag table for Ignored Records.*/
                                     bookDao.updateLocationAssetMain(
-                                        locationId,
-                                        it.LocationId,
+                                        0,
                                         lastItem.scanID,
-                                        1,
-                                        it.AssetRFID!!
+                                        it.AssetRFID
                                     )
                                 }
                             }

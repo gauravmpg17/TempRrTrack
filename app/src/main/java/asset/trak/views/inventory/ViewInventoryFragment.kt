@@ -217,6 +217,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                 } else if (s.toString().length >= 4) {
                     mainCoroutines {
                         tvLocation.text = ""
+                        tvRegisteredCount.text = "0"
+                        tvNewlyScanCount.text = "0"
                         barCodeName = s.toString().trim()
                         //here
                         currMasterLocation = CoroutineScope(Dispatchers.IO).async {
@@ -224,6 +226,8 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                         }.await()
                         if (currMasterLocation == null) {
                             tvLocation.text = ""
+                            tvRegisteredCount.text = "0"
+                            tvNewlyScanCount.text = "0"
                         }
                         currMasterLocation?.let {
                             it.Name?.let {

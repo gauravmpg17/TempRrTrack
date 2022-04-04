@@ -112,7 +112,7 @@ class NotFoundFragment(private val locationId: Int) : BaseFragment(R.layout.frag
         else{
             val inventorymaster= inventoryMasterList.get(0)
 
-            listBook.addAll(bookDao?.getAssetNotFound(locationId,inventorymaster.scanID) ?: arrayListOf())
+            listBook.addAll(bookDao?.getAssetNotFound() ?: arrayListOf())
             if(listBook.isEmpty())
             {
                 tvSelectAll.visibility=View.GONE
