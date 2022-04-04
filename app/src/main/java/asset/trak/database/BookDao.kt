@@ -47,7 +47,7 @@ interface BookDao {
     fun getCount(): Int
 
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
-     suspend fun getCountLocationIdKt(locationId: Int): Int
+    suspend fun getCountLocationIdKt(locationId: Int): Int
 
     @Query("SELECT COUNT(locationId) FROM assetMain WHERE locationId IN (:locationId)")
     fun getCountLocationId(locationId: Int): Int
@@ -140,6 +140,9 @@ interface BookDao {
     @Query("SELECT rfidTag FROM tblScanTag  WHERE locationId IN (:locationId) AND scanId IN (:scanId)")
     fun getScanRfid(locationId: Int, scanId: String): List<String>
 
+    @Query("select count(*) from tblScanTag where LocationId=:locationId and assetId is not null")
+    fun getCountOfTagsFound(locationId: Int): Int
+
     @Query("SELECT rfidTag FROM tblScanTag  WHERE  scanId IN (:scanId)")
     fun getGlobalScanRfid(scanId: String): List<String>
 
@@ -150,16 +153,13 @@ interface BookDao {
       /
      */
 
-    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID IN (SELECT rfidTag from tblscantag where scanId in (:scanId))")
-    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
-
 //    @Query("SELECT COUNT(*) FROM assetMain AC INNER JOIN tblScanTag ST ON ST.rfidTag = AC.AssetRFID WHERE ST.scanId IN (:scanId) AND AC.locationId IN (:locationId)")
 //    fun getCountOfTagsFound(scanId: String, locationId: Int): Int
 
     /*   @Query("SELECT COUNT(*) FROM tblAssetCatalogue WHERE locationId IN (:locationId) AND rfidTag NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND rfidTag is null)")
     fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int*/
     //   @Query("SELECT COUNT(*) FROM tblAssetCatalogue AC LEFT JOIN tblScanTag ST ON ST.rfidTag = AC.rfidTag WHERE ST.scanId IS NULL AND AC.locationId IN (:locationId)")
-    @Query("SELECT COUNT(*) FROM assetMain WHERE locationId IN (:locationId) AND AssetRFID NOT IN (SELECT rfidTag FROM tblScanTag WHERE ScanId IN(:scanId)) OR (locationId IN (:locationId) AND AssetRFID is null)")
+    @Query("select count(*) from tblScanTag where locationId=0 and assetId is not null")
     fun getCountOfTagsNotFound(locationId: Int, scanId: String): Int
 
 
@@ -326,15 +326,17 @@ interface BookDao {
     suspend fun saveOffLocation(offLocation: OffLocation)
 
     @Query("SELECT COUNT(*) FROM offlocation")
-    suspend fun checkTableIsEmpty():Int
+    suspend fun checkTableIsEmpty(): Int
 
     @Query("UPDATE offlocation SET locationName=:name")
-    suspend fun updateOffLocation(name:String)
+    suspend fun updateOffLocation(name: String)
 
     @Query("SELECT * FROM offlocation ORDER BY id DESC LIMIT 1")
-    suspend fun getOffLocation():OffLocation
+    suspend fun getOffLocation(): OffLocation
 
     @Query("DELETE FROM offlocation")
     suspend fun deleteOffLocation()
 
+    @Query("SELECT * FROM assetMain where AssetRFID=:rfidTag")
+    fun getRFIDTagDetails(rfidTag: String): AssetMain
 }

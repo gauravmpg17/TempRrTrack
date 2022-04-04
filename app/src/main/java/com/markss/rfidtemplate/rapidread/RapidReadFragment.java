@@ -186,34 +186,31 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 //                listInventoryList = new HashSet<>();
             }*/
 
-    BroadcastReceiver receiver=new BroadcastReceiver() {
+    BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-       boolean isInventoryStartStop=  intent.getBooleanExtra("istart",false);
-       if(!isInventoryStartStop)
-       {
-           inventoryButton.setTag("0");
-           llBottomParent.setVisibility(View.GONE);
-           inventoryButton.setImageResource(android.R.drawable.ic_media_pause);
-           listInventoryList = new HashSet<>();
+            boolean isInventoryStartStop = intent.getBooleanExtra("istart", false);
+            if (!isInventoryStartStop) {
+                inventoryButton.setTag("0");
+                llBottomParent.setVisibility(View.GONE);
+                inventoryButton.setImageResource(android.R.drawable.ic_media_pause);
+                listInventoryList = new HashSet<>();
 
-           //new requirement
-           foundLocParent.setVisibility(View.GONE);
-           foundForDifferentParent.setVisibility(View.GONE);
-           inventoryViewModel.updateTime();
-       }
-       else
-       {
-           inventoryViewModel.stopTime();
-           inventoryButton.setTag("1");
-           llBottomParent.setVisibility(View.VISIBLE);
-           inventoryButton.setImageResource(android.R.drawable.ic_media_play);
-           addDataToScanTag();
-           showCountFound();
-           updateCountInDb();
-       }
+                //new requirement
+                foundLocParent.setVisibility(View.GONE);
+                foundForDifferentParent.setVisibility(View.GONE);
+                inventoryViewModel.updateTime();
+            } else {
+                inventoryViewModel.stopTime();
+                inventoryButton.setTag("1");
+                llBottomParent.setVisibility(View.VISIBLE);
+                inventoryButton.setImageResource(android.R.drawable.ic_media_play);
+                addDataToScanTag();
+                showCountFound();
+                updateCountInDb();
+            }
 
-    //   btnScan.performClick();
+            //   btnScan.performClick();
         }
     };
 
@@ -275,7 +272,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             new CommonAlertDialog(requireActivity(), "Are you sure you want to abandon this scan? Your data will be lost.", "Yes", "No", new CommonAlertDialog.OnButtonClickListener() {
                 @Override
                 public void onPositiveButtonClicked() {
-                    isAbandoned=true;
+                    isAbandoned = true;
                     if (Application.isReconsiled) {
                         try {
                             if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
@@ -498,11 +495,11 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             inventoryButton.setImageResource(android.R.drawable.ic_media_play);
             addDataToScanTag();
             showCountFound();
-        } else{
+        } else {
             inventoryButton.performClick();
         }
 
-       inventoryViewModel.stopTime();
+        inventoryViewModel.stopTime();
         inventoryButton.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
         inventoryButton.setImageResource(android.R.drawable.ic_media_play);
@@ -713,15 +710,21 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
-//                listInventoryList.add("000000000000000000001271");
-//                listInventoryList.add("E2801190200077BCB26B031B");
-//                listInventoryList.add("E2801190200068DDB25F0388");
-//                listInventoryList.add("E2801190200077BCB26B031A");
-//
-//                scannedList.add("000000000000000000001271");
-//                scannedList.add("E2801190200077BCB26B031B");
-//                scannedList.add("E2801190200068DDB25F0308");
-//                scannedList.add("E2801190200077BCB26B031A");
+                listInventoryList.add("0000000000000000067D0E4B");
+                listInventoryList.add("000000000000000006844C51");
+                listInventoryList.add("000000000000000000001271");
+                listInventoryList.add("E2801190200077BCB26B031B");
+                listInventoryList.add("E2801190200068DDB25F0388");
+                listInventoryList.add("E2801190200077BCB26B031A");
+                listInventoryList.add("AD72120544AE85B55D000080");
+
+                scannedList.add("0000000000000000067D0E4B");
+                scannedList.add("000000000000000006844C51");
+                scannedList.add("000000000000000000001271");
+                scannedList.add("E2801190200077BCB26B031B");
+                scannedList.add("E2801190200068DDB25F0308");
+                scannedList.add("E2801190200077BCB26B031A");
+                scannedList.add("AD72120544AE85B55D000080");
 ////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);
@@ -738,9 +741,18 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
                 for (String inventoryTag : listInventoryList) {
                     //code here
+                    AssetMain assetMain = bookDao.getRFIDTagDetails(inventoryTag);
                     ScanTag scanTag = new ScanTag();
                     scanTag.setScanId(lastItem.getScanID());
-                    scanTag.setLocationId(locationData.getLocID());
+                    int locId=-1;
+                    String assetId=null;
+
+                    if (assetMain!=null && assetMain.getLocationId()!=-1){
+                        locId=assetMain.getLocationId();
+                        assetId=assetMain.getAssetID();
+                    }
+                    scanTag.setLocationId(locId);
+                    scanTag.setAssetId(assetId);
                     scanTag.setRfidTag(inventoryTag);
 
                     Integer getCountOfTagAlready = bookDao.getCountOfTagAlready(scanTag.getRfidTag(), scanTag.getScanId());
@@ -796,7 +808,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             // Log.d("tag116", "showCountFound: "+(inventoryMaster.getScanID());
 
             /*Get Count*/
-            countFoundCurrentLocation = bookDao.getCountOfTagsFound(inventoryMaster.getScanID(), locationData.getLocID());
+            countFoundCurrentLocation = bookDao.getCountOfTagsFound(locationData.getLocID());
             countNotFoundCurrentLocation = bookDao.getCountOfTagsNotFound(locationData.getLocID(), inventoryMaster.getScanID());
             countFoundDifferentLoc = bookDao.getCountFoundDifferentLoc(inventoryMaster.getScanID(), locationData.getLocID());
             countNotRegistered = bookDao.getCountNotRegistered(inventoryMaster.getScanID());
@@ -850,7 +862,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         new CommonAlertDialog(requireActivity(), "Are you sure you want to complete Scan?.", "Yes", "No", new CommonAlertDialog.OnButtonClickListener() {
             @Override
             public void onPositiveButtonClicked() {
-               //isReconsiled = false;
+                //isReconsiled = false;
                 inventoryViewModel.setFirstTime(true);
                 progressBar.setVisibility(View.VISIBLE);
                 disableUserInteraction(getActivity());
@@ -967,10 +979,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().registerReceiver(receiver,new IntentFilter("INVENTORYSTART"));
+        requireActivity().registerReceiver(receiver, new IntentFilter("INVENTORYSTART"));
         Log.d("scantagcheck", "onResume: " + btnScan.getTag());
-        if(inventoryViewModel.isSearchClicked())
-        {
+        if (inventoryViewModel.isSearchClicked()) {
             Log.d("tag12", " isSearchClicked");
             inventoryButton.setTag("1");
             llBottomParent.setVisibility(View.VISIBLE);
@@ -989,7 +1000,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         @Override
                         public void onPositiveButtonClicked() {
                             try {
-                                isAbandoned=true;
+                                isAbandoned = true;
                                 if (Application.isReconsiled) {
                                     if (pendingInventoryScan != null && !pendingInventoryScan.isEmpty()) {
                                         Inventorymaster lastItem = pendingInventoryScan.get(0);
