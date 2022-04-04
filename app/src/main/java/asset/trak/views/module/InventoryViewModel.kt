@@ -65,6 +65,7 @@ class InventoryViewModel @Inject constructor(private val bookRepository: BookRep
         viewModelScope.launch {
             Application.bookDao?.updateOffLocation(location)
         }
+        getLastSync("")
     }
 
     val t = Runnable {
