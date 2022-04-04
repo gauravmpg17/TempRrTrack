@@ -400,23 +400,21 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                     if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
                         Application.isReconsiled = true
                         val listBook = ArrayList<ScanTag>()
+                        var totalItemCount = 0
                         (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook.forEach {
                             if (it.isSelected) {
-                                val assetCatalog = ScanTag()
-                                assetCatalog.locationId = locationId
-                                listBook.add(assetCatalog)
+                               val assetCatalog = ScanTag()
+                                assetCatalog.scanId=it.ScanID
+                              assetCatalog.locationId = locationId
+                                assetCatalog.rfidTag=it.AssetRFID
+                            assetCatalog.assetId=it.AssetID
+                                assetCatalog.inventorySyncFlag=1
+                                assetCatalog.isSelected=it.isSelected
+                              listBook.add(assetCatalog)
+                                totalItemCount += 1
                             }
                         }
-                        if (listBook.isNotEmpty()) {
-                            bookDao.updateBookAndAssetData(listBook)
-                            refreshRegisteredAssetCount()
-                            (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
-                        } else
-//                        Toast.makeText(
-//                            requireContext(), "No Item Selected",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-
+                        if (listBook.isEmpty()) {
                             FancyToast.makeText(
                                 requireActivity(),
                                 "No Item Selected.",
@@ -424,64 +422,36 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
                                 FancyToast.WARNING,
                                 false
                             ).show()
-                    }
-
-
-//                    if (adapter.getCurrentFragment() is DifferentLoactionFragment) {
-//                        val listRfids = ArrayList<ScanTag>()
-//
-//                        val scanList = bookDao.getScanTagAll()
-//                        val listBook =
-//                            (adapter.getCurrentFragment() as DifferentLoactionFragment).listBook
-//
-//                        Log.e(
-//                            "sdd",
-//                            "" + Gson().toJson((adapter.getCurrentFragment() as DifferentLoactionFragment).listBook)
-//                        )
-//
-//                        listBook.forEach {
-//                            if (it.assetCatalogue.isSelected) {
-//                                val assetCatalogue = it.assetCatalogue
-//                                scanList.forEachIndexed { index, scanTag ->
-//                                    if (scanTag.rfidTag == assetCatalogue.rfidTag) {
-//                                        listRfids.add(scanTag)
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                        if (listRfids.isNotEmpty()) {
-//                            bookDao.deleteScanTag(listRfids)
-//                            (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
-//                        } else
-//                            FancyToast.makeText(
-//                                requireActivity(),
-//                                "No Item Selected.",
-//                                FancyToast.LENGTH_LONG,
-//                                FancyToast.WARNING,
-//                                false
-//                            ).show()
-//                            Toast.makeText(
-//                                requireContext(), "No Item Selected",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-
-                    if (inventorymaster == null) {
-                        var countofNotRegistered = 0
-                        val notRegistered = "Different\nLocation ($countofNotRegistered)"
+                        } else {
+                            listBook.forEach {
+                                if (it.isSelected) {
+                                    bookDao.updateBookAndAssetData(
+                                        locationId,
+                                        inventorymaster!!.scanID,
+                                        1,
+                                        it.rfidTag.toString()
+                                    )
+                                }
+                            }
+                            refreshRegisteredAssetCount()
+                            (adapter.getCurrentFragment() as DifferentLoactionFragment).updateList()
+                        }
+                        if (inventorymaster == null) {
+                            var countofNotRegistered = 0
+                            val notRegistered = "Different\nLocation ($countofNotRegistered)"
 //                        tablayout.getTabAt(1)?.text = notRegistered
-                        differentLocationTab(notRegistered)
-                    } else {
-                        var countofDiffLocation =
-                            bookDao.getCountFoundDifferentLoc(locationId)
-                        val diffLoc = "Different\nLocation ($countofDiffLocation)"
+                            differentLocationTab(notRegistered)
+                        } else {
+                            var countofDiffLocation =
+                                bookDao.getCountFoundDifferentLoc(locationId)
+                            val diffLoc = "Different\nLocation ($countofDiffLocation)"
 //                        tablayout.getTabAt(1)?.text = diffLoc
-                        differentLocationTab(diffLoc)
+                            differentLocationTab(diffLoc)
+                        }
+
+
                     }
-
-
                 }
-
                 2 -> {
                     if (adapter.getCurrentFragment() is NotRegisteredFragment) {
                         val listRfids = ArrayList<ScanTag>()

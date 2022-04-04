@@ -710,7 +710,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
-                /*listInventoryList.add("0000000000000000067D0E4B");
+                listInventoryList.add("0000000000000000067D0E4B");
 //                listInventoryList.add("30361F8A405EB0D74876E83D");
                 listInventoryList.add("30361F8A400E4E174876E86A");
                 listInventoryList.add("30361F8A40157BD74876E80A");
@@ -730,7 +730,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 scannedList.add("E2801190200077BCB26B031B");
                 scannedList.add("E2801190200068DDB25F0308");
                 scannedList.add("E2801190200077BCB26B031A");
-                scannedList.add("AD72120544AE85B55D000080");*/
+                scannedList.add("AD72120544AE85B55D000080");
 ////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);
