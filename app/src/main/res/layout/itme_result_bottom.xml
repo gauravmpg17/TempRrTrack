@@ -111,7 +111,6 @@
             android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10"
             android:fontFamily="@font/jio_type_light"
             android:maxLines="1"
             android:textColor="@color/black"

@@ -211,7 +211,7 @@ public class SingleTagLocateFragment extends Fragment implements ResponseHandler
                         sampleNature = "";
                     }
                     if (list.get(0).getSampleNature() != null) {
-                        sampleNature = list.get(0).getSampleNature() + " | ";
+                        sampleNature = " | "+list.get(0).getSampleNature() + " | ";
                     }
                     if (list.get(0).getSeason() != null) {
                         season = list.get(0).getSeason();
