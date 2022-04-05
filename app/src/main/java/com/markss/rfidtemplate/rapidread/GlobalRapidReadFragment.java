@@ -2,6 +2,7 @@ package com.markss.rfidtemplate.rapidread;
 
 import static com.markss.rfidtemplate.application.Application.TAG_LIST_LOADED;
 import static com.markss.rfidtemplate.application.Application.bookDao;
+import static com.markss.rfidtemplate.application.Application.isRecordInventory;
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
 import static com.markss.rfidtemplate.rfid.RFIDController.ActiveProfile;
@@ -899,6 +900,7 @@ public class GlobalRapidReadFragment extends Fragment implements ResponseHandler
                         btnInventoryRecord.setClickable(true);
                         inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
                         bookDao.updateInventoryItem(inventoryMaster);
+                        isRecordInventory=true;
                         //   bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
                         //temporary commented
                         //  bookDao.clearSyncFlagOfAssets(syncedIds);

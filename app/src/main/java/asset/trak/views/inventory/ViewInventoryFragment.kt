@@ -26,8 +26,7 @@ import asset.trak.views.baseclasses.BaseFragment
 import asset.trak.views.module.InventoryViewModel
 import com.markss.rfidtemplate.R
 import com.markss.rfidtemplate.application.Application
-import com.markss.rfidtemplate.application.Application.isAbandoned
-import com.markss.rfidtemplate.application.Application.roomDatabaseBuilder
+import com.markss.rfidtemplate.application.Application.*
 import com.markss.rfidtemplate.rapidread.MapRFIDLocationFragment
 import com.markss.rfidtemplate.rapidread.RapidReadFragment
 import com.shashank.sony.fancytoastlib.FancyToast
@@ -99,7 +98,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
         initialisation()
         setAdaptor()
         listeners()
-        if (inventoryViewModel.isFirstTime || (Application.isReconsiled && isAbandoned)) {
+        if (inventoryViewModel.isFirstTime || isRecordInventory) {
             Log.d("ViewInventoryFragment", "onViewCreated: ")
             if (Constants.isInternetAvailable(requireContext())) {
                 disableUserInteraction(requireActivity())
@@ -111,13 +110,13 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
                     }.await()
                     Log.e("dhdgdhdh", "getLastSync First11 ${appTimeStamp}")
                     inventoryViewModel.dateLastSync = apiDateFormat(appTimeStamp?.syncDate!!)
-//                    inventoryViewModel.getLastSync(
-//                        inventoryViewModel.dateLastSync
-//                    )
-
                     inventoryViewModel.getLastSync(
-                      ""
+                        inventoryViewModel.dateLastSync
                     )
+
+//                    inventoryViewModel.getLastSync(
+//                      ""
+//                    )
                     inventoryViewModel.dataSyncStatus.observe(viewLifecycleOwner) { isDataSynced ->
                         progressBar1.visibility = View.INVISIBLE
                         if (isDataSynced) {
@@ -140,7 +139,7 @@ class ViewInventoryFragment(val isFromWhat: String, var barCodeTag: String? = nu
 
                         }
                     }
-                    Application.isReconsiled = false
+                    Application.isRecordInventory = false
                     Constants.enableUserInteraction(requireActivity())
                 }
             } else {

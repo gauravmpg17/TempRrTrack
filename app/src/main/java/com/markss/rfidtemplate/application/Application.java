@@ -189,6 +189,7 @@ public class Application extends android.app.Application {
     public static boolean isFirstTime=true;
     public static boolean isReconsiled=false;
     public static  Boolean isAbandoned=false;
+    public static  Boolean isRecordInventory=false;
 
     public static boolean isActivityVisible() {
         return activityVisible;

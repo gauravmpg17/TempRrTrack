@@ -4,6 +4,7 @@ import static com.markss.rfidtemplate.application.Application.TAG_LIST_LOADED;
 import static com.markss.rfidtemplate.application.Application.bookDao;
 import static com.markss.rfidtemplate.application.Application.isAbandoned;
 import static com.markss.rfidtemplate.application.Application.isReconsiled;
+import static com.markss.rfidtemplate.application.Application.isRecordInventory;
 import static com.markss.rfidtemplate.application.Application.mIsMultiTagLocatingRunning;
 import static com.markss.rfidtemplate.common.Constants.SUCCESS;
 import static com.markss.rfidtemplate.home.MainActivity.TAG_CONTENT_FRAGMENT;
@@ -248,7 +249,13 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
         ImageView ivBack = getActivity().findViewById(R.id.ivBackButtonrr);
         locationData = getArguments().getParcelable("LocationData");
         totalRegisteredCount = getArguments().getInt("totalRegistered");
-        tvRegisteredCount.setText(String.valueOf(bookDao.getCountLocationId(locationData.getLocID())));
+        String countValue="";
+        if(isFromReconsile){
+            countValue=  String.valueOf(bookDao.getCountLocationId(locationData.getLocID()));
+        }else{
+            countValue= String.valueOf(bookDao.getCountLocationIdAsset(locationData.getLocID()));
+        }
+        tvRegisteredCount.setText(countValue);
 
         inventoryViewModel.getTimerVal().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -499,13 +506,13 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
             inventoryButton.performClick();
         }
 
-        inventoryViewModel.stopTime();
+       /* inventoryViewModel.stopTime();
         inventoryButton.setTag("1");
         llBottomParent.setVisibility(View.VISIBLE);
         inventoryButton.setImageResource(android.R.drawable.ic_media_play);
         addDataToScanTag();
         showCountFound();
-        updateCountInDb();
+        updateCountInDb();*/
     }
 
 
@@ -710,7 +717,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             } else {
                 Inventorymaster lastItem = pendingInventoryScan.get(0);
-                listInventoryList.add("0000000000000000067D0E4B");
+               /* listInventoryList.add("0000000000000000067D0E4B");
 //                listInventoryList.add("30361F8A405EB0D74876E83D");
                 listInventoryList.add("30361F8A400E4E174876E86A");
                 listInventoryList.add("30361F8A40157BD74876E80A");
@@ -730,7 +737,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 scannedList.add("E2801190200077BCB26B031B");
                 scannedList.add("E2801190200068DDB25F0308");
                 scannedList.add("E2801190200077BCB26B031A");
-                scannedList.add("AD72120544AE85B55D000080");
+                scannedList.add("AD72120544AE85B55D000080");*/
 ////
 //                                listInventoryList.add(null);
 //                listInventoryList.add(null);
@@ -864,7 +871,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
             if (asset.trak.utils.Constants.INSTANCE.isInternetAvailable(requireContext())) {
                 if (countNotFoundCurrentLocation == 0 && countFoundDifferentLoc == 0 && countNotRegistered == 0) {
-                    progressBar.setVisibility(View.VISIBLE);
+//                    progressBar.setVisibility(View.VISIBLE);
                     btnInventoryRecord.setEnabled(false);
                     btnInventoryRecord.setClickable(false);
                     postAssetSync();
@@ -896,7 +903,9 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 // bookAndAssetData.addAll(bookDao.getFoundAtLocation(inventoryMaster.getScanID(), locationData.getId()));
 
                 List<AssetMain> pendingSyncAssetdata = new ArrayList<AssetMain>();
-                pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync());
+                List<AssetMain> pendingSyncAssetdataNotFound = new ArrayList<AssetMain>();
+                pendingSyncAssetdata.addAll(bookDao.getAssetsPendingToSync(locationData.getLocID()));
+                pendingSyncAssetdataNotFound.addAll(bookDao.getAssetsPendingNotFoundToSync());
                 AssetSyncRequestDataModel assetSyncRequestDataModel = new AssetSyncRequestDataModel();
 
                 SimpleDateFormat changedFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -931,14 +940,24 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                 // Log.e("bookAndAssetData", "" + new Gson().toJson(bookAndAssetData));
                 Log.e("pendingSyncAssetdata", "" + new Gson().toJson(pendingSyncAssetdata));
                 // assets which location was changed
+                //Found Tag for Different Location
                 for (AssetMain n : pendingSyncAssetdata) {
                     AssetData scanTag = new AssetData();
                     scanTag.assetRFID = n.getAssetRFID();
-                    scanTag.locID = n.getLocationId();
+                    scanTag.locID = locationData.getLocID();
+                    scanTag.assetID = n.getAssetID();
+                    assetSyncRequestDataModel.assetData.add(scanTag);
+                }
+                //Found Tag Not Found for Current Location
+                for (AssetMain n : pendingSyncAssetdataNotFound) {
+                    AssetData scanTag = new AssetData();
+                    scanTag.assetRFID = n.getAssetRFID();
+                    scanTag.locID = 0;
                     scanTag.assetID = n.getAssetID();
                     assetSyncRequestDataModel.assetData.add(scanTag);
                 }
 
+                //Tag Found for current Location
                 for (AssetMain n : bookAndAssetData) {
                     AssetData scanTag = new AssetData();
                     // sending ID in rfidTag field, need to update attribute name accordingly in API
@@ -958,6 +977,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
 
 
                 Log.e("data", "" + new Gson().toJson(assetSyncRequestDataModel));
+
                 inventoryViewModel.postAssetSync(body).observe(getViewLifecycleOwner(), response -> {
                     if (response == SUCCESS) {
                         enableUserInteraction(getActivity());
@@ -968,6 +988,7 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         inventoryMaster.setStatus(asset.trak.utils.Constants.InventoryStatus.COMPLETED);
                         bookDao.updateInventoryItem(inventoryMaster);
                         bookDao.updateScanIdOfReconciledAssets(inventoryMaster.getScanID(), inventoryMaster.getLocationId());
+                        isRecordInventory=true;
                         //temporary commented
                         //    bookDao.clearSyncFlagOfAssets(syncedIds);
 
