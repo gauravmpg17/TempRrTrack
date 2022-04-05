@@ -183,8 +183,8 @@ where assetID is null*/
     fun getAssetNotFound(): List<AssetMain>
 
 
-    @Query("select AssetRFID from assetMain where LocationId=:locationId and inventorySyncFlag=0 and AssetRFID  not in (select rfidTag from tblScanTag where locationId=:locationId)")
-    fun getAssetNotFoundTagsInScanTable(locationId: Int): List<String>
+    @Query("select * from assetMain where LocationId=(:locationId) and inventorySyncFlag=0 and AssetRFID  not in (select rfidTag from tblScanTag where locationId=:locationId)")
+    fun getAssetNotFoundTagsInScanTable(locationId: Int): List<AssetMain>
 
     //   @Query("SELECT * FROM assetMain  WHERE locationId NOT IN (:locationId) AND AssetRFID  IN (SELECT rfidTag FROM tblScanTag where ScanId IN (:scanId) )")
     @Query("select * from assetMain where AssetRFID in (select rfidTag from tblScanTag where assetId !='NF' AND locationId !=(:locationId) AND ScanId IN (:scanId))")

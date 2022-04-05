@@ -773,15 +773,15 @@ public class RapidReadFragment extends Fragment implements ResponseHandlerInterf
                         bookDao.addScanTag(scanTag);
                 }
 
-                List<String> notInScanTable=bookDao.getAssetNotFoundTagsInScanTable(locationData.getLocID());
-                for(String tags:notInScanTable){
+                List<AssetMain> notInScanTable=bookDao.getAssetNotFoundTagsInScanTable(locationData.getLocID());
+                for(AssetMain tags:notInScanTable){
                     ScanTag scanTag = new ScanTag();
                     scanTag.setScanId(lastItem.getScanID());
-                    int locId=-1;
-                    String assetId="NF";
+                    int locId=-2;
+                  //  String assetId="NF";
                     scanTag.setLocationId(locId);
-                    scanTag.setAssetId(assetId);
-                    scanTag.setRfidTag(tags);
+                    scanTag.setAssetId(scanTag.getAssetId());
+                    scanTag.setRfidTag(tags.getAssetRFID());
 
                     Integer getCountOfTagAlready = bookDao.getCountOfTagAlready(scanTag.getRfidTag(), scanTag.getScanId());
                     if (getCountOfTagAlready == 0)
