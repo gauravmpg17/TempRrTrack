@@ -684,7 +684,7 @@ class ReconcileAssetsFragment : BaseFragment(R.layout.fragment_reconcile_assets)
 
         //   viewPager.adapter?.notifyDataSetChanged()
     }
-
+ //
     override fun onDestroy() {
         super.onDestroy()
         selectedPosition12 = 0
